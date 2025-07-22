@@ -3,6 +3,7 @@ from collections import defaultdict
 from pathlib import Path
 from typing import List, Dict
 from datetime import datetime, timedelta
+import shutil
 
 #Getting root directory and desktop 
 def get_directory(root_dir:Path=Path.home())->Path:
@@ -45,7 +46,7 @@ def find_duplicates_by_name(items: list[Path]) -> dict[str, list[Path]]:
     Returns:
         dict[str, list[Path]]: Dictionary of duplicate names to lists of Path objects.
     """
-    from collections import defaultdict
+    from collections import defaultdict 
     name_map = defaultdict(list)
     for p in items:
         name_map[p.name.lower()].append(p)
@@ -90,3 +91,15 @@ def prompt_and_filter_user_keep(items: list[Path]) -> list[Path]:
     else:
         user_keep = []
     return filter_exclude(items, user_keep)
+
+
+
+#Creating a directory 
+def create_directory(target_dir:Path)->Path:
+    target_dir.mkdir(parents=True,exist_ok=True)
+    return target_dir
+
+def move_items_to_directory(items:list[Path],destination_dir:Path):
+    for item in items:
+        dest=destination_dir/item.name
+        shutil.move(str(item),str(dest))

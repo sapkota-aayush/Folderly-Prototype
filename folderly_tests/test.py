@@ -2,6 +2,10 @@ import sys
 from pathlib import Path
 sys.path.append(str(Path(__file__).resolve().parent.parent))
 
+import os
+import platform
+import subprocess
+
 from core import (
     list_directory_items,
     filter_and_sort_by_modified,
@@ -9,7 +13,11 @@ from core import (
     select_items_by_indices,
     find_duplicates_by_name,
     # If you have find_similar_name_duplicates, import it too
+    filter_by_name,
 )
+
+def normalize(s):
+    return ''.join(s.lower().split())
 
 if __name__ == "__main__":
     all_items = list_directory_items()
@@ -61,3 +69,44 @@ if __name__ == "__main__":
     #             print(f"  {p}")
     # else:
     #     print("\nNo similar name duplicates found.")
+
+    # --- Test: Open file/folder in system file explorer ---
+    search_name = input("\nEnter the name of a file or folder to search on your Desktop (or press Enter to skip): ").strip()
+    if search_name:
+        norm_search = normalize(search_name)
+        matches = [item for item in all_items if norm_search in normalize(item.name)]
+        if matches:
+            print("Found:")
+            for idx, match in enumerate(matches, 1):
+                print(f"{idx}. {match}")
+            open_choice = input("Enter the number to open in File Explorer, or press Enter to skip: ").strip()
+            if open_choice.isdigit():
+                idx = int(open_choice)
+                if 1 <= idx <= len(matches):
+                    path = matches[idx - 1]
+                    if platform.system() == 'Windows':
+                        os.startfile(str(path))
+                    elif platform.system() == 'Darwin':
+                        subprocess.run(['open', str(path)])
+                    else:
+                        subprocess.run(['xdg-open', str(path)])
+                    print("Opened in file explorer.")
+                else:
+                    print("Invalid number.")
+            else:
+                print("Skipped opening.")
+        else:
+            print("No file or folder found with that name on your Desktop.")
+
+    # Quick test for filter_by_name
+    search_term = input("\nEnter a file or folder name (or part of it) to search for: ").strip()
+    if search_term:
+        matches = filter_by_name(all_items, search_term)
+        if matches:
+            print("\nFound the following matches:")
+            for match in matches:
+                print(match)
+        else:
+            print("No files or folders found matching your search.")
+    else:
+        print("No search term entered.")
