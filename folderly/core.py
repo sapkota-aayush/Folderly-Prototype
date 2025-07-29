@@ -95,3 +95,62 @@ def move_items_to_directory(items: list[Path], destination_dir: Path) -> Dict[st
             "success": False,
             "error": str(e)
         }
+
+def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None) -> Dict[str, Any]:
+    """
+    Creates multiple numbered files with specified extension.
+    
+    Args:
+        base_name: Base name for files (e.g., "file", "test")
+        count: Number of files to create
+        extension: File extension (e.g., "txt", "py", "js")
+        start_number: Starting number (default: 1)
+        target_dir: Directory to create files in (default: Desktop)
+    
+    Returns:
+        Dict with success status and created files info
+    """
+    try:
+        if target_dir is None:
+            target_dir = get_directory()
+        
+        created_files = []
+        failed_files = []
+        
+        for i in range(start_number, start_number + count):
+            try:
+                # Create filename
+                filename = f"{base_name}_{i}.{extension}"
+                file_path = target_dir / filename
+                
+                # Create file with basic content
+                content = f"This is {base_name} number {i}"
+                with open(file_path, 'w', encoding='utf-8') as f:
+                    f.write(content)
+                
+                created_files.append({
+                    "filename": filename,
+                    "path": str(file_path),
+                    "content_length": len(content)
+                })
+                
+            except Exception as e:
+                failed_files.append({
+                    "filename": f"{base_name}_{i}.{extension}",
+                    "error": str(e)
+                })
+        
+        return {
+            "success": True,
+            "created_files": created_files,
+            "failed_files": failed_files,
+            "total_created": len(created_files),
+            "total_failed": len(failed_files),
+            "target_directory": str(target_dir)
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }

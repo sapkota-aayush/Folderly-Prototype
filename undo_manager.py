@@ -10,17 +10,14 @@ def undo_last_operation(expected_type=None):
     """
     metadata = read_operation_metadata()
     if not metadata:
-        print("No operation to undo.")
-        return
+        return {"success": False, "message": "No operation to undo."}
     operation = metadata['current_operation']
     if expected_type and operation['type'] != expected_type:
-        print(f"No {expected_type} operation to undo.")
-        return
+        return {"success": False, "message": f"No {expected_type} operation to undo."}
     # Check expiry
     expires_at = datetime.fromisoformat(operation.get('expires_at'))
     if datetime.now() > expires_at:
-        print("Undo window has expired. Cannot undo.")
-        return
+        return {"success": False, "message": "Undo window has expired. Cannot undo."}
     # Restore each item
     for item in operation['items']:
         restore_file_or_folder(item['backup_path'], item['original_path'])
@@ -33,7 +30,7 @@ def undo_last_operation(expected_type=None):
                 else:
                     os.remove(item['destination_path'])
             except Exception as e:
-                print(f"Warning: Could not remove {item['destination_path']}: {e}")
+                return {"success": False, "message": f"Warning: Could not remove {item['destination_path']}: {e}"}
         delete_backup_file_or_folder(item['backup_path'])
     delete_operation_metadata()
-    print(f"Undo complete. Files/folders restored to original locations for operation type: {operation['type']}.") 
+    return {"success": True, "message": f"Undo complete. Files/folders restored to original locations for operation type: {operation['type']}."} 
