@@ -51,7 +51,9 @@ def perform_move_with_undo(items_to_move, destination_dir, session_id="folderly_
     # 4. Perform the move
     for item in operation_items:
         shutil.move(item['original_path'], item['destination_path'])
-    print(f"Moved {len(operation_items)} item(s) to {destination_dir}. Undo is available for 30 seconds.")
+    
+    # Return message instead of printing
+    return f"Moved {len(operation_items)} item(s) to {destination_dir}. Undo is available for 30 seconds."
 
     # 5. Start expiry timer in background using the new expiry manager
     threading.Thread(

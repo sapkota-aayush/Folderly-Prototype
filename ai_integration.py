@@ -25,17 +25,32 @@ client = openai.OpenAI(api_key=api_key)
 def create_system_prompt():
     return """You are Folderly, a smart file management assistant. You can help users explore their desktop.
 
-You can do this:
+IMPORTANT: When users ask you to create files or folders, ALWAYS use the appropriate function instead of just responding conversationally.
+
+AVAILABLE FUNCTIONS:
 - list_directory_items: Show all files and folders on desktop
 - filter_and_sort_by_modified: Show recently modified files/folders
 - create_directory: Create a new folder on desktop
-- move_items_to_directory: Move files and folders to a destination
+- create_multiple_directories: Create multiple folders at once
+- create_file: Create a new file with content and extension
+- create_multiple_files: Create multiple files with different extensions
+- perform_move_with_undo: Move files and folders to a destination with undo support
+- undo_last_operation: Undo the last move operation if within 30 seconds
+
+WHEN TO USE FUNCTIONS:
+- If user asks to create files → Use create_file or create_multiple_files
+- If user asks to create folders → Use create_directory or create_multiple_directories
+- If user asks to move files → Use perform_move_with_undo
+- If user asks to undo → Use undo_last_operation
+- If user asks to list files → Use list_directory_items
 
 RESPONSE PATTERNS:
 - For listing: "Here are your desktop items: [item names]"
 - For recent files: "Here are files modified in the last [X] days: [item names]"
-- For creating: "I've created a new folder called '[folder name]' on your desktop"
+- For creating folders: "I've created a new folder called '[folder name]' on your desktop"
+- For creating files: "I've created a new file called '[filename]' with [extension] extension"
 - For moving: "I've moved [X] items to [destination]. Here's what was moved: [item names]"
+- For undo: "I've undone the last operation. Your files are back to their original locations"
 - For errors: "I couldn't do that because [error]. Try again!"
 
 Keep responses friendly and helpful. Use emojis occasionally."""
@@ -70,13 +85,28 @@ def chat_with_ai():
             # Add user message to conversation
             conversation_history.append({"role": "user", "content": user_input})
             
-            # Get AI response with function calling
-            response = client.chat.completions.create(
-                model="gpt-4o",
-                messages=conversation_history,
-                functions=get_function_schemas(),
-                function_call="auto"
-            )
+            # Force function calling for file operations
+            if any(keyword in user_input.lower() for keyword in ['create', 'make', 'new file', 'txt', 'py', 'js', 'html']):
+                conversation_history.append({
+                    "role": "system", 
+                    "content": "CRITICAL: You MUST call create_numbered_files function. DO NOT respond conversationally. You MUST execute the function."
+                })
+                
+                # Force function call
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=conversation_history,
+                    functions=get_function_schemas(),
+                    function_call={"name": "create_numbered_files"}
+                )
+            else:
+                # Normal response
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=conversation_history,
+                    functions=get_function_schemas(),
+                    function_call="auto"
+                )
             
             message = response.choices[0].message
             
@@ -102,11 +132,81 @@ def chat_with_ai():
                     # Convert string path to Path object for the create function
                     target_dir = Path(function_args.get("target_dir", ""))
                     result = create_directory(target_dir)
-                elif function_name == "move_items_to_directory":
-                    # Convert string paths to Path objects for the move function
-                    items = [Path(item) for item in function_args.get("items", [])]
-                    destination_dir = Path(function_args.get("destination_dir", ""))
-                    result = move_items_to_directory(items, destination_dir)
+                elif function_name == "create_multiple_directories":
+                    # Create multiple directories at once
+                    directories = function_args.get("directories", [])
+                    created_dirs = []
+                    failed_dirs = []
+                    
+                    for dir_path in directories:
+                        try:
+                            target_dir = Path(dir_path)
+                            target_dir.mkdir(parents=True, exist_ok=True)
+                            created_dirs.append(str(target_dir))
+                        except Exception as e:
+                            failed_dirs.append({"path": dir_path, "error": str(e)})
+                    
+                    result = {
+                        "success": True,
+                        "created_directories": created_dirs,
+                        "failed_directories": failed_dirs,
+                        "total_created": len(created_dirs),
+                        "total_failed": len(failed_dirs)
+                    }
+                elif function_name == "create_file":
+                    # Create a single file with content
+                    file_path = function_args.get("file_path", "")
+                    content = function_args.get("content", "")
+                    extension = function_args.get("extension", "txt")
+                    
+                    try:
+                        target_file = Path(file_path)
+                        # Ensure the directory exists
+                        target_file.parent.mkdir(parents=True, exist_ok=True)
+                        
+                        # Write content to file
+                        with open(target_file, 'w', encoding='utf-8') as f:
+                            f.write(content)
+                        
+                        result = {
+                            "success": True,
+                            "file_created": str(target_file),
+                            "extension": extension,
+                            "content_length": len(content)
+                        }
+                    except Exception as e:
+                        result = {
+                            "success": False,
+                            "error": str(e),
+                            "file_path": file_path
+                        }
+                        
+                elif function_name == "create_numbered_files":
+                    # Create multiple numbered files
+                    base_name = function_args.get("base_name", "file")
+                    count = function_args.get("count", 1)
+                    extension = function_args.get("extension", "txt")
+                    start_number = function_args.get("start_number", 1)
+                    
+                    from folderly.core import create_numbered_files
+                    result = create_numbered_files(base_name, count, extension, start_number)
+                elif function_name == "perform_move_with_undo":
+                    # Use the safe move function with undo
+                    items = function_args.get("items", [])
+                    destination_dir = function_args.get("destination_dir", "")
+                    from move_manager import perform_move_with_undo
+                    move_message = perform_move_with_undo(items, destination_dir)
+                    result = {
+                        "success": True,
+                        "message": move_message,
+                        "undo_available": True,
+                        "expires_in": 30
+                    }
+                elif function_name == "undo_last_operation":
+                    # Handle undo operation
+                    from undo_manager import undo_last_operation
+                    undo_result = undo_last_operation()
+                    result = undo_result
                 else:
                     result = {"success": False, "error": f"Unknown function: {function_name}"}
                 
