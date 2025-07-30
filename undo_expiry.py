@@ -15,5 +15,5 @@ def auto_expiry_cleanup(expires_at, operation_items, delete_metadata_func, delet
         threading.Event().wait(wait_seconds)
     for item in operation_items:
         delete_backup_func(item['backup_path'])
-    delete_metadata_func()
+        delete_metadata_func()
     print("Undo window expired. Backups and metadata cleaned up.") 

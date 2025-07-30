@@ -5,7 +5,7 @@ import threading
 import time
 from dotenv import load_dotenv
 from function_schemas import get_function_schemas
-from folderly.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory
+from folderly.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern
 from folderly.activity_tracker import start_activity_monitoring, FolderlyActivityTracker, show_activity_summary
 from folderly.ai_activity_integration import show_ai_enhanced_activity
 from pathlib import Path
@@ -77,15 +77,21 @@ AVAILABLE FUNCTIONS:
 - create_file: Create a new file with content and extension
 - create_multiple_files: Create multiple files with different extensions
 - perform_move_with_undo: Move files and folders to a destination with undo support
-- undo_last_operation: Undo the last move operation if within 30 seconds
+- undo_last_operation: Undo the last move or delete operation if within 30 seconds
+- delete_single_item: Soft delete a single file or directory (moves to recycle bin) with undo support
+- delete_multiple_items: Soft delete multiple files and directories (moves to recycle bin) with undo support
+- delete_items_by_pattern: Delete files matching a pattern (moves to recycle bin) with undo support
 - show_activity_with_ai: Show user's recent file activity with AI analysis and insights
 
 WHEN TO USE FUNCTIONS:
 - If user asks to create files → Use create_file or create_multiple_files
 - If user asks to create folders → Use create_directory or create_multiple_directories
 - If user asks to move files → Use perform_move_with_undo
-- If user asks to undo → Use undo_last_operation
+- If user asks to undo → Use undo_last_operation (works for both move and delete operations)
 - If user asks to list files → Use list_directory_items
+- If user asks to delete files → Use delete_single_item, delete_multiple_items, or delete_items_by_pattern
+- If user asks to delete files by pattern (e.g., "all txt files", "temp files") → Use delete_items_by_pattern
+- If user asks to delete specific files → Use delete_single_item or delete_multiple_items
 
 RESPONSE PATTERNS:
 - For listing: "Here are your desktop items: [item names]"
@@ -93,6 +99,7 @@ RESPONSE PATTERNS:
 - For creating folders: "I've created a new folder called '[folder name]' on your desktop"
 - For creating files: "I've created a new file called '[filename]' with [extension] extension"
 - For moving: "I've moved [X] items to [destination]. Here's what was moved: [item names]"
+- For deleting: "I've deleted [X] items and moved them to the recycle bin. Here's what was deleted: [item names]. You can undo this within 30 seconds."
 - For undo: "I've undone the last operation. Your files are back to their original locations"
 - For errors: "I couldn't do that because [error]. Try again!"
 
@@ -156,8 +163,8 @@ def chat_with_ai():
                     functions=get_function_schemas(),
                     function_call={"name": "undo_last_operation"}
                 )
-            # Force function calling for file operations
-            elif any(keyword in user_input.lower() for keyword in ['create', 'make', 'new file', 'txt', 'py', 'js', 'html']):
+            # Force function calling for file creation operations
+            elif any(keyword in user_input.lower() for keyword in ['create', 'make', 'new file']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash']):
                 conversation_history.append({
                     "role": "system", 
                     "content": "CRITICAL: You MUST call create_numbered_files function. DO NOT respond conversationally. You MUST execute the function."
@@ -171,7 +178,7 @@ def chat_with_ai():
                     function_call={"name": "create_numbered_files"}
                 )
             # Force function calling for listing files
-            elif any(keyword in user_input.lower() for keyword in ['list', 'show', 'files', 'desktop']):
+            elif any(keyword in user_input.lower() for keyword in ['list', 'show', 'files', 'desktop']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move']):
                 conversation_history.append({
                     "role": "system",
                     "content": "CRITICAL: You MUST call list_directory_items function. DO NOT respond conversationally. You MUST execute the function."
@@ -193,6 +200,18 @@ def chat_with_ai():
                     messages=conversation_history,
                     functions=get_function_schemas(),
                     function_call={"name": "perform_move_with_undo"}
+                )
+            # Force function calling for delete operations
+            elif any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'bin']):
+                conversation_history.append({
+                    "role": "system",
+                    "content": "CRITICAL: You MUST call delete_single_item, delete_multiple_items, or delete_items_by_pattern function based on the context. For pattern-based deletion (like 'all txt files'), use delete_items_by_pattern. DO NOT respond conversationally. You MUST execute the function."
+                })
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=conversation_history,
+                    functions=get_function_schemas(),
+                    function_call="auto"
                 )
             else:
                 # Normal response
@@ -306,6 +325,22 @@ def chat_with_ai():
                     from undo_manager import undo_last_operation
                     undo_result = undo_last_operation()
                     result = undo_result
+                elif function_name == "delete_single_item":
+                    # Delete a single item
+                    item_path = function_args.get("item_path", "")
+                    enable_undo = function_args.get("enable_undo", True)
+                    result = delete_single_item(item_path, enable_undo)
+                elif function_name == "delete_multiple_items":
+                    # Delete multiple items
+                    item_paths = function_args.get("item_paths", [])
+                    enable_undo = function_args.get("enable_undo", True)
+                    result = delete_multiple_items(item_paths, enable_undo)
+                elif function_name == "delete_items_by_pattern":
+                    # Delete items by pattern
+                    pattern = function_args.get("pattern", "")
+                    target_dir = function_args.get("target_dir", None)
+                    enable_undo = function_args.get("enable_undo", True)
+                    result = delete_items_by_pattern(pattern, target_dir, enable_undo)
                 else:
                     result = {"success": False, "error": f"Unknown function: {function_name}"}
                 
@@ -322,12 +357,18 @@ def chat_with_ai():
                     messages=conversation_history
                 )
                 
-                print(f"🤖 Folderly: {final_response.choices[0].message.content}")
+                # Add response to conversation history
                 conversation_history.append(final_response.choices[0].message)
                 
+                # Print AI response
+                print(f"🤖 {final_response.choices[0].message.content}")
+                
             else:
-                print(f"🤖 Folderly: {message.content}")
+                # Add response to conversation history
                 conversation_history.append(message)
+                
+                # Print AI response
+                print(f"🤖 {message.content}")
                 
         except KeyboardInterrupt:
             print("\n👋 See you later! 👋")

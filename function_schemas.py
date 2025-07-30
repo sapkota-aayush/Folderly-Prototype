@@ -151,6 +151,65 @@ FOLDERLY_FUNCTIONS = [
             "properties": {},
             "required": []
         }
+    },
+    {
+        "name": "delete_single_item",
+        "description": "Soft deletes a single file or directory using send2trash (moves to recycle bin) with undo support",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "item_path": {
+                    "type": "string",
+                    "description": "Path to the file or directory to delete"
+                },
+                "enable_undo": {
+                    "type": "boolean",
+                    "description": "Whether to enable undo support (default: true)"
+                }
+            },
+            "required": ["item_path"]
+        }
+    },
+    {
+        "name": "delete_multiple_items",
+        "description": "Soft deletes multiple files and directories using send2trash (moves to recycle bin) with undo support",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "item_paths": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of paths to files or directories to delete"
+                },
+                "enable_undo": {
+                    "type": "boolean",
+                    "description": "Whether to enable undo support (default: true)"
+                }
+            },
+            "required": ["item_paths"]
+        }
+    },
+    {
+        "name": "delete_items_by_pattern",
+        "description": "Deletes files and directories matching a pattern using soft delete (moves to recycle bin) with undo support. Use this for deleting files by type (e.g., 'all txt files', 'all temp files')",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "pattern": {
+                    "type": "string",
+                    "description": "Glob pattern to match (e.g., '*.txt', 'test*', '*temp*', 'temp*')"
+                },
+                "target_dir": {
+                    "type": "string",
+                    "description": "Directory to search in (default: Desktop)"
+                },
+                "enable_undo": {
+                    "type": "boolean",
+                    "description": "Whether to enable undo support (default: true)"
+                }
+            },
+            "required": ["pattern"]
+        }
     }
 ]
 
