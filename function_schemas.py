@@ -142,6 +142,15 @@ FOLDERLY_FUNCTIONS = [
             "properties": {},
             "required": []
         }
+    },
+    {
+        "name": "show_activity_with_ai",
+        "description": "Show user's recent file activity with AI analysis and insights",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
     }
 ]
 
