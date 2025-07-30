@@ -19,7 +19,40 @@ class FolderlyActivityTracker(FileSystemEventHandler):
         self.desktop_path = desktop_path or str(Path.home() / "Desktop")
         self.activities = []
         self.log_file = "folderly_activities.json"
+        
+        # Files/folders to ignore (case-insensitive)
+        self.ignore_patterns = [
+            "thumbs.db",
+            ".ds_store",
+            "desktop.ini",
+            "~$",  # Temporary files
+            ".tmp",
+            ".temp",
+            ".log",
+            ".cache",
+            "node_modules",
+            ".git",
+            ".vscode",
+            "__pycache__",
+            ".pytest_cache",
+            ".coverage",
+            ".env",
+            ".venv",
+            "venv",
+            "env"
+        ]
+        
         self.load_activities()
+    
+    def should_ignore(self, filename: str) -> bool:
+        """Check if file/folder should be ignored"""
+        filename_lower = filename.lower()
+        
+        for pattern in self.ignore_patterns:
+            if pattern in filename_lower:
+                return True
+        
+        return False
     
     def load_activities(self):
         """Load existing activities from file"""
@@ -50,43 +83,67 @@ class FolderlyActivityTracker(FileSystemEventHandler):
         self.save_activities()
     
     def on_created(self, event):
-        """Track file creation"""
-        if not event.is_directory:
-            filename = os.path.basename(event.src_path)
-            self.add_activity("file_created", {
-                "filename": filename,
-                "path": event.src_path
-            })
+        """Track file and folder creation"""
+        filename = os.path.basename(event.src_path)
+        
+        # Skip if file/folder should be ignored
+        if self.should_ignore(filename):
+            return
+            
+        item_type = "folder" if event.is_directory else "file"
+        self.add_activity(f"{item_type}_created", {
+            "filename": filename,
+            "path": event.src_path,
+            "type": item_type
+        })
     
     def on_deleted(self, event):
-        """Track file deletion"""
-        if not event.is_directory:
-            filename = os.path.basename(event.src_path)
-            self.add_activity("file_deleted", {
-                "filename": filename,
-                "path": event.src_path
-            })
+        """Track file and folder deletion"""
+        filename = os.path.basename(event.src_path)
+        
+        # Skip if file/folder should be ignored
+        if self.should_ignore(filename):
+            return
+            
+        item_type = "folder" if event.is_directory else "file"
+        self.add_activity(f"{item_type}_deleted", {
+            "filename": filename,
+            "path": event.src_path,
+            "type": item_type
+        })
     
     def on_modified(self, event):
-        """Track file modification"""
-        if not event.is_directory:
-            filename = os.path.basename(event.src_path)
-            self.add_activity("file_modified", {
-                "filename": filename,
-                "path": event.src_path
-            })
+        """Track file and folder modification"""
+        filename = os.path.basename(event.src_path)
+        
+        # Skip if file/folder should be ignored
+        if self.should_ignore(filename):
+            return
+            
+        item_type = "folder" if event.is_directory else "file"
+        self.add_activity(f"{item_type}_modified", {
+            "filename": filename,
+            "path": event.src_path,
+            "type": item_type
+        })
     
     def on_moved(self, event):
-        """Track file movement"""
-        if not event.is_directory:
-            old_name = os.path.basename(event.src_path)
-            new_name = os.path.basename(event.dest_path)
-            self.add_activity("file_moved", {
-                "old_name": old_name,
-                "new_name": new_name,
-                "from_path": event.src_path,
-                "to_path": event.dest_path
-            })
+        """Track file and folder movement"""
+        old_name = os.path.basename(event.src_path)
+        new_name = os.path.basename(event.dest_path)
+        
+        # Skip if either old or new name should be ignored
+        if self.should_ignore(old_name) or self.should_ignore(new_name):
+            return
+            
+        item_type = "folder" if event.is_directory else "file"
+        self.add_activity(f"{item_type}_moved", {
+            "old_name": old_name,
+            "new_name": new_name,
+            "from_path": event.src_path,
+            "to_path": event.dest_path,
+            "type": item_type
+        })
     
     def get_recent_activities(self, hours: int = 24) -> List[Dict]:
         """Get activities from the last N hours"""
@@ -107,7 +164,11 @@ class FolderlyActivityTracker(FileSystemEventHandler):
             "files_created": 0,
             "files_deleted": 0,
             "files_modified": 0,
-            "files_moved": 0
+            "files_moved": 0,
+            "folders_created": 0,
+            "folders_deleted": 0,
+            "folders_modified": 0,
+            "folders_moved": 0
         }
         
         for activity in recent:
@@ -156,13 +217,21 @@ def show_activity_summary(tracker: FolderlyActivityTracker):
         details = activity["details"]
         
         if action == "file_created":
-            formatted_activities.append(f"{timestamp} 📁 Created: {details['filename']}")
+            formatted_activities.append(f"{timestamp} 📄 Created file: {details['filename']}")
+        elif action == "folder_created":
+            formatted_activities.append(f"{timestamp} 📁 Created folder: {details['filename']}")
         elif action == "file_deleted":
-            formatted_activities.append(f"{timestamp} 🗑️ Deleted: {details['filename']}")
+            formatted_activities.append(f"{timestamp} 🗑️ Deleted file: {details['filename']}")
+        elif action == "folder_deleted":
+            formatted_activities.append(f"{timestamp} 🗑️ Deleted folder: {details['filename']}")
         elif action == "file_modified":
-            formatted_activities.append(f"{timestamp} ✏️ Modified: {details['filename']}")
+            formatted_activities.append(f"{timestamp} ✏️ Modified file: {details['filename']}")
+        elif action == "folder_modified":
+            formatted_activities.append(f"{timestamp} ✏️ Modified folder: {details['filename']}")
         elif action == "file_moved":
-            formatted_activities.append(f"{timestamp} 📦 Moved: {details['old_name']} → {details['new_name']}")
+            formatted_activities.append(f"{timestamp} 📦 Moved file: {details['old_name']} → {details['new_name']}")
+        elif action == "folder_moved":
+            formatted_activities.append(f"{timestamp} 📦 Moved folder: {details['old_name']} → {details['new_name']}")
     
     return {
         "success": True,
