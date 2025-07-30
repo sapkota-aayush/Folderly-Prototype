@@ -286,5 +286,901 @@
       "filename": "file_5.txt",
       "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
     }
+  },
+  {
+    "timestamp": "2025-07-30T11:30:04.574339",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:30:04.582333",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:37:15.157500",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:37:15.158502",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.033746",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.034748",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.036745",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.041912",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.043744",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.050748",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.052743",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.053744",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.054745",
+    "action": "file_created",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.056743",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.057743",
+    "action": "file_created",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.057743",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.058743",
+    "action": "file_created",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.059742",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.061743",
+    "action": "file_created",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:27.062899",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:43.930270",
+    "action": "file_deleted",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:43.969770",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:43.991232",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.013238",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.039239",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.060266",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.081265",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.107114",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.136114",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.159114",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.188119",
+    "action": "file_deleted",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.214024",
+    "action": "file_deleted",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:44.241156",
+    "action": "file_deleted",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.831958",
+    "action": "file_created",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.833967",
+    "action": "file_modified",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.835957",
+    "action": "file_created",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.840959",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.841959",
+    "action": "file_created",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.843957",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.845957",
+    "action": "file_created",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.846957",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.847962",
+    "action": "file_created",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.849962",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.850962",
+    "action": "file_created",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.853051",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.854962",
+    "action": "file_created",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.855963",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.857962",
+    "action": "file_created",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.859962",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.864517",
+    "action": "file_created",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.866468",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.867743",
+    "action": "file_created",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.868743",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.870762",
+    "action": "file_created",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.871912",
+    "action": "file_modified",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.872920",
+    "action": "file_created",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.873920",
+    "action": "file_modified",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.874921",
+    "action": "file_created",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:38:55.876425",
+    "action": "file_modified",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.090953",
+    "action": "file_deleted",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.145121",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.175814",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.204685",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.234506",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.266191",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.299559",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.324902",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.360689",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.388231",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.421333",
+    "action": "file_deleted",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.448025",
+    "action": "file_deleted",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:26.482152",
+    "action": "file_deleted",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.875492",
+    "action": "file_created",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.877607",
+    "action": "file_modified",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.880491",
+    "action": "file_created",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.882490",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.885496",
+    "action": "file_created",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.888496",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.892502",
+    "action": "file_created",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.894498",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.896495",
+    "action": "file_created",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.899003",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.904005",
+    "action": "file_created",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.907005",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.910004",
+    "action": "file_created",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.912035",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.914003",
+    "action": "file_created",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.918028",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.921002",
+    "action": "file_created",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.923004",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.924002",
+    "action": "file_created",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.926002",
+    "action": "file_modified",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.928002",
+    "action": "file_created",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.930002",
+    "action": "file_modified",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.932003",
+    "action": "file_created",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.934003",
+    "action": "file_modified",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.935037",
+    "action": "file_created",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:35.937002",
+    "action": "file_modified",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.371615",
+    "action": "file_deleted",
+    "details": {
+      "filename": "direct_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.402625",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.438180",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_2.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.466181",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_3.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.497184",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_4.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.521695",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_5.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.544370",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_6.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.566741",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_7.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.595124",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_8.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_8.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.626810",
+    "action": "file_deleted",
+    "details": {
+      "filename": "file_9.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\file_9.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.656926",
+    "action": "file_deleted",
+    "details": {
+      "filename": "interactive_test_0.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_0.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.682927",
+    "action": "file_deleted",
+    "details": {
+      "filename": "interactive_test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T11:54:52.704932",
+    "action": "file_deleted",
+    "details": {
+      "filename": "test_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\test_1.txt"
+    }
+  },
+  {
+    "timestamp": "2025-07-30T12:07:50.812810",
+    "action": "file_deleted",
+    "details": {
+      "filename": "document_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\document_1.pdf"
+    }
   }
 ]
