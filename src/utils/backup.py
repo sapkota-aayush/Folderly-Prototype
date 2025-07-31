@@ -1,6 +1,6 @@
 import os
 import shutil
-from utils import get_backup_dir
+from .utils import get_backup_dir
 
 def backup_file_or_folder(original_path):
     backup_dir=get_backup_dir()
