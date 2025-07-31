@@ -95,5 +95,23 @@
       "path": "C:\\Users\\aayus\\Desktop\\New folder",
       "type": "folder"
     }
+  },
+  {
+    "timestamp": "2025-07-31T09:52:28.785009",
+    "action": "file_deleted",
+    "details": {
+      "filename": "New folder",
+      "path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-07-31T09:52:29.362134",
+    "action": "file_deleted",
+    "details": {
+      "filename": "holahola",
+      "path": "C:\\Users\\aayus\\Desktop\\holahola",
+      "type": "file"
+    }
   }
 ]
