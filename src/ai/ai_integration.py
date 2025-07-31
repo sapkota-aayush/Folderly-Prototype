@@ -4,8 +4,8 @@ import openai
 import threading
 import time
 from dotenv import load_dotenv
-from function_schemas import get_function_schemas
-from folderly.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern
+from src.ai.function_schemas import get_function_schemas
+from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern
 from folderly.activity_tracker import start_activity_monitoring, FolderlyActivityTracker, show_activity_summary
 from folderly.ai_activity_integration import show_ai_enhanced_activity
 from pathlib import Path
@@ -303,7 +303,7 @@ def chat_with_ai():
                     extension = function_args.get("extension", "txt")
                     start_number = function_args.get("start_number", 1)
                     
-                    from folderly.core import create_numbered_files
+                    from src.core.core import create_numbered_files
                     result = create_numbered_files(base_name, count, extension, start_number)
                 elif function_name == "perform_move_with_undo":
                     # Use the safe move function with undo
