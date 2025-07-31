@@ -4,10 +4,10 @@ from typing import List, Dict, Any
 from datetime import datetime, timedelta
 import shutil
 from send2trash import send2trash
-from utils import write_operation_metadata, read_operation_metadata, delete_operation_metadata
-from backup import backup_file_or_folder, delete_backup_file_or_folder
+from ..utils.utils import write_operation_metadata, read_operation_metadata, delete_operation_metadata
+from ..utils.backup import backup_file_or_folder, delete_backup_file_or_folder
 import threading
-from undo_expiry import auto_expiry_cleanup
+from ..utils.undo_expiry import auto_expiry_cleanup
 
 #Getting root directory and desktop 
 def get_directory(root_dir:Path=Path.home())->Path:

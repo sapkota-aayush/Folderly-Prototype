@@ -6,7 +6,7 @@ Test script for delete undo functionality
 import os
 import tempfile
 from pathlib import Path
-from folderly.core import delete_single_item, delete_multiple_items, delete_items_by_pattern
+from src.core.core import delete_single_item, delete_multiple_items, delete_items_by_pattern
 from undo_manager import undo_last_operation
 
 def test_delete_undo():

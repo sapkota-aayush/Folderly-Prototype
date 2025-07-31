@@ -1,11 +1,11 @@
 import os
 import shutil
-from utils import write_operation_metadata, read_operation_metadata, delete_operation_metadata
-from backup import backup_file_or_folder, delete_backup_file_or_folder, restore_file_or_folder
+from .utils import write_operation_metadata, read_operation_metadata, delete_operation_metadata
+from .backup import backup_file_or_folder, delete_backup_file_or_folder, restore_file_or_folder
 from datetime import datetime, timedelta
 import threading
-from undo_expiry import auto_expiry_cleanup
-from undo_manager import undo_last_operation
+from .undo_expiry import auto_expiry_cleanup
+from .undo_manager import undo_last_operation
 
 def perform_move_with_undo(items_to_move, destination_dir, session_id="folderly_session"): 
     """

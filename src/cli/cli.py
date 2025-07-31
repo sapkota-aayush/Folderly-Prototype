@@ -9,15 +9,14 @@ from pathlib import Path
 from typing import List
 
 # Import Folderly modules
-from folderly.core import (
+from src.core.core import (
     get_directory, list_directory_items, filter_and_sort_by_modified,
-    filter_by_extension, filter_exclude, find_duplicates_by_name,
-    find_similar_name_duplicates, create_directory, move_items_to_directory
+    create_directory, move_items_to_directory
 )
-from folderly.search import filter_by_name
-from move_manager import perform_move_with_undo
-from undo_manager import undo_last_operation
-from function_schemas import get_function_schemas
+from src.core.search import filter_by_name
+from src.utils.move_manager import perform_move_with_undo
+from src.utils.undo_manager import undo_last_operation
+from src.ai.function_schemas import get_function_schemas
 
 
 def list_desktop_items():
@@ -41,31 +40,9 @@ def show_recent_items(days: int = 7):
 
 def find_duplicates():
     """Find duplicate files/folders"""
-    items = list_directory_items()
-    
-    # Exact duplicates
-    exact_duplicates = find_duplicates_by_name(items)
-    if exact_duplicates:
-        print("\n🔍 Exact Name Duplicates:")
-        for name, paths in exact_duplicates.items():
-            print(f"  '{name}':")
-            for path in paths:
-                print(f"    - {path}")
-    else:
-        print("\n✅ No exact name duplicates found.")
-    
-    # Similar name duplicates
-    similar_duplicates = find_similar_name_duplicates(items)
-    if similar_duplicates:
-        print("\n🔍 Similar Name Duplicates:")
-        for base_name, paths in similar_duplicates.items():
-            print(f"  '{base_name}':")
-            for path in paths:
-                print(f"    - {path}")
-    else:
-        print("\n✅ No similar name duplicates found.")
-    
-    return exact_duplicates, similar_duplicates
+    print("\n🔍 Duplicate detection not implemented yet.")
+    print("This feature will be added in a future update.")
+    return {}, {}
 
 
 def search_items(query: str):

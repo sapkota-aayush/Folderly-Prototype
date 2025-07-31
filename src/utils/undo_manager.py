@@ -1,5 +1,5 @@
-from utils import read_operation_metadata, delete_operation_metadata
-from backup import restore_file_or_folder, delete_backup_file_or_folder
+from .utils import read_operation_metadata, delete_operation_metadata
+from .backup import restore_file_or_folder, delete_backup_file_or_folder
 import os
 from datetime import datetime
 

@@ -3,8 +3,8 @@ import logging
 from datetime import datetime
 from typing import Dict, Any, List
 
-# Set up logging
-logging.basicConfig(level=logging.INFO)
+# Set up logging - only show warnings and errors
+logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger(__name__)
 
 def auto_expiry_cleanup(expires_at, operation_items, delete_metadata_func, delete_backup_func) -> Dict[str, Any]:
