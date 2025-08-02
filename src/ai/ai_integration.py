@@ -5,9 +5,11 @@ import threading
 import time
 from dotenv import load_dotenv
 from src.ai.function_schemas import get_function_schemas
-from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern
+from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, create_numbered_files, list_nested_folders_tree
 from folderly.activity_tracker import start_activity_monitoring, FolderlyActivityTracker, show_activity_summary
 from folderly.ai_activity_integration import show_ai_enhanced_activity
+from src.utils.move_manager import perform_move_with_undo
+from src.utils.undo_manager import undo_last_operation
 from pathlib import Path
 
 # Load environment variables
@@ -71,6 +73,7 @@ IMPORTANT: When users ask you to create files or folders, ALWAYS use the appropr
 
 AVAILABLE FUNCTIONS:
 - list_directory_items: Show all files and folders on desktop
+- list_nested_folders_tree: Show nested folders in tree structure format
 - filter_and_sort_by_modified: Show recently modified files/folders
 - create_directory: Create a new folder on desktop
 - create_multiple_directories: Create multiple folders at once
@@ -89,13 +92,41 @@ WHEN TO USE FUNCTIONS:
 - If user asks to move files → Use perform_move_with_undo
 - If user asks to undo → Use undo_last_operation (works for both move and delete operations)
 - If user asks to list files → Use list_directory_items
+- If user asks to show folder structure/tree → Use list_nested_folders_tree
 - If user asks to delete files → Use delete_single_item, delete_multiple_items, or delete_items_by_pattern
 - If user asks to delete files by pattern (e.g., "all txt files", "temp files") → Use delete_items_by_pattern
 - If user asks to delete specific files → Use delete_single_item or delete_multiple_items
 
+TREE STRUCTURE FORMATTING:
+When displaying file/folder structures, ALWAYS use tree format with these characters:
+- ├── for items that have siblings below
+- └── for the last item in a level  
+- │   for vertical lines showing hierarchy
+- Use proper indentation (4 spaces per level)
+
+When users ask to create multiple folders or a folder structure, ALWAYS preview the structure first like:
+"📁 I'll create this folder structure for you:
+Documents/
+   ├── Education/
+   │      ├── Program_Name/
+   │      └── Certificates/
+   ├── Work/
+   │      ├── Project_Name/
+   │      └── Reports/
+   └── Personal/
+          ├── Finance/
+          └── ID/
+
+Would you like me to create this structure?"
+
 RESPONSE PATTERNS:
-- For listing: "Here are your desktop items: [item names]"
-- For recent files: "Here are files modified in the last [X] days: [item names]"
+- For listing: Display as tree structure like:
+  Desktop/
+     ├── Documents/
+     ├── Pictures/
+     ├── file1.txt
+     └── file2.pdf
+- For recent files: Show tree structure of recently modified items
 - For creating folders: "I've created a new folder called '[folder name]' on your desktop"
 - For creating files: "I've created a new file called '[filename]' with [extension] extension"
 - For moving: "I've moved [X] items to [destination]. Here's what was moved: [item names]"
@@ -103,7 +134,7 @@ RESPONSE PATTERNS:
 - For undo: "I've undone the last operation. Your files are back to their original locations"
 - For errors: "I couldn't do that because [error]. Try again!"
 
-Keep responses friendly and helpful. Use emojis occasionally."""
+Keep responses friendly and helpful. Use emojis occasionally. ALWAYS format file listings as tree structures."""
 
 def chat_with_ai():
     print("🚀 Welcome to Folderly - Smart Desktop Explorer!")
@@ -177,8 +208,20 @@ def chat_with_ai():
                     functions=get_function_schemas(),
                     function_call={"name": "create_numbered_files"}
                 )
-            # Force function calling for listing files
-            elif any(keyword in user_input.lower() for keyword in ['list', 'show', 'files', 'desktop']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move']):
+            # Force function calling for tree structure requests (specific keywords)
+            elif any(keyword in user_input.lower() for keyword in ['tree', 'structure', 'folder structure', 'nested', 'hierarchy']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move']):
+                conversation_history.append({
+                    "role": "system",
+                    "content": "CRITICAL: You MUST call list_nested_folders_tree function. DO NOT respond conversationally. You MUST execute the function."
+                })
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=conversation_history,
+                    functions=get_function_schemas(),
+                    function_call={"name": "list_nested_folders_tree"}
+                )
+            # Force function calling for listing files (default surface level)
+            elif any(keyword in user_input.lower() for keyword in ['list', 'show', 'files', 'desktop', 'what']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move', 'tree', 'structure', 'nested', 'hierarchy']):
                 conversation_history.append({
                     "role": "system",
                     "content": "CRITICAL: You MUST call list_directory_items function. DO NOT respond conversationally. You MUST execute the function."
@@ -303,13 +346,11 @@ def chat_with_ai():
                     extension = function_args.get("extension", "txt")
                     start_number = function_args.get("start_number", 1)
                     
-                    from src.core.core import create_numbered_files
                     result = create_numbered_files(base_name, count, extension, start_number)
                 elif function_name == "perform_move_with_undo":
                     # Use the safe move function with undo
                     items = function_args.get("items", [])
                     destination_dir = function_args.get("destination_dir", "")
-                    from move_manager import perform_move_with_undo
                     move_message = perform_move_with_undo(items, destination_dir)
                     result = {
                         "success": True,
@@ -322,7 +363,6 @@ def chat_with_ai():
                     result = show_activity_with_ai()
                 elif function_name == "undo_last_operation":
                     # Handle undo operation
-                    from undo_manager import undo_last_operation
                     undo_result = undo_last_operation()
                     result = undo_result
                 elif function_name == "delete_single_item":
@@ -341,6 +381,11 @@ def chat_with_ai():
                     target_dir = function_args.get("target_dir", None)
                     enable_undo = function_args.get("enable_undo", True)
                     result = delete_items_by_pattern(pattern, target_dir, enable_undo)
+                elif function_name == "list_nested_folders_tree":
+                    # List nested folders in tree structure
+                    target_dir = function_args.get("target_dir", None)
+                    max_depth = function_args.get("max_depth", 3)
+                    result = list_nested_folders_tree(target_dir, max_depth)
                 else:
                     result = {"success": False, "error": f"Unknown function: {function_name}"}
                 

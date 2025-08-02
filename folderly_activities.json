@@ -133,5 +133,41 @@
       "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
       "type": "folder"
     }
+  },
+  {
+    "timestamp": "2025-08-01T20:32:09.102516",
+    "action": "file_deleted",
+    "details": {
+      "filename": "heyy.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\heyy.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T20:40:24.847901",
+    "action": "folder_modified",
+    "details": {
+      "filename": "not-used",
+      "path": "C:\\Users\\aayus\\Desktop\\not-used",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T20:51:56.981679",
+    "action": "file_deleted",
+    "details": {
+      "filename": "helllomiss",
+      "path": "C:\\Users\\aayus\\Desktop\\helllomiss",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T20:51:57.077071",
+    "action": "file_deleted",
+    "details": {
+      "filename": "hi there",
+      "path": "C:\\Users\\aayus\\Desktop\\hi there",
+      "type": "file"
+    }
   }
 ]

@@ -9,9 +9,16 @@ from ..utils.backup import backup_file_or_folder, delete_backup_file_or_folder
 import threading
 from ..utils.undo_expiry import auto_expiry_cleanup
 
-#Getting root directory and desktop 
+# ============================================================================
+# CONFIGURABLE TARGET DIRECTORY
+# ============================================================================
+# Change this to any folder you want to manage
+# Examples: "Desktop", "Documents", "Downloads", "Pictures", "Work", "Projects"
+TARGET_FOLDER = "Desktop"  # Easy to change!
+
+#Getting root directory and target folder 
 def get_directory(root_dir:Path=Path.home())->Path:
-    return root_dir/"Desktop"
+    return root_dir/TARGET_FOLDER
 
 #Getting the list of all the files and folders
 def list_directory_items()->Dict[str, Any]:
@@ -401,5 +408,93 @@ def delete_items_by_pattern(pattern: str, target_dir: str = None, enable_undo: b
             "success": False,
             "error": str(e),
             "pattern": pattern,
+            "target_dir": target_dir
+        }
+
+def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict[str, Any]:
+    """
+    Lists all nested folders in a tree structure format.
+    
+    Args:
+        target_dir: Directory to search in (default: Desktop)
+        max_depth: Maximum depth to traverse (default: 3)
+        
+    Returns:
+        Dict with success status and tree structure
+    """
+    try:
+        if target_dir is None:
+            target_dir = str(get_directory())
+        
+        search_dir = Path(target_dir)
+        
+        if not search_dir.exists():
+            return {
+                "success": False,
+                "error": f"Target directory does not exist: {target_dir}",
+                "target_dir": target_dir
+            }
+        
+        def build_tree(path: Path, depth: int = 0, is_last: bool = False, prefix: str = "") -> str:
+            """Recursively build tree structure string"""
+            if depth > max_depth:
+                return ""
+            
+            # Get all items in current directory
+            try:
+                items = sorted([item for item in path.iterdir() if item.is_dir()], key=lambda x: x.name.lower())
+            except PermissionError:
+                return f"{prefix}└── [Access Denied]\n"
+            
+            if not items:
+                return ""
+            
+            tree_lines = []
+            for i, item in enumerate(items):
+                is_last_item = i == len(items) - 1
+                connector = "└──" if is_last_item else "├──"
+                line_prefix = "    " if is_last else "│   "
+                
+                # Current item line
+                tree_lines.append(f"{prefix}{connector} {item.name}/")
+                
+                # Recursively add children
+                child_prefix = prefix + line_prefix
+                child_tree = build_tree(item, depth + 1, is_last_item, child_prefix)
+                if child_tree:
+                    tree_lines.append(child_tree)
+            
+            return "\n".join(tree_lines)
+        
+        # Build the tree structure
+        tree_structure = build_tree(search_dir)
+        
+        if not tree_structure:
+            return {
+                "success": True,
+                "message": f"No folders found in {target_dir}",
+                "target_dir": target_dir,
+                "tree_structure": f"{search_dir.name}/\n",
+                "total_folders": 0
+            }
+        
+        # Add root directory name
+        full_tree = f"{search_dir.name}/\n{tree_structure}"
+        
+        # Count total folders
+        folder_count = len([line for line in full_tree.split('\n') if line.strip().endswith('/')])
+        
+        return {
+            "success": True,
+            "target_dir": target_dir,
+            "tree_structure": full_tree,
+            "total_folders": folder_count,
+            "max_depth": max_depth
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
             "target_dir": target_dir
         }

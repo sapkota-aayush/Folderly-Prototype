@@ -210,6 +210,67 @@ FOLDERLY_FUNCTIONS = [
             },
             "required": ["pattern"]
         }
+    },
+    {
+        "name": "list_nested_folders_tree",
+        "description": "Lists all nested folders in a tree structure format with proper hierarchy visualization",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "target_dir": {
+                    "type": "string",
+                    "description": "Directory to search in (default: Desktop)"
+                },
+                "max_depth": {
+                    "type": "integer",
+                    "description": "Maximum depth to traverse (default: 3)"
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "create_structured_hierarchy",
+        "description": "Creates a structured folder hierarchy with predefined categories like Documents/Education/Work/Personal with subfolders for better organization",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "base_path": {
+                    "type": "string",
+                    "description": "Base path where the hierarchy should be created (default: Desktop)"
+                },
+                "hierarchy_type": {
+                    "type": "string",
+                    "description": "Type of hierarchy to create: 'documents' (Documents/Education/Work/Personal), 'projects' (Projects/Client/Personal/Archive), 'media' (Media/Photos/Videos/Music), or 'custom'",
+                    "enum": ["documents", "projects", "media", "custom"]
+                },
+                "custom_structure": {
+                    "type": "object",
+                    "description": "Custom folder structure (only used when hierarchy_type is 'custom')",
+                    "properties": {
+                        "root_name": {"type": "string"},
+                        "categories": {
+                            "type": "array",
+                            "items": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {"type": "string"},
+                                    "subcategories": {
+                                        "type": "array",
+                                        "items": {"type": "string"}
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "include_readme": {
+                    "type": "boolean",
+                    "description": "Whether to create a README file in each folder explaining its purpose (default: true)"
+                }
+            },
+            "required": ["hierarchy_type"]
+        }
     }
 ]
 
