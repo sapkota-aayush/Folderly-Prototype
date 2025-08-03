@@ -12,30 +12,267 @@ from ..utils.undo_expiry import auto_expiry_cleanup
 # ============================================================================
 # CONFIGURABLE TARGET DIRECTORY
 # ============================================================================
-# Change this to any folder you want to manage
-# Examples: "Desktop", "Documents", "Downloads", "Pictures", "Work", "Projects"
-TARGET_FOLDER = "Desktop"  # Easy to change!
+try:
+    from config import TARGET_FOLDER
+except ImportError:
+    # Default fallback
+    TARGET_FOLDER = "Desktop"
 
 #Getting root directory and target folder 
-def get_directory(root_dir:Path=Path.home())->Path:
-    return root_dir/TARGET_FOLDER
+def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path:
+    """
+    Get directory path for any root folder (Desktop, Downloads, Documents, etc.)
+    
+    Args:
+        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
+        root_dir: Root directory (default: user home)
+    
+    Returns:
+        Path to the specified folder
+    """
+    if folder_name is None:
+        folder_name = TARGET_FOLDER
+    
+    # Handle common folder name variations
+    folder_mappings = {
+        "documents": ["Documents", "My Documents", "Documenti"],
+        "downloads": ["Downloads", "Download"],
+        "desktop": ["Desktop"],
+        "pictures": ["Pictures", "My Pictures", "Immagini"],
+        "music": ["Music", "My Music", "Musica"],
+        "videos": ["Videos", "My Videos", "Video"]
+    }
+    
+    # Debug: Print what we're looking for
+    print(f"🔍 Looking for folder: '{folder_name}' in {root_dir}")
+    
+    # Normalize folder name
+    folder_lower = folder_name.lower() if folder_name else TARGET_FOLDER.lower()
+    
+    # Try the exact name first
+    exact_path = root_dir / folder_name
+    if exact_path.exists():
+        return exact_path
+    
+    # Try common variations
+    if folder_lower in folder_mappings:
+        for variation in folder_mappings[folder_lower]:
+            variation_path = root_dir / variation
+            if variation_path.exists():
+                return variation_path
+    
+    # Handle OneDrive paths for Documents, Pictures, etc.
+    if folder_lower in ["documents", "pictures", "music", "videos"]:
+        # Try OneDrive paths - check multiple possible locations
+        onedrive_variations = [
+            "OneDrive",
+            "OneDrive - Personal", 
+            "OneDrive - Personal",
+            "OneDrive"
+        ]
+        
+        for onedrive_folder in onedrive_variations:
+            onedrive_paths = [
+                root_dir / onedrive_folder / folder_name,
+                root_dir / onedrive_folder / folder_mappings[folder_lower][0] if folder_lower in folder_mappings else folder_name
+            ]
+            
+            for onedrive_path in onedrive_paths:
+                if onedrive_path.exists():
+                    return onedrive_path
+    
+    # If nothing found, return the original path (will be created if needed)
+    return root_dir / folder_name
 
 #Getting the list of all the files and folders
-def list_directory_items()->Dict[str, Any]:
+def list_directory_items(
+    folder_name: str = None,
+    extension: str = None,
+    file_type: str = None,
+    pattern: str = None,
+    date_range: tuple = None,
+    size_range: tuple = None,
+    sort_by: str = "name",
+    sort_order: str = "asc",
+    include_folders: bool = True,
+    include_files: bool = True,
+    max_results: int = None
+) -> Dict[str, Any]:
+    """
+    Lists files and folders in the specified root folder with advanced filtering
+    
+    Args:
+        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
+        extension: Filter by file extension (e.g., "txt", "pdf", "docx")
+        file_type: Filter by file type ("documents", "images", "videos", "audio", "archives")
+        pattern: Filter by name pattern (case-insensitive substring match)
+        date_range: Filter by date range (days_ago, or (start_date, end_date))
+        size_range: Filter by file size in bytes (min_size, max_size)
+        sort_by: Sort by "name", "modified", "size" (default: "name")
+        sort_order: "asc" or "desc" (default: "asc")
+        include_folders: Include folders in results (default: True)
+        include_files: Include files in results (default: True)
+        max_results: Maximum number of results to return
+    
+    Returns:
+        Dict with success status, filtered file list, and filter metadata
+    """
     try:
-        desktop_dir = get_directory()
-        results = list(desktop_dir.iterdir())
+        target_dir = get_directory(folder_name)
+        
+        # Check if directory exists
+        if not target_dir.exists():
+            return {
+                "success": False,
+                "error": f"Folder '{folder_name or TARGET_FOLDER}' does not exist at {target_dir}",
+                "folder_name": folder_name or TARGET_FOLDER,
+                "suggestions": [
+                    "Try checking the folder name spelling",
+                    "The folder might be in a different location",
+                    "Common folder names: Desktop, Downloads, Documents, Pictures, Music, Videos"
+                ]
+            }
+        
+        # Check if directory is accessible
+        if not target_dir.is_dir():
+            return {
+                "success": False,
+                "error": f"'{target_dir}' is not a directory",
+                "folder_name": folder_name or TARGET_FOLDER
+            }
+        
+        # Get all items
+        all_items = list(target_dir.iterdir())
+        results = []
+        
+        # Apply file/folder filters
+        for item in all_items:
+            is_file = item.is_file()
+            is_folder = item.is_dir()
+            
+            # Skip if not including files/folders
+            if not include_files and is_file:
+                continue
+            if not include_folders and is_folder:
+                continue
+            
+            # Apply extension filter
+            if extension and is_file:
+                ext = extension.lower().lstrip('.')
+                if item.suffix.lower() != f'.{ext}':
+                    continue
+            
+            # Apply file type filter
+            if file_type and is_file:
+                file_extensions = {
+                    "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt"],
+                    "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp"],
+                    "videos": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm"],
+                    "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma"],
+                    "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2"]
+                }
+                
+                if file_type.lower() in file_extensions:
+                    if item.suffix.lower() not in file_extensions[file_type.lower()]:
+                        continue
+            
+            # Apply pattern filter
+            if pattern:
+                if pattern.lower() not in item.name.lower():
+                    continue
+            
+            # Apply date filter
+            if date_range and is_file:
+                try:
+                    file_time = datetime.fromtimestamp(item.stat().st_mtime)
+                    current_time = datetime.now()
+                    
+                    if isinstance(date_range, (int, float)):
+                        # Days ago filter
+                        cutoff_date = current_time - timedelta(days=date_range)
+                        if file_time < cutoff_date:
+                            continue
+                    elif isinstance(date_range, tuple) and len(date_range) == 2:
+                        # Date range filter
+                        start_date, end_date = date_range
+                        if isinstance(start_date, str):
+                            start_date = datetime.strptime(start_date, "%Y-%m-%d")
+                        if isinstance(end_date, str):
+                            end_date = datetime.strptime(end_date, "%Y-%m-%d")
+                        
+                        if file_time < start_date or file_time > end_date:
+                            continue
+                except Exception:
+                    # Skip date filtering if there's an error
+                    pass
+            
+            # Apply size filter
+            if size_range and is_file:
+                try:
+                    file_size = item.stat().st_size
+                    min_size, max_size = size_range
+                    
+                    if min_size and file_size < min_size:
+                        continue
+                    if max_size and file_size > max_size:
+                        continue
+                except Exception:
+                    # Skip size filtering if there's an error
+                    pass
+            
+            results.append(item)
+        
+        # Apply sorting
+        if sort_by == "name":
+            results.sort(key=lambda x: x.name.lower(), reverse=(sort_order == "desc"))
+        elif sort_by == "modified":
+            results.sort(key=lambda x: x.stat().st_mtime, reverse=(sort_order == "desc"))
+        elif sort_by == "size":
+            results.sort(key=lambda x: x.stat().st_size if x.is_file() else 0, reverse=(sort_order == "desc"))
+        
+        # Apply max results limit
+        if max_results and len(results) > max_results:
+            results = results[:max_results]
+        
+        # Build filters applied metadata
+        filters_applied = {}
+        if extension:
+            filters_applied["extension"] = extension
+        if file_type:
+            filters_applied["file_type"] = file_type
+        if pattern:
+            filters_applied["pattern"] = pattern
+        if date_range:
+            filters_applied["date_range"] = date_range
+        if size_range:
+            filters_applied["size_range"] = size_range
+        if sort_by:
+            filters_applied["sort_by"] = sort_by
+        if sort_order:
+            filters_applied["sort_order"] = sort_order
+        if max_results:
+            filters_applied["max_results"] = max_results
         
         return {
             "success": True,
-            "results": [str(path) for path in results],  # Convert to strings
+            "results": [str(path) for path in results],
             "total_found": len(results),
-            "directory": str(desktop_dir)
+            "filters_applied": filters_applied,
+            "directory": str(target_dir),
+            "folder_name": folder_name or TARGET_FOLDER
+        }
+    except PermissionError:
+        return {
+            "success": False,
+            "error": f"Permission denied: Cannot access folder '{folder_name or TARGET_FOLDER}'",
+            "folder_name": folder_name or TARGET_FOLDER,
+            "suggestions": ["Try running as administrator or check folder permissions"]
         }
     except Exception as e:
         return {
             "success": False,
-            "error": str(e)
+            "error": str(e),
+            "folder_name": folder_name or TARGET_FOLDER
         }
 
 #Listing recently modified files and folders
@@ -497,4 +734,128 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
             "success": False,
             "error": str(e),
             "target_dir": target_dir
+        }
+
+def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
+    """
+    Counts files by extension in the specified folder
+    
+    Args:
+        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
+    
+    Returns:
+        Dict with extension counts and statistics
+    """
+    try:
+        target_dir = get_directory(folder_name)
+        
+        if not target_dir.exists():
+            return {
+                "success": False,
+                "error": f"Folder '{folder_name or TARGET_FOLDER}' does not exist",
+                "folder_name": folder_name or TARGET_FOLDER
+            }
+        
+        # Get all files
+        all_files = [f for f in target_dir.iterdir() if f.is_file()]
+        
+        # Count by extension
+        extension_counts = {}
+        total_files = len(all_files)
+        
+        for file_path in all_files:
+            ext = file_path.suffix.lower()
+            if ext:
+                extension_counts[ext] = extension_counts.get(ext, 0) + 1
+            else:
+                # Files without extension
+                extension_counts["no_extension"] = extension_counts.get("no_extension", 0) + 1
+        
+        # Sort by count (descending)
+        sorted_extensions = sorted(extension_counts.items(), key=lambda x: x[1], reverse=True)
+        
+        return {
+            "success": True,
+            "total_files": total_files,
+            "extension_counts": dict(sorted_extensions),
+            "top_extensions": sorted_extensions[:10],  # Top 10 extensions
+            "directory": str(target_dir),
+            "folder_name": folder_name or TARGET_FOLDER
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "folder_name": folder_name or TARGET_FOLDER
+        }
+
+def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
+    """
+    Gets file type statistics (documents, images, videos, etc.) for the specified folder
+    
+    Args:
+        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
+    
+    Returns:
+        Dict with file type statistics
+    """
+    try:
+        target_dir = get_directory(folder_name)
+        
+        if not target_dir.exists():
+            return {
+                "success": False,
+                "error": f"Folder '{folder_name or TARGET_FOLDER}' does not exist",
+                "folder_name": folder_name or TARGET_FOLDER
+            }
+        
+        # File type definitions
+        file_types = {
+            "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".ppt", ".pptx", ".xls", ".xlsx"],
+            "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
+            "videos": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v"],
+            "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a"],
+            "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"],
+            "executables": [".exe", ".msi", ".dmg", ".pkg", ".deb", ".rpm"],
+            "code": [".py", ".js", ".html", ".css", ".java", ".cpp", ".c", ".php", ".rb", ".go"]
+        }
+        
+        # Get all files
+        all_files = [f for f in target_dir.iterdir() if f.is_file()]
+        
+        # Count by file type
+        type_counts = {file_type: 0 for file_type in file_types.keys()}
+        type_counts["other"] = 0
+        total_files = len(all_files)
+        
+        for file_path in all_files:
+            ext = file_path.suffix.lower()
+            categorized = False
+            
+            for file_type, extensions in file_types.items():
+                if ext in extensions:
+                    type_counts[file_type] += 1
+                    categorized = True
+                    break
+            
+            if not categorized:
+                type_counts["other"] += 1
+        
+        # Remove zero counts and sort
+        non_zero_counts = {k: v for k, v in type_counts.items() if v > 0}
+        sorted_types = sorted(non_zero_counts.items(), key=lambda x: x[1], reverse=True)
+        
+        return {
+            "success": True,
+            "total_files": total_files,
+            "file_type_counts": dict(sorted_types),
+            "top_file_types": sorted_types[:5],  # Top 5 file types
+            "directory": str(target_dir),
+            "folder_name": folder_name or TARGET_FOLDER
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "folder_name": folder_name or TARGET_FOLDER
         }

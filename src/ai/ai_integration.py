@@ -5,7 +5,11 @@ import threading
 import time
 from dotenv import load_dotenv
 from src.ai.function_schemas import get_function_schemas
-from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, create_numbered_files, list_nested_folders_tree
+from src.ai.prompts import (
+    load_system_prompt, load_force_prompt, load_welcome_message, 
+    load_goodbye_message, load_empty_input_message, load_error_message
+)
+from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, create_numbered_files, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics
 from folderly.activity_tracker import start_activity_monitoring, FolderlyActivityTracker, show_activity_summary
 from folderly.ai_activity_integration import show_ai_enhanced_activity
 from src.utils.move_manager import perform_move_with_undo
@@ -18,9 +22,7 @@ load_dotenv()
 # Get API key
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
-    print("❌ Error: OPENAI_API_KEY not found in environment variables!")
-    print("Please add your API key to the .env file:")
-    print("OPENAI_API_KEY=your_api_key_here")
+    print(load_error_message("api_key"))
     exit(1)
 
 print(f"API Key loaded: {'Yes' if api_key else 'No'}")
@@ -66,89 +68,12 @@ def show_activity_with_ai():
             "message": f"Could not analyze activity: {str(e)}"
         }
 
-def create_system_prompt():
-    return """You are Folderly, a smart file management assistant. You can help users explore their desktop.
-
-IMPORTANT: When users ask you to create files or folders, ALWAYS use the appropriate function instead of just responding conversationally.
-
-AVAILABLE FUNCTIONS:
-- list_directory_items: Show all files and folders on desktop
-- list_nested_folders_tree: Show nested folders in tree structure format
-- filter_and_sort_by_modified: Show recently modified files/folders
-- create_directory: Create a new folder on desktop
-- create_multiple_directories: Create multiple folders at once
-- create_file: Create a new file with content and extension
-- create_multiple_files: Create multiple files with different extensions
-- perform_move_with_undo: Move files and folders to a destination with undo support
-- undo_last_operation: Undo the last move or delete operation if within 30 seconds
-- delete_single_item: Soft delete a single file or directory (moves to recycle bin) with undo support
-- delete_multiple_items: Soft delete multiple files and directories (moves to recycle bin) with undo support
-- delete_items_by_pattern: Delete files matching a pattern (moves to recycle bin) with undo support
-- show_activity_with_ai: Show user's recent file activity with AI analysis and insights
-
-WHEN TO USE FUNCTIONS:
-- If user asks to create files → Use create_file or create_multiple_files
-- If user asks to create folders → Use create_directory or create_multiple_directories
-- If user asks to move files → Use perform_move_with_undo
-- If user asks to undo → Use undo_last_operation (works for both move and delete operations)
-- If user asks to list files → Use list_directory_items
-- If user asks to show folder structure/tree → Use list_nested_folders_tree
-- If user asks to delete files → Use delete_single_item, delete_multiple_items, or delete_items_by_pattern
-- If user asks to delete files by pattern (e.g., "all txt files", "temp files") → Use delete_items_by_pattern
-- If user asks to delete specific files → Use delete_single_item or delete_multiple_items
-
-TREE STRUCTURE FORMATTING:
-When displaying file/folder structures, ALWAYS use tree format with these characters:
-- ├── for items that have siblings below
-- └── for the last item in a level  
-- │   for vertical lines showing hierarchy
-- Use proper indentation (4 spaces per level)
-
-When users ask to create multiple folders or a folder structure, ALWAYS preview the structure first like:
-"📁 I'll create this folder structure for you:
-Documents/
-   ├── Education/
-   │      ├── Program_Name/
-   │      └── Certificates/
-   ├── Work/
-   │      ├── Project_Name/
-   │      └── Reports/
-   └── Personal/
-          ├── Finance/
-          └── ID/
-
-Would you like me to create this structure?"
-
-RESPONSE PATTERNS:
-- For listing: Display as tree structure like:
-  Desktop/
-     ├── Documents/
-     ├── Pictures/
-     ├── file1.txt
-     └── file2.pdf
-- For recent files: Show tree structure of recently modified items
-- For creating folders: "I've created a new folder called '[folder name]' on your desktop"
-- For creating files: "I've created a new file called '[filename]' with [extension] extension"
-- For moving: "I've moved [X] items to [destination]. Here's what was moved: [item names]"
-- For deleting: "I've deleted [X] items and moved them to the recycle bin. Here's what was deleted: [item names]. You can undo this within 30 seconds."
-- For undo: "I've undone the last operation. Your files are back to their original locations"
-- For errors: "I couldn't do that because [error]. Try again!"
-
-Keep responses friendly and helpful. Use emojis occasionally. ALWAYS format file listings as tree structures."""
-
 def chat_with_ai():
-    print("🚀 Welcome to Folderly - Smart Desktop Explorer!")
-    print("=" * 50)
-    print("💡 I can help you:")
-    print("   • List all items on your desktop")
-    print("   • Show recently modified files")
-    print("   • Create new folders")
-    print("   • Move files and folders")
-    print("=" * 50)
+    print(load_welcome_message())
     
     # Initialize conversation history
     conversation_history = [
-        {"role": "system", "content": create_system_prompt()}
+        {"role": "system", "content": load_system_prompt()}
     ]
     
     # Start background monitoring
@@ -159,12 +84,12 @@ def chat_with_ai():
             user_input = input("\n💭 You: ").strip()
             
             if user_input.lower() in ['bye', 'goodbye', 'exit', 'quit']:
-                print("👋 Thanks for using Folderly! ✨")
+                print(load_goodbye_message())
                 stop_background_monitoring()
                 break
                 
             if not user_input:
-                print("🤔 What would you like to do?")
+                print(load_empty_input_message())
                 continue
             
             # Add user message to conversation
@@ -174,7 +99,7 @@ def chat_with_ai():
             if "analyze my activity" in user_input.lower() or "what did I do" in user_input.lower() or "activity" in user_input.lower():
                 conversation_history.append({
                     "role": "system",
-                    "content": "CRITICAL: You MUST call show_activity_with_ai function. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("activity")
                 })
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -186,7 +111,7 @@ def chat_with_ai():
             elif "undo" in user_input.lower():
                 conversation_history.append({
                     "role": "system",
-                    "content": "CRITICAL: You MUST call undo_last_operation function. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("undo")
                 })
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -198,7 +123,7 @@ def chat_with_ai():
             elif any(keyword in user_input.lower() for keyword in ['create', 'make', 'new file']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash']):
                 conversation_history.append({
                     "role": "system", 
-                    "content": "CRITICAL: You MUST call create_numbered_files function. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("file_creation")
                 })
                 
                 # Force function call
@@ -212,7 +137,7 @@ def chat_with_ai():
             elif any(keyword in user_input.lower() for keyword in ['tree', 'structure', 'folder structure', 'nested', 'hierarchy']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move']):
                 conversation_history.append({
                     "role": "system",
-                    "content": "CRITICAL: You MUST call list_nested_folders_tree function. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("tree_structure")
                 })
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -221,10 +146,10 @@ def chat_with_ai():
                     function_call={"name": "list_nested_folders_tree"}
                 )
             # Force function calling for listing files (default surface level)
-            elif any(keyword in user_input.lower() for keyword in ['list', 'show', 'files', 'desktop', 'what']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move', 'tree', 'structure', 'nested', 'hierarchy']):
+            elif any(keyword in user_input.lower() for keyword in ['list', 'show', 'files', 'desktop']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move', 'tree', 'structure', 'nested', 'hierarchy', 'can you do', 'what can you', 'help']):
                 conversation_history.append({
                     "role": "system",
-                    "content": "CRITICAL: You MUST call list_directory_items function. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("list_files")
                 })
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -236,7 +161,7 @@ def chat_with_ai():
             elif "move" in user_input.lower():
                 conversation_history.append({
                     "role": "system",
-                    "content": "CRITICAL: You MUST call perform_move_with_undo function. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("move")
                 })
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -248,7 +173,7 @@ def chat_with_ai():
             elif any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'bin']):
                 conversation_history.append({
                     "role": "system",
-                    "content": "CRITICAL: You MUST call delete_single_item, delete_multiple_items, or delete_items_by_pattern function based on the context. For pattern-based deletion (like 'all txt files'), use delete_items_by_pattern. DO NOT respond conversationally. You MUST execute the function."
+                    "content": load_force_prompt("delete")
                 })
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -275,7 +200,31 @@ def chat_with_ai():
                 
                 # Execute appropriate function
                 if function_name == "list_directory_items":
-                    result = list_directory_items()
+                    folder_name = function_args.get("folder_name", None)
+                    extension = function_args.get("extension", None)
+                    file_type = function_args.get("file_type", None)
+                    pattern = function_args.get("pattern", None)
+                    date_range = function_args.get("date_range", None)
+                    size_range = function_args.get("size_range", None)
+                    sort_by = function_args.get("sort_by", "name")
+                    sort_order = function_args.get("sort_order", "asc")
+                    include_folders = function_args.get("include_folders", True)
+                    include_files = function_args.get("include_files", True)
+                    max_results = function_args.get("max_results", None)
+                    
+                    result = list_directory_items(
+                        folder_name=folder_name,
+                        extension=extension,
+                        file_type=file_type,
+                        pattern=pattern,
+                        date_range=date_range,
+                        size_range=size_range,
+                        sort_by=sort_by,
+                        sort_order=sort_order,
+                        include_folders=include_folders,
+                        include_files=include_files,
+                        max_results=max_results
+                    )
                 elif function_name == "filter_and_sort_by_modified":
                     # Get items first, then filter by date
                     items_result = list_directory_items()
@@ -386,6 +335,14 @@ def chat_with_ai():
                     target_dir = function_args.get("target_dir", None)
                     max_depth = function_args.get("max_depth", 3)
                     result = list_nested_folders_tree(target_dir, max_depth)
+                elif function_name == "count_files_by_extension":
+                    # Count files by extension
+                    folder_name = function_args.get("folder_name", None)
+                    result = count_files_by_extension(folder_name)
+                elif function_name == "get_file_type_statistics":
+                    # Get file type statistics
+                    folder_name = function_args.get("folder_name", None)
+                    result = get_file_type_statistics(folder_name)
                 else:
                     result = {"success": False, "error": f"Unknown function: {function_name}"}
                 
@@ -419,7 +376,7 @@ def chat_with_ai():
             print("\n👋 See you later! 👋")
             break
         except Exception as e:
-            print(f"😅 Oops! Something went wrong: {e}")
+            print(load_error_message("generic", str(e)))
 
 if __name__ == "__main__":
     chat_with_ai()

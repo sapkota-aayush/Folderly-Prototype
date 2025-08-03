@@ -169,5 +169,248 @@
       "path": "C:\\Users\\aayus\\Desktop\\hi there",
       "type": "file"
     }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.008454",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.014452",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.836263",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.867298",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.891091",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.910089",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:54.976970",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:55.003690",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:55.029939",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:55.039307",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:16:55.052637",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:48:45.824040",
+    "action": "folder_modified",
+    "details": {
+      "filename": "not-used",
+      "path": "C:\\Users\\aayus\\Desktop\\not-used",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T21:57:53.764068",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:47.823116",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:47.844117",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.043912",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.081269",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.112779",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.140777",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.224301",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.256300",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.288312",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.297084",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-01T22:25:48.306911",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-02T17:26:54.337309",
+    "action": "folder_modified",
+    "details": {
+      "filename": "not-used",
+      "path": "C:\\Users\\aayus\\Desktop\\not-used",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-02T22:54:41.792634",
+    "action": "file_created",
+    "details": {
+      "filename": "ShortcutStorage_1.empty",
+      "path": "C:\\Users\\aayus\\Desktop\\ShortcutStorage_1.empty",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-02T22:54:41.802146",
+    "action": "file_modified",
+    "details": {
+      "filename": "ShortcutStorage_1.empty",
+      "path": "C:\\Users\\aayus\\Desktop\\ShortcutStorage_1.empty",
+      "type": "file"
+    }
   }
 ]
