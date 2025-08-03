@@ -12,10 +12,56 @@ from typing import Dict, List, Any
 FOLDERLY_FUNCTIONS = [
     {
         "name": "list_directory_items",
-        "description": "Lists all files and folders on the Desktop",
+        "description": "Lists files and folders in any root folder with advanced filtering options (Desktop, Downloads, Documents, etc.)",
         "parameters": {
             "type": "object",
-            "properties": {},
+            "properties": {
+                "folder_name": {
+                    "type": "string",
+                    "description": "Name of the root folder to list (Desktop, Downloads, Documents, Pictures, Music, Videos, etc.)"
+                },
+                "extension": {
+                    "type": "string",
+                    "description": "Filter by file extension (e.g., 'txt', 'pdf', 'docx'). Use without the dot."
+                },
+                "file_type": {
+                    "type": "string",
+                    "description": "Filter by file type category: 'documents', 'images', 'videos', 'audio', 'archives', 'executables', 'code'"
+                },
+                "pattern": {
+                    "type": "string", 
+                    "description": "Filter by name pattern (case-insensitive substring match, e.g., 'assignment', '2024')"
+                },
+                "date_range": {
+                    "type": "integer",
+                    "description": "Filter by days ago (e.g., 7 for files modified in last 7 days)"
+                },
+                "size_range": {
+                    "type": "array",
+                    "items": {"type": "integer"},
+                    "description": "Filter by file size in bytes [min_size, max_size]. Use null for no limit."
+                },
+                "sort_by": {
+                    "type": "string",
+                    "description": "Sort by: 'name', 'modified', 'size' (default: 'name')"
+                },
+                "sort_order": {
+                    "type": "string",
+                    "description": "Sort order: 'asc' or 'desc' (default: 'asc')"
+                },
+                "include_folders": {
+                    "type": "boolean",
+                    "description": "Include folders in results (default: true)"
+                },
+                "include_files": {
+                    "type": "boolean", 
+                    "description": "Include files in results (default: true)"
+                },
+                "max_results": {
+                    "type": "integer",
+                    "description": "Maximum number of results to return (useful for large directories)"
+                }
+            },
             "required": []
         }
     },
@@ -40,7 +86,7 @@ FOLDERLY_FUNCTIONS = [
     },
     {
         "name": "create_directory",
-        "description": "Creates a new directory at the specified path",
+        "description": "Creates a new directory in the target directory",
         "parameters": {
             "type": "object",
             "properties": {
@@ -270,6 +316,34 @@ FOLDERLY_FUNCTIONS = [
                 }
             },
             "required": ["hierarchy_type"]
+        }
+    },
+    {
+        "name": "count_files_by_extension",
+        "description": "Counts files by extension in the specified folder and provides statistics about file types",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "folder_name": {
+                    "type": "string",
+                    "description": "Name of the folder to analyze (Desktop, Downloads, Documents, etc.)"
+                }
+            },
+            "required": []
+        }
+    },
+    {
+        "name": "get_file_type_statistics",
+        "description": "Gets file type statistics (documents, images, videos, etc.) for the specified folder",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "folder_name": {
+                    "type": "string",
+                    "description": "Name of the folder to analyze (Desktop, Downloads, Documents, etc.)"
+                }
+            },
+            "required": []
         }
     }
 ]

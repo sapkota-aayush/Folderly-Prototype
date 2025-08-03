@@ -5,11 +5,16 @@ Folderly is an intelligent desktop file management system that combines traditio
 ## 🚀 Features
 
 ### **Core File Operations**
-- 📁 **List and explore** all files and folders on your Desktop
+- 📁 **List and explore** all files and folders in your target directory
 - 🔍 **Search and filter** files by name, extension, or modification date
 - 📦 **Create folders** and organize files efficiently
 - 🗂️ **Move files** with undo support and backup safety
 - 🗑️ **Delete files** safely with recycle bin and undo functionality
+
+### **Easy Configuration**
+- ⚙️ **Simple setup** - Change target folder with one line in `config.py`
+- 🎯 **Flexible targeting** - Manage Desktop, Documents, Downloads, or any folder
+- 🔧 **Quick customization** - No complex setup required
 
 ### **AI-Powered Assistance**
 - 🤖 **Natural language commands** - "list all my files", "create a folder called work"
@@ -52,6 +57,12 @@ Folderly-ProtoType/
 ### **Prerequisites**
 - Python 3.8+
 - OpenAI API key (for AI features)
+
+### **Quick Configuration**
+```python
+# Edit config.py to change your target folder
+TARGET_FOLDER = "Desktop"  # Change to "Documents", "Downloads", etc.
+```
 
 ### **Installation Options**
 
