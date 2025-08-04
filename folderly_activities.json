@@ -412,5 +412,14 @@
       "path": "C:\\Users\\aayus\\Desktop\\ShortcutStorage_1.empty",
       "type": "file"
     }
+  },
+  {
+    "timestamp": "2025-08-04T10:56:01.312611",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
   }
 ]
