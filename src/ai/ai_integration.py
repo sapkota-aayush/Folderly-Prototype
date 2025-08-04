@@ -59,8 +59,11 @@ def stop_background_monitoring():
 def show_activity_with_ai():
     """Show user's recent activity with AI analysis"""
     try:
-        tracker = FolderlyActivityTracker()
-        result = show_ai_enhanced_activity(tracker)
+        global background_tracker
+        if background_tracker is None:
+            # If no background tracker, create one
+            background_tracker = FolderlyActivityTracker()
+        result = show_ai_enhanced_activity(background_tracker)
         return result
     except Exception as e:
         return {
