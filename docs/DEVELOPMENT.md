@@ -19,6 +19,9 @@ src/
 │   └── function_schemas.py # OpenAI function schemas
 └── cli/            # Command line interface
     └── cli.py      # Traditional CLI interface
+folderly/
+├── activity_tracker.py      # File system activity monitoring
+└── ai_activity_integration.py # AI analysis of user activity
 ```
 
 ### Key Design Principles
@@ -38,6 +41,14 @@ src/
 - **30-second undo window** for all operations
 - **Soft delete** using recycle bin
 - **Metadata tracking** for operation history
+- **Automatic activity cleanup** - 2-day retention policy
+
+#### 4. Activity Tracking System
+- **Real-time monitoring** of file system events
+- **2-day retention policy** - Automatic cleanup of old activities
+- **Smart cleanup triggers** - Every 10 activities and on startup
+- **JSON-based storage** in `folderly_activities.json`
+- **AI-powered analysis** of user activity patterns
 
 ## Development Setup
 

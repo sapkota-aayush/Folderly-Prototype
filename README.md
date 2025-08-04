@@ -21,6 +21,7 @@ Folderly is an intelligent desktop file management system that combines traditio
 - 🧠 **Smart suggestions** based on your file patterns
 - 📊 **Activity tracking** with AI analysis of your file usage
 - 🔄 **Automated operations** with safety checks
+- 🧹 **Automatic cleanup** - 2-day retention policy for activity logs
 
 ### **Safety & Undo System**
 - 🔒 **Backup system** - All operations create backups
