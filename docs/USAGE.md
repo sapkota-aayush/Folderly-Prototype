@@ -98,6 +98,8 @@ The system automatically tracks your file usage patterns:
 - **Most used files**
 - **Least used files**
 - **AI-powered insights**
+- **2-day retention policy** - Automatic cleanup of old activity data
+- **Smart cleanup** - Removes activities older than 2 days automatically
 
 ### Background Operations
 - **Auto-cleanup** runs in background threads
