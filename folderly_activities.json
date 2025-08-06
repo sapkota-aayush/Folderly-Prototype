@@ -421,5 +421,2719 @@
       "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
       "type": "folder"
     }
+  },
+  {
+    "timestamp": "2025-08-04T11:04:07.086348",
+    "action": "file_deleted",
+    "details": {
+      "filename": "jhfyutfhgvc",
+      "path": "C:\\Users\\aayus\\Desktop\\jhfyutfhgvc",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:04:47.014808",
+    "action": "folder_created",
+    "details": {
+      "filename": "New folder",
+      "path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:04:55.187693",
+    "action": "folder_moved",
+    "details": {
+      "old_name": "New folder",
+      "new_name": "k xa",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "to_path": "C:\\Users\\aayus\\Desktop\\k xa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:04:55.192704",
+    "action": "folder_modified",
+    "details": {
+      "filename": "k xa",
+      "path": "C:\\Users\\aayus\\Desktop\\k xa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:07:33.899280",
+    "action": "file_deleted",
+    "details": {
+      "filename": "k xa",
+      "path": "C:\\Users\\aayus\\Desktop\\k xa",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:07:36.451409",
+    "action": "folder_created",
+    "details": {
+      "filename": "New folder",
+      "path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:07:40.051075",
+    "action": "folder_moved",
+    "details": {
+      "old_name": "New folder",
+      "new_name": "Hyd",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "to_path": "C:\\Users\\aayus\\Desktop\\Hyd",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:07:40.055074",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Hyd",
+      "path": "C:\\Users\\aayus\\Desktop\\Hyd",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.244475",
+    "action": "file_deleted",
+    "details": {
+      "filename": "Hyd",
+      "path": "C:\\Users\\aayus\\Desktop\\Hyd",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.744099",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.749575",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.754581",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.756577",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.768579",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.794962",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.815941",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.834497",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.847496",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.851465",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:21.862503",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:51.221794",
+    "action": "folder_created",
+    "details": {
+      "filename": "New folder",
+      "path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:52.961509",
+    "action": "folder_moved",
+    "details": {
+      "old_name": "New folder",
+      "new_name": "bcvbnvcg",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "to_path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:11:52.964503",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:07.584499",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:07.587501",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:07.595023",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:07.599124",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:37.994835",
+    "action": "folder_created",
+    "details": {
+      "filename": "New folder",
+      "path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:43.236298",
+    "action": "folder_moved",
+    "details": {
+      "old_name": "New folder",
+      "new_name": "hii sir",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "to_path": "C:\\Users\\aayus\\Desktop\\hii sir",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:15:43.240297",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hii sir",
+      "path": "C:\\Users\\aayus\\Desktop\\hii sir",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:35:32.359582",
+    "action": "file_deleted",
+    "details": {
+      "filename": "hii sir",
+      "path": "C:\\Users\\aayus\\Desktop\\hii sir",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:36:20.286655",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:36:20.290654",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:38:32.242095",
+    "action": "folder_created",
+    "details": {
+      "filename": "New folder",
+      "path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:38:50.004449",
+    "action": "folder_moved",
+    "details": {
+      "old_name": "New folder",
+      "new_name": "hey nasa",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New folder",
+      "to_path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T11:38:50.008448",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:41:48.225879",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:41:48.237437",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:41:48.241476",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_2.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:41:48.245434",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_2.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:41:48.249433",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_3.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:41:48.254436",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_3.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.196498",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.201509",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.299628",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.336626",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.368129",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.399656",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.419884",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.483901",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.506422",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.531420",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.547421",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.559428",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:42:22.568418",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.942552",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.948560",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_2.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.952970",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_3.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.979500",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_4.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.984501",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_4.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.990692",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_5.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.994713",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_5.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:10.997745",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_6.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:11.000255",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_6.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:11.004957",
+    "action": "file_created",
+    "details": {
+      "filename": "folder_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_7.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:11.007475",
+    "action": "file_modified",
+    "details": {
+      "filename": "folder_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\folder_7.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.394670",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.405676",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.414201",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_2.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.424210",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_2.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_2.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.428208",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_3.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.433025",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_3.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_3.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.436535",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_4.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.441545",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_4.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_4.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.444537",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_5.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.449051",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_5.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_5.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.454053",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_6.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.460101",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_6.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_6.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.463095",
+    "action": "file_created",
+    "details": {
+      "filename": "testing_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_7.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:38.466094",
+    "action": "file_modified",
+    "details": {
+      "filename": "testing_7.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\testing_7.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:43:53.771708",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:45:30.728260",
+    "action": "file_created",
+    "details": {
+      "filename": "marketing_course_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_course_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:45:30.731256",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_course_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_course_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:45:42.913136",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_course_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_course_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:48:57.891726",
+    "action": "file_created",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T12:48:57.896767",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:19:07.562552",
+    "action": "file_created",
+    "details": {
+      "filename": "aayush_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\aayush_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:19:07.595251",
+    "action": "file_modified",
+    "details": {
+      "filename": "aayush_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\aayush_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:20:47.930928",
+    "action": "file_modified",
+    "details": {
+      "filename": "aayush_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\aayush_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:22:08.916638",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:22:08.921608",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:22:20.133356",
+    "action": "file_deleted",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:23:02.629346",
+    "action": "file_created",
+    "details": {
+      "filename": "computer_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\computer_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:23:02.638349",
+    "action": "file_modified",
+    "details": {
+      "filename": "computer_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\computer_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:23:34.104227",
+    "action": "file_modified",
+    "details": {
+      "filename": "computer_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\computer_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:23:34.121591",
+    "action": "file_modified",
+    "details": {
+      "filename": "computer_1.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\computer_1.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:44:43.032286",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:53:54.753054",
+    "action": "file_created",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:53:54.764053",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:54:47.696961",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:54:47.717682",
+    "action": "file_modified",
+    "details": {
+      "filename": "marketing_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\marketing_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.340757",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.525543",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.580534",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.652620",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.671629",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.698827",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.713709",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.729208",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.746604",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.772599",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.879345",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.914261",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:02.922266",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:46.910536",
+    "action": "file_created",
+    "details": {
+      "filename": "helo_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\helo_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:55:46.916957",
+    "action": "file_modified",
+    "details": {
+      "filename": "helo_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\helo_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:56:28.989649",
+    "action": "file_created",
+    "details": {
+      "filename": "rumal_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\rumal_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:56:28.998653",
+    "action": "file_modified",
+    "details": {
+      "filename": "rumal_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\rumal_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:57:45.580667",
+    "action": "file_created",
+    "details": {
+      "filename": "rumali_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\rumali_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:57:45.585667",
+    "action": "file_modified",
+    "details": {
+      "filename": "rumali_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\rumali_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:59:55.217876",
+    "action": "file_created",
+    "details": {
+      "filename": "hera_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\hera_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T13:59:55.225377",
+    "action": "file_modified",
+    "details": {
+      "filename": "hera_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\hera_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T14:01:53.923445",
+    "action": "file_created",
+    "details": {
+      "filename": "rumaliroti_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\rumaliroti_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T14:01:53.929443",
+    "action": "file_modified",
+    "details": {
+      "filename": "rumaliroti_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\rumaliroti_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T14:07:59.666564",
+    "action": "file_modified",
+    "details": {
+      "filename": "hera_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\hera_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T14:09:28.954076",
+    "action": "file_modified",
+    "details": {
+      "filename": "hera_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\hera_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T14:10:33.696042",
+    "action": "file_modified",
+    "details": {
+      "filename": "hera_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\hera_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T14:10:33.725670",
+    "action": "file_modified",
+    "details": {
+      "filename": "hera_1.folder",
+      "path": "C:\\Users\\aayus\\Desktop\\hera_1.folder",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T16:50:03.460457",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:49:49.984708",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:31.133732",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:31.439539",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:31.593202",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:31.763965",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.095934",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.253661",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.414429",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.550636",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.588904",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.610774",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.662043",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.763645",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T21:50:32.780857",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T22:51:01.384847",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.140118",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.155516",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.171254",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.213176",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.278203",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.319194",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.355575",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.488207",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.542912",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.599241",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.634625",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.651760",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:01:06.669722",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-04T23:51:01.519327",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:55.851966",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:55.871538",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:55.899138",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:55.930710",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:56.078789",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:56.170137",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:56.245329",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:21:56.358098",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:32:53.165596",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:32:53.172244",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:32:53.180274",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:32:53.188273",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T00:32:53.196274",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T01:02:24.845433",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:43.040398",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:50.664531",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:50.759306",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:51.069807",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:54.590266",
+    "action": "folder_modified",
+    "details": {
+      "filename": "not-used",
+      "path": "C:\\Users\\aayus\\Desktop\\not-used",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:55.254507",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:55.344679",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:55.414149",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:55.561819",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:55.992253",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:56.085182",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:56.191460",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:56.251997",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:56.363783",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T06:34:56.495104",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:32:49.409519",
+    "action": "folder_created",
+    "details": {
+      "filename": "aayu",
+      "path": "C:\\Users\\aayus\\Desktop\\aayu",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:34:48.663951",
+    "action": "file_deleted",
+    "details": {
+      "filename": "aayu",
+      "path": "C:\\Users\\aayus\\Desktop\\aayu",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:38:20.346170",
+    "action": "folder_created",
+    "details": {
+      "filename": "Folder1",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder1",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:38:20.374165",
+    "action": "folder_created",
+    "details": {
+      "filename": "Folder2",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder2",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:38:20.386588",
+    "action": "folder_created",
+    "details": {
+      "filename": "Folder3",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder3",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:43:38.213287",
+    "action": "folder_created",
+    "details": {
+      "filename": "Study",
+      "path": "C:\\Users\\aayus\\Desktop\\Study",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:43:38.219281",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Study",
+      "path": "C:\\Users\\aayus\\Desktop\\Study",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:44:42.188131",
+    "action": "folder_created",
+    "details": {
+      "filename": "Academic",
+      "path": "C:\\Users\\aayus\\Desktop\\Academic",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:44:42.216011",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Academic",
+      "path": "C:\\Users\\aayus\\Desktop\\Academic",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:46:37.914237",
+    "action": "file_created",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:46:37.919244",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:46:37.925244",
+    "action": "file_created",
+    "details": {
+      "filename": "Assignment_2.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_2.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:46:37.929243",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_2.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_2.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:46:37.932752",
+    "action": "file_created",
+    "details": {
+      "filename": "Assignment_3.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_3.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:46:37.947766",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_3.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_3.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:50:22.973883",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:50:23.001887",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:50:23.014888",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_2.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_2.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:50:23.024998",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_3.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_3.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:56:20.661688",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:56:20.687697",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:56:20.695352",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_2.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_2.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:56:20.700369",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_3.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_3.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:59:38.809187",
+    "action": "folder_created",
+    "details": {
+      "filename": "ComputerScience",
+      "path": "C:\\Users\\aayus\\Desktop\\ComputerScience",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T09:59:38.845845",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ComputerScience",
+      "path": "C:\\Users\\aayus\\Desktop\\ComputerScience",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:01:56.114886",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:01:56.134923",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_1.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_1.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:01:56.147344",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_2.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_2.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:01:56.155126",
+    "action": "file_modified",
+    "details": {
+      "filename": "Assignment_3.pdf",
+      "path": "C:\\Users\\aayus\\Desktop\\Assignment_3.pdf",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:04:19.679747",
+    "action": "folder_created",
+    "details": {
+      "filename": "Marketing",
+      "path": "C:\\Users\\aayus\\Desktop\\Marketing",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:04:19.716368",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Marketing",
+      "path": "C:\\Users\\aayus\\Desktop\\Marketing",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:04:19.727318",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Marketing",
+      "path": "C:\\Users\\aayus\\Desktop\\Marketing",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:18:11.626779",
+    "action": "folder_created",
+    "details": {
+      "filename": "DataScience",
+      "path": "C:\\Users\\aayus\\Desktop\\DataScience",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:18:11.640952",
+    "action": "folder_modified",
+    "details": {
+      "filename": "DataScience",
+      "path": "C:\\Users\\aayus\\Desktop\\DataScience",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:19:19.085688",
+    "action": "folder_created",
+    "details": {
+      "filename": "Computer Programming",
+      "path": "C:\\Users\\aayus\\Desktop\\Computer Programming",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:19:19.093687",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Computer Programming",
+      "path": "C:\\Users\\aayus\\Desktop\\Computer Programming",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:19:20.679133",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Computer Programming",
+      "path": "C:\\Users\\aayus\\Desktop\\Computer Programming",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:21:15.373813",
+    "action": "file_created",
+    "details": {
+      "filename": "New Text Document.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\New Text Document.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:21:18.910016",
+    "action": "file_moved",
+    "details": {
+      "old_name": "New Text Document.txt",
+      "new_name": "c++.txt",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New Text Document.txt",
+      "to_path": "C:\\Users\\aayus\\Desktop\\c++.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:21:24.184372",
+    "action": "file_created",
+    "details": {
+      "filename": "New Text Document.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\New Text Document.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:21:26.976777",
+    "action": "file_moved",
+    "details": {
+      "old_name": "New Text Document.txt",
+      "new_name": "java.txt",
+      "from_path": "C:\\Users\\aayus\\Desktop\\New Text Document.txt",
+      "to_path": "C:\\Users\\aayus\\Desktop\\java.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:22:57.018975",
+    "action": "file_deleted",
+    "details": {
+      "filename": "c++.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\c++.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:23:08.970417",
+    "action": "file_deleted",
+    "details": {
+      "filename": "java.txt",
+      "path": "C:\\Users\\aayus\\Desktop\\java.txt",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:28:51.951087",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:03.713683",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.036611",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.070584",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.082581",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.179481",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.195381",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.412459",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.418456",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.541826",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.565722",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.591051",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.628400",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T10:38:04.638387",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:11:22.180002",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:12:57.221555",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.464921",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Academic",
+      "path": "C:\\Users\\aayus\\Desktop\\Academic",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.504432",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.596350",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.623350",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Computer Programming",
+      "path": "C:\\Users\\aayus\\Desktop\\Computer Programming",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.637352",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ComputerScience",
+      "path": "C:\\Users\\aayus\\Desktop\\ComputerScience",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.780943",
+    "action": "folder_modified",
+    "details": {
+      "filename": "DataScience",
+      "path": "C:\\Users\\aayus\\Desktop\\DataScience",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.882906",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.909419",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder1",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder1",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.941928",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder2",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder2",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:57.981046",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder3",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder3",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:58.024168",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:58.097880",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:58.135725",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Marketing",
+      "path": "C:\\Users\\aayus\\Desktop\\Marketing",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:58.149725",
+    "action": "folder_modified",
+    "details": {
+      "filename": "not-used",
+      "path": "C:\\Users\\aayus\\Desktop\\not-used",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:14:58.195277",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Study",
+      "path": "C:\\Users\\aayus\\Desktop\\Study",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T12:21:54.907703",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T13:12:06.041921",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T15:13:30.037757",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:17:30.717379",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:21:23.816538",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.291310",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder1",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder1",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.309816",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.322731",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.421474",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder2",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder2",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.449556",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder3",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder3",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.473525",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.486737",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.506002",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.591234",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.681683",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.753481",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.778963",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.821713",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.843292",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T21:54:00.910115",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:32:19.199275",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:36:30.094726",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.881257",
+    "action": "file_modified",
+    "details": {
+      "filename": "MongoDBCompass.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\MongoDBCompass.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.931778",
+    "action": "file_modified",
+    "details": {
+      "filename": "Insomnia.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Insomnia.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.944778",
+    "action": "file_modified",
+    "details": {
+      "filename": "FullStac.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\FullStac.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.963780",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder1",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder1",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.973782",
+    "action": "file_modified",
+    "details": {
+      "filename": "JobTracker.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\JobTracker.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.984300",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder2",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder2",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:37.998873",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folder3",
+      "path": "C:\\Users\\aayus\\Desktop\\Folder3",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.036543",
+    "action": "file_modified",
+    "details": {
+      "filename": "let.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\let.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.051541",
+    "action": "folder_modified",
+    "details": {
+      "filename": "interactive_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\interactive_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.078542",
+    "action": "file_modified",
+    "details": {
+      "filename": "Wondershare Filmora 13.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Wondershare Filmora 13.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.182210",
+    "action": "file_modified",
+    "details": {
+      "filename": "Visual Studio Code.lnk",
+      "path": "C:\\Users\\aayus\\Desktop\\Visual Studio Code.lnk",
+      "type": "file"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.325026",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Function_Calling",
+      "path": "C:\\Users\\aayus\\Desktop\\Function_Calling",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.342026",
+    "action": "folder_modified",
+    "details": {
+      "filename": "ai_test_destination",
+      "path": "C:\\Users\\aayus\\Desktop\\ai_test_destination",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.368030",
+    "action": "folder_modified",
+    "details": {
+      "filename": "direct_test_folder",
+      "path": "C:\\Users\\aayus\\Desktop\\direct_test_folder",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T22:55:38.406265",
+    "action": "folder_modified",
+    "details": {
+      "filename": "bcvbnvcg",
+      "path": "C:\\Users\\aayus\\Desktop\\bcvbnvcg",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T23:37:06.098130",
+    "action": "folder_modified",
+    "details": {
+      "filename": "Folderly-ProtoType",
+      "path": "C:\\Users\\aayus\\Desktop\\Folderly-ProtoType",
+      "type": "folder"
+    }
+  },
+  {
+    "timestamp": "2025-08-05T23:52:29.933293",
+    "action": "folder_modified",
+    "details": {
+      "filename": "hey nasa",
+      "path": "C:\\Users\\aayus\\Desktop\\hey nasa",
+      "type": "folder"
+    }
   }
 ]
