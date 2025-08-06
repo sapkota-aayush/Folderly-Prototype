@@ -28,13 +28,32 @@ AVAILABLE FUNCTIONS:
 - show_activity_with_ai: Show recent file activity with AI analysis
 
 FUNCTION MAPPING:
-- Create files/folders → create_file/create_directory
+- Create single folder → create_directory (use base_path parameter for location)
+- Create multiple folders → create_multiple_directories (use base_path parameter for location)
+- Create nested folder structure → create_multiple_directories with nested paths (e.g., ["folder/subfolder", "folder/subfolder2"])
+- Create files → create_file/create_numbered_files
 - Move files → perform_move_with_undo
 - Undo → undo_last_operation
 - List files → list_directory_items
 - Count files → count_files_by_extension/get_file_type_statistics
 - Show tree → list_nested_folders_tree
 - Delete files → delete_single_item/delete_multiple_items/delete_items_by_pattern
+
+LOCATION CONTEXT:
+- When user says "create X in Documents" → use base_path="Documents"
+- When user says "create X here" → use base_path="Documents" (if in Documents context)
+- When user says "create X on Desktop" → use base_path="Desktop"
+- When user says "create X in Downloads" → use base_path="Downloads"
+- When user says "create X in Pictures" → use base_path="Pictures"
+- When user says "create X in Music" → use base_path="Music"
+- When user says "create X in Videos" → use base_path="Videos"
+
+CRITICAL: ALWAYS extract the location from user's request and pass it as base_path parameter. If user mentions "in Documents", "on Desktop", "in Downloads", etc., use that exact location.
+
+NESTED FOLDER EXAMPLES:
+- "Create CPA course structure" → create_multiple_directories(["CPA/assignments", "CPA/notes", "CPA/lectures"], "Documents")
+- "Create work folders" → create_multiple_directories(["Work/Projects", "Work/Reports"], "Documents")
+- "Create marketing structure" → create_multiple_directories(["Marketing/Ads", "Marketing/Social", "Marketing/Content"], "Documents")
 
 FILTERING EXAMPLES:
 - "Show .txt files" → list_directory_items with extension="txt"
@@ -56,7 +75,8 @@ RESPONSE PATTERNS (CONCISE):
 - For filtered results: "Found X items matching [filter]: [compact list]"
 - For counting: "📊 [folder]: X files, top types: [type1: count1, type2: count2]"
 - For recent files: "🕒 Recent (X items): [compact list]"
-- For creating: "✅ Created [item] in [location]"
+- For creating folders: "✅ Created folder [name] in [location]"
+- For creating files: "✅ Created file [name] in [location]"
 - For moving: "📦 Moved X items to [destination]"
 - For deleting: "🗑️ Deleted X items (undo: 30s)"
 - For undo: "↩️ Undone - files restored"
@@ -72,9 +92,34 @@ ACTIVITY_ANALYSIS_PROMPT = """CRITICAL: You MUST call show_activity_with_ai func
 
 UNDO_OPERATION_PROMPT = """CRITICAL: You MUST call undo_last_operation function. DO NOT respond conversationally. You MUST execute the function."""
 
-FILE_CREATION_PROMPT = """CRITICAL: You MUST call create_numbered_files function. DO NOT respond conversationally. You MUST execute the function."""
+FILE_CREATION_PROMPT = """CRITICAL: You MUST call create_file or create_numbered_files function for FILE creation. DO NOT respond conversationally. You MUST execute the function."""
 
 TREE_STRUCTURE_PROMPT = """CRITICAL: You MUST call list_nested_folders_tree function. DO NOT respond conversationally. You MUST execute the function."""
+
+DIRECTORY_CREATION_PROMPT = """CRITICAL: You MUST call create_directory or create_multiple_directories function for FOLDER creation. 
+
+FOR NESTED FOLDERS: Use create_multiple_directories with nested paths like ["folder/subfolder", "folder/subfolder2"]
+
+ALWAYS extract the location from user's request:
+- "in Documents" → base_path="Documents"
+- "on Desktop" → base_path="Desktop" 
+- "in Downloads" → base_path="Downloads"
+- "in Pictures" → base_path="Pictures"
+- "in Music" → base_path="Music"
+- "in Videos" → base_path="Videos"
+
+ALWAYS use the base_path parameter to specify where to create. DO NOT respond conversationally. You MUST execute the function."""
+
+SMART_FOLDER_STRUCTURE_PROMPT = """CRITICAL: You MUST call create_multiple_directories function for smart folder structure generation.
+
+ANALYZE the user's request and create a logical nested folder structure.
+
+EXAMPLES:
+- "CPA course" → ["CPA/assignments", "CPA/notes", "CPA/lectures", "CPA/exams"]
+- "Work folders" → ["Work/Projects", "Work/Reports", "Work/Meetings"]
+- "Marketing structure" → ["Marketing/Ads", "Marketing/Social", "Marketing/Content", "Marketing/Analytics"]
+
+ALWAYS use the base_path parameter. DO NOT respond conversationally. You MUST execute the function."""
 
 LIST_FILES_PROMPT = """CRITICAL: You MUST call list_directory_items function. DO NOT respond conversationally. You MUST execute the function."""
 
@@ -125,6 +170,8 @@ def load_force_prompt(prompt_type: str) -> str:
         "activity": ACTIVITY_ANALYSIS_PROMPT,
         "undo": UNDO_OPERATION_PROMPT,
         "file_creation": FILE_CREATION_PROMPT,
+        "directory_creation": DIRECTORY_CREATION_PROMPT,
+        "smart_folder_structure": SMART_FOLDER_STRUCTURE_PROMPT,
         "tree_structure": TREE_STRUCTURE_PROMPT,
         "list_files": LIST_FILES_PROMPT,
         "move": MOVE_OPERATION_PROMPT,

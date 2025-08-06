@@ -86,13 +86,18 @@ FOLDERLY_FUNCTIONS = [
     },
     {
         "name": "create_directory",
-        "description": "Creates a new directory in the target directory",
+        "description": "Creates a new directory in the specified base path",
         "parameters": {
             "type": "object",
             "properties": {
                 "target_dir": {
                     "type": "string",
-                    "description": "Path where the directory should be created"
+                    "description": "Name of directory to create"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": "Base path where to create (Desktop, Documents, Downloads, etc.)",
+                    "default": "Desktop"
                 }
             },
             "required": ["target_dir"]
@@ -100,67 +105,26 @@ FOLDERLY_FUNCTIONS = [
     },
     {
         "name": "create_multiple_directories",
-        "description": "Creates multiple directories at once",
+        "description": "Creates multiple directories at once in the specified base path",
         "parameters": {
             "type": "object",
             "properties": {
                 "directories": {
                     "type": "array",
                     "items": {"type": "string"},
-                    "description": "List of directory paths to create"
+                    "description": "List of directory names to create"
+                },
+                "base_path": {
+                    "type": "string",
+                    "description": "Base path where to create (Desktop, Documents, Downloads, etc.)",
+                    "default": "Desktop"
                 }
             },
             "required": ["directories"]
         }
     },
-    {
-        "name": "create_file",
-        "description": "Creates a new file with specified content and extension",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "file_path": {
-                    "type": "string",
-                    "description": "Full path where the file should be created (including filename and extension)"
-                },
-                "content": {
-                    "type": "string",
-                    "description": "Content to write in the file (optional)"
-                },
-                "extension": {
-                    "type": "string",
-                    "description": "File extension (e.g., txt, py, js, html, css, json)"
-                }
-            },
-            "required": ["file_path"]
-        }
-    },
-    {
-        "name": "create_numbered_files",
-        "description": "Creates multiple numbered files with specified extension (e.g., file_1.txt, file_2.txt)",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "base_name": {
-                    "type": "string",
-                    "description": "Base name for files (e.g., 'file', 'test', 'document')"
-                },
-                "count": {
-                    "type": "integer",
-                    "description": "Number of files to create"
-                },
-                "extension": {
-                    "type": "string",
-                    "description": "File extension (e.g., 'txt', 'py', 'js', 'html')"
-                },
-                "start_number": {
-                    "type": "integer",
-                    "description": "Starting number (default: 1)"
-                }
-            },
-            "required": ["base_name", "count", "extension"]
-        }
-    },
+
+
     {
         "name": "perform_move_with_undo",
         "description": "Safely moves specified files and folders to a destination directory with undo support (30-second window)",

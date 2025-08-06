@@ -9,7 +9,7 @@ from src.ai.prompts import (
     load_system_prompt, load_force_prompt, load_welcome_message, 
     load_goodbye_message, load_empty_input_message, load_error_message
 )
-from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, create_numbered_files, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics
+from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, create_multiple_directories, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics
 from folderly.activity_tracker import start_activity_monitoring, FolderlyActivityTracker, show_activity_summary
 from folderly.ai_activity_integration import show_ai_enhanced_activity
 from src.utils.move_manager import perform_move_with_undo
@@ -98,8 +98,15 @@ def chat_with_ai():
             # Add user message to conversation
             conversation_history.append({"role": "user", "content": user_input})
             
+            # Debug: Print what we're checking
+            print(f"🔍 DEBUG: Checking user input: '{user_input.lower()}'")
+            print(f"🔍 DEBUG: Contains 'folder'? {'folder' in user_input.lower()}")
+            print(f"🔍 DEBUG: Contains 'create'? {'create' in user_input.lower()}")
+            print(f"🔍 DEBUG: Folder condition result: {'folder' in user_input.lower() and 'create' in user_input.lower()}")
+            
             # Force function calling for activity analysis
             if "analyze my activity" in user_input.lower() or "what did I do" in user_input.lower() or "activity" in user_input.lower():
+                print("🔍 DEBUG: Triggered activity analysis condition")
                 conversation_history.append({
                     "role": "system",
                     "content": load_force_prompt("activity")
@@ -112,6 +119,7 @@ def chat_with_ai():
                 )
             # Force function calling for undo operations
             elif "undo" in user_input.lower():
+                print("🔍 DEBUG: Triggered undo condition")
                 conversation_history.append({
                     "role": "system",
                     "content": load_force_prompt("undo")
@@ -122,19 +130,32 @@ def chat_with_ai():
                     functions=get_function_schemas(),
                     function_call={"name": "undo_last_operation"}
                 )
-            # Force function calling for file creation operations
-            elif any(keyword in user_input.lower() for keyword in ['create', 'make', 'new file']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash']):
+            # Force function calling for folder creation operations
+            elif (('folder' in user_input.lower() or any(keyword in user_input.lower() for keyword in ['structure', 'course', 'project', 'organization', 'setup'])) and 
+                  any(keyword in user_input.lower() for keyword in ['create', 'creat', 'make', 'new'])):
+                print("🔍 DEBUG: Detected folder creation request")
                 conversation_history.append({
-                    "role": "system", 
-                    "content": load_force_prompt("file_creation")
+                    "role": "system",
+                    "content": load_force_prompt("directory_creation")
                 })
-                
-                # Force function call
                 response = client.chat.completions.create(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
-                    function_call={"name": "create_numbered_files"}
+                    function_call="auto"
+                )
+
+            # Force function calling for smart folder structure generation
+            elif any(keyword in user_input.lower() for keyword in ['structure', 'course', 'project', 'organization', 'setup']) and any(keyword in user_input.lower() for keyword in ['create', 'make', 'generate']):
+                conversation_history.append({
+                    "role": "system",
+                    "content": load_force_prompt("smart_folder_structure")
+                })
+                response = client.chat.completions.create(
+                    model="gpt-4o",
+                    messages=conversation_history,
+                    functions=get_function_schemas(),
+                    function_call="auto"
                 )
             # Force function calling for tree structure requests (specific keywords)
             elif any(keyword in user_input.lower() for keyword in ['tree', 'structure', 'folder structure', 'nested', 'hierarchy']) and not any(keyword in user_input.lower() for keyword in ['delete', 'remove', 'trash', 'move']):
@@ -185,6 +206,7 @@ def chat_with_ai():
                     function_call="auto"
                 )
             else:
+                print("🔍 DEBUG: No specific condition matched, using normal response")
                 # Normal response
                 response = client.chat.completions.create(
                     model="gpt-4o",
@@ -239,66 +261,18 @@ def chat_with_ai():
                     else:
                         result = items_result
                 elif function_name == "create_directory":
-                    # Convert string path to Path object for the create function
+                    # Create directory with base path support
                     target_dir = Path(function_args.get("target_dir", ""))
-                    result = create_directory(target_dir)
+                    base_path = function_args.get("base_path", "Desktop")
+                    result = create_directory(target_dir, base_path)
                 elif function_name == "create_multiple_directories":
-                    # Create multiple directories at once
+                    # Create multiple directories with base path support
                     directories = function_args.get("directories", [])
-                    created_dirs = []
-                    failed_dirs = []
-                    
-                    for dir_path in directories:
-                        try:
-                            target_dir = Path(dir_path)
-                            target_dir.mkdir(parents=True, exist_ok=True)
-                            created_dirs.append(str(target_dir))
-                        except Exception as e:
-                            failed_dirs.append({"path": dir_path, "error": str(e)})
-                    
-                    result = {
-                        "success": True,
-                        "created_directories": created_dirs,
-                        "failed_directories": failed_dirs,
-                        "total_created": len(created_dirs),
-                        "total_failed": len(failed_dirs)
-                    }
-                elif function_name == "create_file":
-                    # Create a single file with content
-                    file_path = function_args.get("file_path", "")
-                    content = function_args.get("content", "")
-                    extension = function_args.get("extension", "txt")
-                    
-                    try:
-                        target_file = Path(file_path)
-                        # Ensure the directory exists
-                        target_file.parent.mkdir(parents=True, exist_ok=True)
+                    base_path = function_args.get("base_path", "Desktop")
+                    result = create_multiple_directories(directories, base_path)
+                
                         
-                        # Write content to file
-                        with open(target_file, 'w', encoding='utf-8') as f:
-                            f.write(content)
-                        
-                        result = {
-                            "success": True,
-                            "file_created": str(target_file),
-                            "extension": extension,
-                            "content_length": len(content)
-                        }
-                    except Exception as e:
-                        result = {
-                            "success": False,
-                            "error": str(e),
-                            "file_path": file_path
-                        }
-                        
-                elif function_name == "create_numbered_files":
-                    # Create multiple numbered files
-                    base_name = function_args.get("base_name", "file")
-                    count = function_args.get("count", 1)
-                    extension = function_args.get("extension", "txt")
-                    start_number = function_args.get("start_number", 1)
-                    
-                    result = create_numbered_files(base_name, count, extension, start_number)
+                
                 elif function_name == "perform_move_with_undo":
                     # Use the safe move function with undo
                     items = function_args.get("items", [])

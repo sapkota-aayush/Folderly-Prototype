@@ -295,20 +295,81 @@ def filter_and_sort_by_modified(items: List[Path], days: int) -> Dict[str, Any]:
         }
 
 #Creating a directory 
-def create_directory(target_dir: Path) -> Dict[str, Any]:
+def create_directory(target_dir: Path, base_path: str = "Desktop") -> Dict[str, Any]:
+    """
+    Creates a new directory in the specified base path.
+    
+    Args:
+        target_dir: Name of directory to create
+        base_path: Base path where to create (Desktop, Documents, etc.)
+    
+    Returns:
+        Dict with success status and created directory info
+    """
     try:
-        target_dir.mkdir(parents=True, exist_ok=True)
+        # Get the base directory path
+        base_directory = get_directory(base_path)
+        full_path = base_directory / target_dir
+        
+        # Create the directory
+        full_path.mkdir(parents=True, exist_ok=True)
         
         return {
             "success": True,
-            "results": str(target_dir),
-            "directory_created": str(target_dir),
-            "already_existed": target_dir.exists()
+            "results": str(full_path),
+            "directory_created": str(full_path),
+            "base_path": str(base_directory),
+            "already_existed": full_path.exists()
         }
     except Exception as e:
         return {
             "success": False,
             "error": str(e)
+        }
+
+def create_multiple_directories(directories: List[str], base_path: str = "Desktop") -> Dict[str, Any]:
+    """
+    Creates multiple directories in the specified base path.
+    
+    Args:
+        directories: List of directory names to create (can include nested paths like "folder/subfolder")
+        base_path: Base path where to create (Desktop, Documents, Downloads, etc.)
+    
+    Returns:
+        Dict with success status and created directories info
+    """
+    try:
+        # Get the base directory path (handles OneDrive, etc.)
+        base_directory = get_directory(base_path)
+        created_dirs = []
+        failed_dirs = []
+        
+        for dir_path in directories:
+            try:
+                # Handle nested paths (e.g., "CPA/assignments/notes")
+                target_dir = Path(dir_path)
+                full_path = base_directory / target_dir
+                
+                # Create the directory (including parent directories if needed)
+                full_path.mkdir(parents=True, exist_ok=True)
+                created_dirs.append(str(full_path))
+                
+            except Exception as e:
+                failed_dirs.append({"path": dir_path, "error": str(e)})
+        
+        return {
+            "success": True,
+            "created_directories": created_dirs,
+            "failed_directories": failed_dirs,
+            "total_created": len(created_dirs),
+            "total_failed": len(failed_dirs),
+            "base_path": str(base_directory)
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "base_path": base_path
         }
 
 def move_items_to_directory(items: list[Path], destination_dir: Path) -> Dict[str, Any]:
