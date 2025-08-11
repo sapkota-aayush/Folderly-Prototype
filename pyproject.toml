@@ -20,7 +20,7 @@ flake8 = "^6.0.0"
 
 [tool.poetry.scripts]
 folderly = "src.cli.cli:main"
-folderly-ai = "src.ai.ai_integration:chat_with_ai"
+folderly-ai = "src.ai.ai_integration:main"
 
 [build-system]
 requires = ["poetry-core"]
