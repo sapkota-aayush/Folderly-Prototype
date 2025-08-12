@@ -1,13 +1,10 @@
 import re
 from pathlib import Path
 from typing import List, Dict, Any
-from datetime import datetime, timedelta
 import shutil
-from send2trash import send2trash
-from ..utils.utils import write_operation_metadata, read_operation_metadata, delete_operation_metadata
-from ..utils.backup import backup_file_or_folder, delete_backup_file_or_folder
-import threading
-from ..utils.undo_expiry import auto_expiry_cleanup
+import asyncio
+from datetime import datetime, timedelta
+
 
 # ============================================================================
 # CONFIGURABLE TARGET DIRECTORY
@@ -17,6 +14,33 @@ try:
 except ImportError:
     # Default fallback
     TARGET_FOLDER = "Desktop"
+
+# ============================================================================
+# ASYNC EXECUTION HELPER
+# ============================================================================
+async def execute_operations(operations, execution_mode="parallel"):
+    """
+    Execute multiple operations in parallel or sequential mode
+    
+    Args:
+        operations: List of (function, args, kwargs) tuples
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
+    
+    Returns:
+        List of results from operations
+    """
+    if execution_mode == "parallel":
+        # Create all tasks for parallel execution (independent operations)
+        tasks = [asyncio.to_thread(func, *args, **kwargs) for func, args, kwargs in operations]
+        # Execute all simultaneously
+        return await asyncio.gather(*tasks)
+    else:
+        # Execute one by one sequentially (dependent operations)
+        results = []
+        for func, args, kwargs in operations:
+            result = await asyncio.to_thread(func, *args, **kwargs)
+            results.append(result)
+        return results
 
 #Getting root directory and target folder 
 def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path:
@@ -85,7 +109,7 @@ def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path
     return root_dir / folder_name
 
 #Getting the list of all the files and folders
-def list_directory_items(
+async def list_directory_items(
     folder_name: str = None,
     extension: str = None,
     file_type: str = None,
@@ -96,7 +120,8 @@ def list_directory_items(
     sort_order: str = "asc",
     include_folders: bool = True,
     include_files: bool = True,
-    max_results: int = None
+    max_results: int = None,
+    execution_mode: str = "parallel"
 ) -> Dict[str, Any]:
     """
     Lists files and folders in the specified root folder with advanced filtering
@@ -113,6 +138,7 @@ def list_directory_items(
         include_folders: Include folders in results (default: True)
         include_files: Include files in results (default: True)
         max_results: Maximum number of results to return
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
     
     Returns:
         Dict with success status, filtered file list, and filter metadata
@@ -259,7 +285,8 @@ def list_directory_items(
             "total_found": len(results),
             "filters_applied": filters_applied,
             "directory": str(target_dir),
-            "folder_name": folder_name or TARGET_FOLDER
+            "folder_name": folder_name or TARGET_FOLDER,
+            "execution_mode": execution_mode
         }
     except PermissionError:
         return {
@@ -295,13 +322,14 @@ def filter_and_sort_by_modified(items: List[Path], days: int) -> Dict[str, Any]:
         }
 
 #Creating a directory 
-def create_directory(target_dir: Path, base_path: str = "Desktop") -> Dict[str, Any]:
+async def create_directory(target_dir: Path, base_path: str = "Desktop", execution_mode: str = "parallel") -> Dict[str, Any]:
     """
     Creates a new directory in the specified base path.
     
     Args:
         target_dir: Name of directory to create
         base_path: Base path where to create (Desktop, Documents, etc.)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
     
     Returns:
         Dict with success status and created directory info
@@ -319,7 +347,8 @@ def create_directory(target_dir: Path, base_path: str = "Desktop") -> Dict[str, 
             "results": str(full_path),
             "directory_created": str(full_path),
             "base_path": str(base_directory),
-            "already_existed": full_path.exists()
+            "already_existed": full_path.exists(),
+            "execution_mode": execution_mode
         }
     except Exception as e:
         return {
@@ -327,13 +356,14 @@ def create_directory(target_dir: Path, base_path: str = "Desktop") -> Dict[str, 
             "error": str(e)
         }
 
-def create_multiple_directories(directories: List[str], base_path: str = "Desktop") -> Dict[str, Any]:
+async def create_multiple_directories(directories: List[str], base_path: str = "Desktop", execution_mode: str = "parallel") -> Dict[str, Any]:
     """
     Creates multiple directories in the specified base path.
     
     Args:
         directories: List of directory names to create (can include nested paths like "folder/subfolder")
         base_path: Base path where to create (Desktop, Documents, Downloads, etc.)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
     
     Returns:
         Dict with success status and created directories info
@@ -341,10 +371,9 @@ def create_multiple_directories(directories: List[str], base_path: str = "Deskto
     try:
         # Get the base directory path (handles OneDrive, etc.)
         base_directory = get_directory(base_path)
-        created_dirs = []
-        failed_dirs = []
         
-        for dir_path in directories:
+        # Define the directory creation operation
+        def create_single_directory(dir_path):
             try:
                 # Handle nested paths (e.g., "CPA/assignments/notes")
                 target_dir = Path(dir_path)
@@ -352,10 +381,25 @@ def create_multiple_directories(directories: List[str], base_path: str = "Deskto
                 
                 # Create the directory (including parent directories if needed)
                 full_path.mkdir(parents=True, exist_ok=True)
-                created_dirs.append(str(full_path))
-                
+                return {"success": True, "path": str(full_path)}
             except Exception as e:
-                failed_dirs.append({"path": dir_path, "error": str(e)})
+                return {"success": False, "path": dir_path, "error": str(e)}
+        
+        # Prepare operations for execution
+        operations = [(create_single_directory, (dir_path,), {}) for dir_path in directories]
+        
+        # Execute operations using helper
+        results = await execute_operations(operations, execution_mode)
+        
+        # Process results
+        created_dirs = []
+        failed_dirs = []
+        
+        for result in results:
+            if result["success"]:
+                created_dirs.append(result["path"])
+            else:
+                failed_dirs.append({"path": result["path"], "error": result["error"]})
         
         return {
             "success": True,
@@ -363,7 +407,8 @@ def create_multiple_directories(directories: List[str], base_path: str = "Deskto
             "failed_directories": failed_dirs,
             "total_created": len(created_dirs),
             "total_failed": len(failed_dirs),
-            "base_path": str(base_directory)
+            "base_path": str(base_directory),
+            "execution_mode": execution_mode
         }
     except Exception as e:
         return {
@@ -372,33 +417,58 @@ def create_multiple_directories(directories: List[str], base_path: str = "Deskto
             "base_path": base_path
         }
 
-def move_items_to_directory(items: list[Path], destination_dir: Path) -> Dict[str, Any]:
+async def move_items_to_directory(items: list[Path], destination_dir: Path, execution_mode: str = "parallel") -> Dict[str, Any]:
+    """
+    Moves multiple items to a destination directory.
+    
+    Args:
+        items: List of file/folder paths to move
+        destination_dir: Destination directory
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
+    
+    Returns:
+        Dict with success status and move results
+    """
     try:
+        # Define the move operation
+        def move_single_item(item):
+            try:
+                # Skip hidden files/folders
+                if item.name.startswith('.'):
+                    return {"success": False, "item": str(item), "reason": "hidden file"}
+                
+                # Move the item
+                dest = destination_dir / item.name
+                shutil.move(str(item), str(dest))
+                return {"success": True, "item": str(item), "destination": str(dest)}
+            except PermissionError:
+                return {"success": False, "item": str(item), "reason": "file in use"}
+            except Exception as e:
+                return {"success": False, "item": str(item), "reason": str(e)}
+        
+        # Prepare operations for execution
+        operations = [(move_single_item, (item,), {}) for item in items]
+        
+        # Execute operations using helper
+        results = await execute_operations(operations, execution_mode)
+        
+        # Process results
         moved_items = []
         skipped_items = []
         
-        for item in items:
-            # Skip hidden files/folders
-            if item.name.startswith('.'):
-                skipped_items.append({"item": str(item), "reason": "hidden file"})
-                continue
-                
-            # Skip if file is in use (try to check)
-            try:
-                dest = destination_dir / item.name
-                shutil.move(str(item), str(dest))
-                moved_items.append(str(dest))
-            except PermissionError:
-                skipped_items.append({"item": str(item), "reason": "file in use"})
-            except Exception as e:
-                skipped_items.append({"item": str(item), "reason": str(e)})
+        for result in results:
+            if result["success"]:
+                moved_items.append(result["destination"])
+            else:
+                skipped_items.append({"item": result["item"], "reason": result["reason"]})
         
         return {
             "success": True,
             "results": moved_items,
             "total_moved": len(moved_items),
             "skipped_items": skipped_items,
-            "destination": str(destination_dir)
+            "destination": str(destination_dir),
+            "execution_mode": execution_mode
         }
     except Exception as e:
         return {
@@ -406,7 +476,7 @@ def move_items_to_directory(items: list[Path], destination_dir: Path) -> Dict[st
             "error": str(e)
         }
 
-def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None) -> Dict[str, Any]:
+async def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None, execution_mode: str = "parallel") -> Dict[str, Any]:
     """
     Creates multiple numbered files with specified extension.
     
@@ -416,6 +486,7 @@ def create_numbered_files(base_name: str, count: int, extension: str, start_numb
         extension: File extension (e.g., "txt", "py", "js")
         start_number: Starting number (default: 1)
         target_dir: Directory to create files in (default: Desktop)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
     
     Returns:
         Dict with success status and created files info
@@ -424,30 +495,52 @@ def create_numbered_files(base_name: str, count: int, extension: str, start_numb
         if target_dir is None:
             target_dir = get_directory()
         
-        created_files = []
-        failed_files = []
-        
-        for i in range(start_number, start_number + count):
+        # Define the file creation operation
+        def create_single_file(file_number):
             try:
                 # Create filename
-                filename = f"{base_name}_{i}.{extension}"
+                filename = f"{base_name}_{file_number}.{extension}"
                 file_path = target_dir / filename
                 
                 # Create file with basic content
-                content = f"This is {base_name} number {i}"
+                content = f"This is {base_name} number {file_number}"
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
                 
-                created_files.append({
+                return {
+                    "success": True,
                     "filename": filename,
                     "path": str(file_path),
                     "content_length": len(content)
-                })
-                
+                }
             except Exception as e:
-                failed_files.append({
-                    "filename": f"{base_name}_{i}.{extension}",
+                return {
+                    "success": False,
+                    "filename": f"{base_name}_{file_number}.{extension}",
                     "error": str(e)
+                }
+        
+        # Prepare operations for execution
+        operations = [(create_single_file, (i,), {}) for i in range(start_number, start_number + count)]
+        
+        # Execute operations using helper
+        results = await execute_operations(operations, execution_mode)
+        
+        # Process results
+        created_files = []
+        failed_files = []
+        
+        for result in results:
+            if result["success"]:
+                created_files.append({
+                    "filename": result["filename"],
+                    "path": result["path"],
+                    "content_length": result["content_length"]
+                })
+            else:
+                failed_files.append({
+                    "filename": result["filename"],
+                    "error": result["error"]
                 })
         
         return {
@@ -456,7 +549,8 @@ def create_numbered_files(base_name: str, count: int, extension: str, start_numb
             "failed_files": failed_files,
             "total_created": len(created_files),
             "total_failed": len(failed_files),
-            "target_directory": str(target_dir)
+            "target_directory": str(target_dir),
+            "execution_mode": execution_mode
         }
         
     except Exception as e:
@@ -465,13 +559,13 @@ def create_numbered_files(base_name: str, count: int, extension: str, start_numb
             "error": str(e)
         }
 
-def delete_single_item(item_path: str, enable_undo: bool = True) -> Dict[str, Any]:
+async def delete_single_item(item_path: str, execution_mode: str = "parallel") -> Dict[str, Any]:
     """
-    Soft deletes a single file or directory using send2trash with optional undo support.
+    Deletes a single file or directory.
     
     Args:
         item_path: Path to the file or directory to delete
-        enable_undo: Whether to enable undo support (default: True)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
         
     Returns:
         Dict with success status and deletion info
@@ -495,55 +589,17 @@ def delete_single_item(item_path: str, enable_undo: bool = True) -> Dict[str, An
                 "item_path": item_path
             }
         
-        # If undo is enabled, create backup and metadata
-        if enable_undo:
-            # Clear any existing undo operation
-            metadata = read_operation_metadata()
-            if metadata:
-                for item in metadata['current_operation'].get('items', []):
-                    delete_backup_file_or_folder(item['backup_path'])
-                delete_operation_metadata()
-            
-            # Create backup
-            backup_path = backup_file_or_folder(str(path))
-            
-            # Prepare operation metadata
-            expires_at = datetime.now() + timedelta(seconds=30)
-            operation_data = {
-                'session_id': 'folderly_delete_session',
-                'current_operation': {
-                    'id': f'delete_op_{datetime.now().strftime("%Y%m%d%H%M%S")}',
-                    'type': 'delete',
-                    'timestamp': datetime.now().isoformat(),
-                    'expires_at': expires_at.isoformat(),
-                    'status': 'active',
-                    'items': [{
-                        'original_path': str(path),
-                        'backup_path': backup_path,
-                        'item_type': 'file' if path.is_file() else 'directory'
-                    }]
-                }
-            }
-            write_operation_metadata(operation_data)
-            
-            # Start expiry timer
-            threading.Thread(
-                target=auto_expiry_cleanup,
-                args=(expires_at, operation_data['current_operation']['items'], delete_operation_metadata, delete_backup_file_or_folder),
-                daemon=True
-            ).start()
-        
-        # Soft delete using send2trash
-        send2trash(str(path))
+        # Delete the file or directory
+        if path.is_file():
+            path.unlink()
+        else:
+            shutil.rmtree(str(path))
         
         return {
             "success": True,
             "deleted_item": item_path,
             "item_type": "file" if path.is_file() else "directory",
-            "deletion_method": "soft_delete",
-            "trash_location": "system_recycle_bin",
-            "undo_available": enable_undo,
-            "undo_expires_in": 30 if enable_undo else 0
+            "deletion_method": "permanent_delete"
         }
         
     except PermissionError:
@@ -560,72 +616,83 @@ def delete_single_item(item_path: str, enable_undo: bool = True) -> Dict[str, An
             "item_path": item_path
         }
 
-def delete_multiple_items(item_paths: List[str], enable_undo: bool = True) -> Dict[str, Any]:
+async def delete_multiple_items(item_paths: List[str], execution_mode: str = "parallel") -> Dict[str, Any]:
     """
-    Soft deletes multiple files and directories using send2trash with undo support.
+    Deletes multiple files and directories.
     
     Args:
         item_paths: List of paths to files or directories to delete
-        enable_undo: Whether to enable undo support (default: True)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
         
     Returns:
         Dict with success status and deletion info for all items
     """
     try:
-        # If undo is enabled, create backup and metadata for all items
-        if enable_undo:
-            # Clear any existing undo operation
-            metadata = read_operation_metadata()
-            if metadata:
-                for item in metadata['current_operation'].get('items', []):
-                    delete_backup_file_or_folder(item['backup_path'])
-                delete_operation_metadata()
-            
-            # Create backups for all items
-            operation_items = []
-            for item_path in item_paths:
+        # Define a regular wrapper function that performs the delete operation directly
+        def delete_single_item_wrapper(item_path):
+            try:
                 path = Path(item_path)
-                if path.exists():
-                    backup_path = backup_file_or_folder(str(path))
-                    operation_items.append({
-                        'original_path': str(path),
-                        'backup_path': backup_path,
-                        'item_type': 'file' if path.is_file() else 'directory'
-                    })
-            
-            # Prepare operation metadata
-            expires_at = datetime.now() + timedelta(seconds=30)
-            operation_data = {
-                'session_id': 'folderly_delete_session',
-                'current_operation': {
-                    'id': f'delete_op_{datetime.now().strftime("%Y%m%d%H%M%S")}',
-                    'type': 'delete',
-                    'timestamp': datetime.now().isoformat(),
-                    'expires_at': expires_at.isoformat(),
-                    'status': 'active',
-                    'items': operation_items
+                
+                # Check if item exists
+                if not path.exists():
+                    return {
+                        "success": False,
+                        "error": f"Item does not exist: {item_path}",
+                        "item_path": item_path
+                    }
+                
+                # Check if item is accessible
+                if not path.is_file() and not path.is_dir():
+                    return {
+                        "success": False,
+                        "error": f"Item is not a file or directory: {item_path}",
+                        "item_path": item_path
+                    }
+                
+                # Delete the file or directory
+                if path.is_file():
+                    path.unlink()
+                else:
+                    shutil.rmtree(str(path))
+                
+                return {
+                    "success": True,
+                    "deleted_item": item_path,
+                    "item_type": "file" if path.is_file() else "directory",
+                    "deletion_method": "permanent_delete"
                 }
-            }
-            write_operation_metadata(operation_data)
-            
-            # Start expiry timer
-            threading.Thread(
-                target=auto_expiry_cleanup,
-                args=(expires_at, operation_items, delete_operation_metadata, delete_backup_file_or_folder),
-                daemon=True
-            ).start()
+                
+            except PermissionError:
+                return {
+                    "success": False,
+                    "error": f"Permission denied: Cannot delete {item_path}",
+                    "item_path": item_path,
+                    "reason": "file_in_use_or_protected"
+                }
+            except Exception as e:
+                return {
+                    "success": False,
+                    "error": str(e),
+                    "item_path": item_path
+                }
         
+        # Prepare operations for execution
+        operations = [(delete_single_item_wrapper, (item_path,), {}) for item_path in item_paths]
+        
+        # Execute operations using helper
+        results = await execute_operations(operations, execution_mode)
+        
+        # Process results
         deleted_items = []
         failed_items = []
         
-        for item_path in item_paths:
-            result = delete_single_item(item_path, enable_undo=False)  # Don't create individual undo for each item
-            
+        for i, result in enumerate(results):
+            item_path = item_paths[i]
             if result["success"]:
                 deleted_items.append({
                     "path": item_path,
                     "type": result.get("item_type", "unknown"),
-                    "deletion_method": "soft_delete"
+                    "deletion_method": "permanent_delete"
                 })
             else:
                 failed_items.append({
@@ -640,10 +707,8 @@ def delete_multiple_items(item_paths: List[str], enable_undo: bool = True) -> Di
             "failed_items": failed_items,
             "total_deleted": len(deleted_items),
             "total_failed": len(failed_items),
-            "deletion_method": "soft_delete",
-            "trash_location": "system_recycle_bin",
-            "undo_available": enable_undo,
-            "undo_expires_in": 30 if enable_undo else 0
+            "deletion_method": "permanent_delete",
+            "execution_mode": execution_mode
         }
         
     except Exception as e:
@@ -653,14 +718,14 @@ def delete_multiple_items(item_paths: List[str], enable_undo: bool = True) -> Di
             "total_items": len(item_paths)
         }
 
-def delete_items_by_pattern(pattern: str, target_dir: str = None, enable_undo: bool = True) -> Dict[str, Any]:
+async def delete_items_by_pattern(pattern: str, target_dir: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
     """
-    Deletes files and directories matching a pattern using soft delete with undo support.
+    Deletes files and directories matching a pattern.
     
     Args:
         pattern: Glob pattern to match (e.g., "*.txt", "test*", "*temp*")
         target_dir: Directory to search in (default: Desktop)
-        enable_undo: Whether to enable undo support (default: True)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
         
     Returns:
         Dict with success status and deletion info
@@ -693,8 +758,8 @@ def delete_items_by_pattern(pattern: str, target_dir: str = None, enable_undo: b
         # Convert to string paths for deletion
         item_paths = [str(item) for item in matching_items]
         
-        # Use the multiple delete function
-        result = delete_multiple_items(item_paths, enable_undo)
+        # Use the multiple delete function with execution mode
+        result = await delete_multiple_items(item_paths, execution_mode)
         result["pattern"] = pattern
         result["target_dir"] = target_dir
         result["total_found"] = len(matching_items)
@@ -797,12 +862,13 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
             "target_dir": target_dir
         }
 
-def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
+async def count_files_by_extension(folder_name: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
     """
     Counts files by extension in the specified folder
     
     Args:
         folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
     
     Returns:
         Dict with extension counts and statistics
@@ -841,7 +907,8 @@ def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
             "extension_counts": dict(sorted_extensions),
             "top_extensions": sorted_extensions[:10],  # Top 10 extensions
             "directory": str(target_dir),
-            "folder_name": folder_name or TARGET_FOLDER
+            "folder_name": folder_name or TARGET_FOLDER,
+            "execution_mode": execution_mode
         }
     except Exception as e:
         return {
@@ -850,12 +917,13 @@ def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
             "folder_name": folder_name or TARGET_FOLDER
         }
 
-def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
+async def get_file_type_statistics(folder_name: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
     """
     Gets file type statistics (documents, images, videos, etc.) for the specified folder
     
     Args:
         folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
     
     Returns:
         Dict with file type statistics
@@ -912,7 +980,8 @@ def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
             "file_type_counts": dict(sorted_types),
             "top_file_types": sorted_types[:5],  # Top 5 file types
             "directory": str(target_dir),
-            "folder_name": folder_name or TARGET_FOLDER
+            "folder_name": folder_name or TARGET_FOLDER,
+            "execution_mode": execution_mode
         }
     except Exception as e:
         return {

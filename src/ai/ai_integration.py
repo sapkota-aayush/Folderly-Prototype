@@ -3,6 +3,7 @@ import json
 import openai
 import threading
 import time
+import asyncio
 from dotenv import load_dotenv
 from src.ai.function_schemas import get_function_schemas
 from src.ai.prompts import (
@@ -71,7 +72,7 @@ def show_activity_with_ai():
             "message": f"Could not analyze activity: {str(e)}"
         }
 
-def chat_with_ai():
+async def chat_with_ai():
     print(load_welcome_message())
     
     # Initialize conversation history
@@ -111,7 +112,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("activity")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -124,7 +125,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("undo")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -138,7 +139,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("directory_creation")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -151,7 +152,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("smart_folder_structure")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -163,7 +164,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("tree_structure")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -175,7 +176,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("list_files")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -187,7 +188,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("move")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -199,7 +200,7 @@ def chat_with_ai():
                     "role": "system",
                     "content": load_force_prompt("delete")
                 })
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -208,7 +209,7 @@ def chat_with_ai():
             else:
                 print("🔍 DEBUG: No specific condition matched, using normal response")
                 # Normal response
-                response = client.chat.completions.create(
+                response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
@@ -237,7 +238,7 @@ def chat_with_ai():
                     include_files = function_args.get("include_files", True)
                     max_results = function_args.get("max_results", None)
                     
-                    result = list_directory_items(
+                    result = await list_directory_items(
                         folder_name=folder_name,
                         extension=extension,
                         file_type=file_type,
@@ -248,28 +249,29 @@ def chat_with_ai():
                         sort_order=sort_order,
                         include_folders=include_folders,
                         include_files=include_files,
-                        max_results=max_results
+                        max_results=max_results,
+                        execution_mode="parallel"
                     )
                 elif function_name == "filter_and_sort_by_modified":
                     # Get items first, then filter by date
-                    items_result = list_directory_items()
+                    items_result = await list_directory_items()
                     if items_result["success"]:
                         # Convert string paths back to Path objects for the filter function
                         items = [Path(path) for path in items_result["results"]]
                         days = function_args.get("days", 7)
-                        result = filter_and_sort_by_modified(items, days)
+                        result = await filter_and_sort_by_modified(items, days)
                     else:
                         result = items_result
                 elif function_name == "create_directory":
                     # Create directory with base path support
                     target_dir = Path(function_args.get("target_dir", ""))
                     base_path = function_args.get("base_path", "Desktop")
-                    result = create_directory(target_dir, base_path)
+                    result = await create_directory(target_dir, base_path)
                 elif function_name == "create_multiple_directories":
                     # Create multiple directories with base path support
                     directories = function_args.get("directories", [])
                     base_path = function_args.get("base_path", "Desktop")
-                    result = create_multiple_directories(directories, base_path)
+                    result = await create_multiple_directories(directories, base_path)
                 
                         
                 
@@ -277,7 +279,7 @@ def chat_with_ai():
                     # Use the safe move function with undo
                     items = function_args.get("items", [])
                     destination_dir = function_args.get("destination_dir", "")
-                    move_message = perform_move_with_undo(items, destination_dir)
+                    move_message = await perform_move_with_undo(items, destination_dir)
                     result = {
                         "success": True,
                         "message": move_message,
@@ -286,40 +288,37 @@ def chat_with_ai():
                     }
                 elif function_name == "show_activity_with_ai":
                     # Show user's recent activity with AI analysis
-                    result = show_activity_with_ai()
+                    result = await show_activity_with_ai()
                 elif function_name == "undo_last_operation":
                     # Handle undo operation
-                    undo_result = undo_last_operation()
+                    undo_result = await undo_last_operation()
                     result = undo_result
                 elif function_name == "delete_single_item":
                     # Delete a single item
                     item_path = function_args.get("item_path", "")
-                    enable_undo = function_args.get("enable_undo", True)
-                    result = delete_single_item(item_path, enable_undo)
+                    result = await delete_single_item(item_path)
                 elif function_name == "delete_multiple_items":
                     # Delete multiple items
                     item_paths = function_args.get("item_paths", [])
-                    enable_undo = function_args.get("enable_undo", True)
-                    result = delete_multiple_items(item_paths, enable_undo)
+                    result = await delete_multiple_items(item_paths)
                 elif function_name == "delete_items_by_pattern":
                     # Delete items by pattern
                     pattern = function_args.get("pattern", "")
                     target_dir = function_args.get("target_dir", None)
-                    enable_undo = function_args.get("enable_undo", True)
-                    result = delete_items_by_pattern(pattern, target_dir, enable_undo)
+                    result = await delete_items_by_pattern(pattern, target_dir)
                 elif function_name == "list_nested_folders_tree":
                     # List nested folders in tree structure
                     target_dir = function_args.get("target_dir", None)
                     max_depth = function_args.get("max_depth", 3)
-                    result = list_nested_folders_tree(target_dir, max_depth)
+                    result = await list_nested_folders_tree(target_dir, max_depth)
                 elif function_name == "count_files_by_extension":
                     # Count files by extension
                     folder_name = function_args.get("folder_name", None)
-                    result = count_files_by_extension(folder_name)
+                    result = await count_files_by_extension(folder_name)
                 elif function_name == "get_file_type_statistics":
                     # Get file type statistics
                     folder_name = function_args.get("folder_name", None)
-                    result = get_file_type_statistics(folder_name)
+                    result = await get_file_type_statistics(folder_name)
                 else:
                     result = {"success": False, "error": f"Unknown function: {function_name}"}
                 
@@ -331,7 +330,7 @@ def chat_with_ai():
                 })
                 
                 # Get final response with the data
-                final_response = client.chat.completions.create(
+                final_response = await client.chat.completions.acreate(
                     model="gpt-4o",
                     messages=conversation_history
                 )
@@ -356,4 +355,4 @@ def chat_with_ai():
             print(load_error_message("generic", str(e)))
 
 if __name__ == "__main__":
-    chat_with_ai()
+    main()
