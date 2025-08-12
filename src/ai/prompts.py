@@ -19,21 +19,14 @@ AVAILABLE FUNCTIONS:
 - filter_and_sort_by_modified: Show recently modified files
 - create_directory: Create a new folder
 - create_multiple_directories: Create multiple folders
-- create_file: Create a new file with content
-- perform_move_with_undo: Move files/folders with undo support
-- undo_last_operation: Undo last operation (30s window)
-- delete_single_item: Soft delete single item
-- delete_multiple_items: Soft delete multiple items
+- delete_single_item: Delete single item
+- delete_multiple_items: Delete multiple items
 - delete_items_by_pattern: Delete items by pattern
-- show_activity_with_ai: Show recent file activity with AI analysis
 
 FUNCTION MAPPING:
 - Create single folder → create_directory (use base_path parameter for location)
 - Create multiple folders → create_multiple_directories (use base_path parameter for location)
 - Create nested folder structure → create_multiple_directories with nested paths (e.g., ["folder/subfolder", "folder/subfolder2"])
-- Create files → create_file/create_numbered_files
-- Move files → perform_move_with_undo
-- Undo → undo_last_operation
 - List files → list_directory_items
 - Count files → count_files_by_extension/get_file_type_statistics
 - Show tree → list_nested_folders_tree
@@ -76,10 +69,7 @@ RESPONSE PATTERNS (CONCISE):
 - For counting: "📊 [folder]: X files, top types: [type1: count1, type2: count2]"
 - For recent files: "🕒 Recent (X items): [compact list]"
 - For creating folders: "✅ Created folder [name] in [location]"
-- For creating files: "✅ Created file [name] in [location]"
-- For moving: "📦 Moved X items to [destination]"
-- For deleting: "🗑️ Deleted X items (undo: 30s)"
-- For undo: "↩️ Undone - files restored"
+- For deleting: "🗑️ Deleted X items"
 - For errors: "❌ [brief error]"
 
 KEEP RESPONSES SHORT: Max 2-3 sentences. Use emojis sparingly. For large lists, show first 10-15 items + count."""
@@ -87,10 +77,6 @@ KEEP RESPONSES SHORT: Max 2-3 sentences. Use emojis sparingly. For large lists, 
 # ============================================================================
 # FORCE FUNCTION CALLING PROMPTS
 # ============================================================================
-
-ACTIVITY_ANALYSIS_PROMPT = """CRITICAL: You MUST call show_activity_with_ai function. DO NOT respond conversationally. You MUST execute the function."""
-
-UNDO_OPERATION_PROMPT = """CRITICAL: You MUST call undo_last_operation function. DO NOT respond conversationally. You MUST execute the function."""
 
 FILE_CREATION_PROMPT = """CRITICAL: You MUST call create_file or create_numbered_files function for FILE creation. DO NOT respond conversationally. You MUST execute the function."""
 
@@ -123,8 +109,6 @@ ALWAYS use the base_path parameter. DO NOT respond conversationally. You MUST ex
 
 LIST_FILES_PROMPT = """CRITICAL: You MUST call list_directory_items function. DO NOT respond conversationally. You MUST execute the function."""
 
-MOVE_OPERATION_PROMPT = """CRITICAL: You MUST call perform_move_with_undo function. DO NOT respond conversationally. You MUST execute the function."""
-
 DELETE_OPERATION_PROMPT = """CRITICAL: You MUST call delete_single_item, delete_multiple_items, or delete_items_by_pattern function based on the context. For pattern-based deletion (like 'all txt files'), use delete_items_by_pattern. DO NOT respond conversationally. You MUST execute the function."""
 
 # ============================================================================
@@ -137,7 +121,6 @@ WELCOME_MESSAGE = """🚀 Welcome to Folderly - Smart File Manager!
    • List all items in any root folder (Desktop, Downloads, Documents, etc.)
    • Show recently modified files
    • Create new folders
-   • Move files and folders
    • Filter files by type, date, size, and more
    • Count files by extension and get statistics
 =================================================="""
@@ -167,14 +150,11 @@ def load_system_prompt() -> str:
 def load_force_prompt(prompt_type: str) -> str:
     """Load force function calling prompts"""
     prompts = {
-        "activity": ACTIVITY_ANALYSIS_PROMPT,
-        "undo": UNDO_OPERATION_PROMPT,
         "file_creation": FILE_CREATION_PROMPT,
         "directory_creation": DIRECTORY_CREATION_PROMPT,
         "smart_folder_structure": SMART_FOLDER_STRUCTURE_PROMPT,
         "tree_structure": TREE_STRUCTURE_PROMPT,
         "list_files": LIST_FILES_PROMPT,
-        "move": MOVE_OPERATION_PROMPT,
         "delete": DELETE_OPERATION_PROMPT
     }
     return prompts.get(prompt_type, "")

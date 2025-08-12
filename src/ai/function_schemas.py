@@ -6,7 +6,7 @@ JSON schemas for AI function calling in the Folderly codebase.
 from typing import Dict, List, Any
 
 # ============================================================================
-# AI FUNCTION CALLING SCHEMAS (OLD FORMAT)
+# AI FUNCTION CALLING SCHEMAS
 # ============================================================================
 
 FOLDERLY_FUNCTIONS = [
@@ -105,14 +105,14 @@ FOLDERLY_FUNCTIONS = [
     },
     {
         "name": "create_multiple_directories",
-        "description": "Creates multiple directories at once in the specified base path",
+        "description": "Creates multiple directories in the specified base path",
         "parameters": {
             "type": "object",
             "properties": {
                 "directories": {
                     "type": "array",
                     "items": {"type": "string"},
-                    "description": "List of directory names to create"
+                    "description": "List of directory names to create (can include nested paths like 'folder/subfolder')"
                 },
                 "base_path": {
                     "type": "string",
@@ -123,58 +123,15 @@ FOLDERLY_FUNCTIONS = [
             "required": ["directories"]
         }
     },
-
-
-    {
-        "name": "perform_move_with_undo",
-        "description": "Safely moves specified files and folders to a destination directory with undo support (30-second window)",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "items": {
-                    "type": "array",
-                    "items": {"type": "string"},
-                    "description": "List of file/folder paths to move"
-                },
-                "destination_dir": {
-                    "type": "string",
-                    "description": "Destination directory path where items will be moved"
-                }
-            },
-            "required": ["items", "destination_dir"]
-        }
-    },
-    {
-        "name": "undo_last_operation",
-        "description": "Undoes the last move operation if within 30 seconds",
-        "parameters": {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
-    },
-    {
-        "name": "show_activity_with_ai",
-        "description": "Show user's recent file activity with AI analysis and insights",
-        "parameters": {
-            "type": "object",
-            "properties": {},
-            "required": []
-        }
-    },
     {
         "name": "delete_single_item",
-        "description": "Soft deletes a single file or directory using send2trash (moves to recycle bin) with undo support",
+        "description": "Deletes a single file or directory permanently",
         "parameters": {
             "type": "object",
             "properties": {
                 "item_path": {
                     "type": "string",
                     "description": "Path to the file or directory to delete"
-                },
-                "enable_undo": {
-                    "type": "boolean",
-                    "description": "Whether to enable undo support (default: true)"
                 }
             },
             "required": ["item_path"]
@@ -182,7 +139,7 @@ FOLDERLY_FUNCTIONS = [
     },
     {
         "name": "delete_multiple_items",
-        "description": "Soft deletes multiple files and directories using send2trash (moves to recycle bin) with undo support",
+        "description": "Deletes multiple files and directories permanently",
         "parameters": {
             "type": "object",
             "properties": {
@@ -190,10 +147,6 @@ FOLDERLY_FUNCTIONS = [
                     "type": "array",
                     "items": {"type": "string"},
                     "description": "List of paths to files or directories to delete"
-                },
-                "enable_undo": {
-                    "type": "boolean",
-                    "description": "Whether to enable undo support (default: true)"
                 }
             },
             "required": ["item_paths"]
@@ -201,7 +154,7 @@ FOLDERLY_FUNCTIONS = [
     },
     {
         "name": "delete_items_by_pattern",
-        "description": "Deletes files and directories matching a pattern using soft delete (moves to recycle bin) with undo support. Use this for deleting files by type (e.g., 'all txt files', 'all temp files')",
+        "description": "Deletes files and directories matching a pattern permanently. Use this for deleting files by type (e.g., 'all txt files', 'all temp files')",
         "parameters": {
             "type": "object",
             "properties": {
@@ -212,10 +165,6 @@ FOLDERLY_FUNCTIONS = [
                 "target_dir": {
                     "type": "string",
                     "description": "Directory to search in (default: Desktop)"
-                },
-                "enable_undo": {
-                    "type": "boolean",
-                    "description": "Whether to enable undo support (default: true)"
                 }
             },
             "required": ["pattern"]
