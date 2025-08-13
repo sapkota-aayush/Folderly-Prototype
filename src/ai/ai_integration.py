@@ -58,7 +58,8 @@ async def chat_with_ai():
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
-                    function_call="auto"
+                    function_call="auto",
+                    temperature=0.1
                 )
                 
                 message = response.choices[0].message
