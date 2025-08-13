@@ -8,7 +8,7 @@ from src.ai.prompts import (
     load_system_prompt, load_force_prompt, load_welcome_message, 
     load_goodbye_message, load_empty_input_message, load_error_message
 )
-from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, create_multiple_directories, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics
+from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, create_multiple_directories, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics, copy_multiple_items, rename_multiple_items
 from pathlib import Path
 
 # Load environment variables
@@ -93,12 +93,11 @@ async def chat_with_ai():
                             sort_order=sort_order,
                             include_folders=include_folders,
                             include_files=include_files,
-                            max_results=max_results,
-                            execution_mode="parallel"
+                            max_results=max_results
                         )
                     elif function_name == "filter_and_sort_by_modified":
                         # Get items first, then filter by date
-                        items_result = await list_directory_items(execution_mode="parallel")
+                        items_result = await list_directory_items()
                         if items_result["success"]:
                             # Convert string paths back to Path objects for the filter function
                             items = [Path(path) for path in items_result["results"]]
@@ -110,43 +109,53 @@ async def chat_with_ai():
                         # Create directory with base path support
                         target_dir = Path(function_args.get("target_dir", ""))
                         base_path = function_args.get("base_path", "Desktop")
-                        result = await create_directory(target_dir, base_path, execution_mode="parallel")
+                        result = await create_directory(target_dir, base_path)
                     elif function_name == "create_multiple_directories":
                         # Create multiple directories with base path support
                         directories = function_args.get("directories", [])
                         base_path = function_args.get("base_path", "Desktop")
-                        result = await create_multiple_directories(directories, base_path, execution_mode="parallel")
+                        result = await create_multiple_directories(directories, base_path)
                     elif function_name == "move_items_to_directory":
                         # Move items to destination directory
                         items = [Path(item) for item in function_args.get("items", [])]
                         destination_dir = Path(function_args.get("destination_dir", ""))
-                        result = await move_items_to_directory(items, destination_dir, execution_mode="parallel")
+                        result = await move_items_to_directory(items, destination_dir)
                     elif function_name == "delete_single_item":
                         # Delete a single item
                         item_path = function_args.get("item_path", "")
-                        result = await delete_single_item(item_path, execution_mode="parallel")
+                        result = await delete_single_item(item_path)
                     elif function_name == "delete_multiple_items":
                         # Delete multiple items
                         item_paths = function_args.get("item_paths", [])
-                        result = await delete_multiple_items(item_paths, execution_mode="parallel")
+                        result = await delete_multiple_items(item_paths)
                     elif function_name == "delete_items_by_pattern":
                         # Delete items by pattern
                         pattern = function_args.get("pattern", "")
                         target_dir = function_args.get("target_dir", None)
-                        result = await delete_items_by_pattern(pattern, target_dir, execution_mode="parallel")
+                        result = await delete_items_by_pattern(pattern, target_dir)
                     elif function_name == "list_nested_folders_tree":
                         # List nested folders in tree structure
                         target_dir = function_args.get("target_dir", None)
                         max_depth = function_args.get("max_depth", 3)
-                        result = await list_nested_folders_tree(target_dir, max_depth, execution_mode="parallel")
+                        result = await list_nested_folders_tree(target_dir, max_depth)
                     elif function_name == "count_files_by_extension":
                         # Count files by extension
                         folder_name = function_args.get("folder_name", None)
-                        result = await count_files_by_extension(folder_name, execution_mode="parallel")
+                        result = await count_files_by_extension(folder_name)
                     elif function_name == "get_file_type_statistics":
                         # Get file type statistics
                         folder_name = function_args.get("folder_name", None)
-                        result = await get_file_type_statistics(folder_name, execution_mode="parallel")
+                        result = await get_file_type_statistics(folder_name)
+                    elif function_name == "copy_multiple_items":
+                        # Copy multiple items to destination directory
+                        items = [Path(item) for item in function_args.get("items", [])]
+                        destination_dir = Path(function_args.get("destination_dir", ""))
+                        result = await copy_multiple_items(items, destination_dir)
+                    elif function_name == "rename_multiple_items":
+                        # Rename multiple items with new names
+                        items_data = function_args.get("items", [])
+                        items = [(Path(item["old_path"]), item["new_name"]) for item in items_data]
+                        result = await rename_multiple_items(items)
                     else:
                         result = {"success": False, "error": f"Unknown function: {function_name}"}
                     
