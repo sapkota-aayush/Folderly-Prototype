@@ -85,6 +85,24 @@ FOLDERLY_FUNCTIONS = [
         }
     },
     {
+        "name": "list_nested_folders_tree",
+        "description": "Lists all nested folders in a tree structure format with proper hierarchy visualization",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "target_dir": {
+                    "type": "string",
+                    "description": "Directory to search in (default: Desktop)"
+                },
+                "max_depth": {
+                    "type": "integer",
+                    "description": "Maximum depth to traverse (default: 3)"
+                }
+            },
+            "required": []
+        }
+    },
+    {
         "name": "create_directory",
         "description": "Creates a new directory in the specified base path",
         "parameters": {
