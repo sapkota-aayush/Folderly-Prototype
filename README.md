@@ -71,6 +71,25 @@ echo "OPENAI_API_KEY=your_api_key_here" > .env
 python -m src.ai.ai_integration
 ```
 
+#### **Option 3: Docker (Recommended for Production)**
+```bash
+# Clone the repository
+git clone <repository-url>
+cd Folderly-ProtoType
+
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or build manually
+docker build -t folderly .
+docker run -it folderly
+
+# Set up your OpenAI API key in .env file
+echo "OPENAI_API_KEY=your_api_key_here" > .env
+```
+
+> 📖 **For detailed Docker instructions, see [Docker Usage Guide](docs/DOCKER_USAGE.md)**
+
 ## 💬 **Usage Examples**
 
 ### **Listing and Exploring**
@@ -126,7 +145,7 @@ Folderly-ProtoType/
 │   │   └── search.py   # Search functionality
 │   ├── ai/             # AI integration
 │   │   ├── ai_integration.py    # AI conversation interface
-│   │   ├── function_schemas.py  # OpenAI function definitions
+│ │   ├── function_schemas.py  # OpenAI function definitions
 │   │   └── prompts.py          # AI system prompts
 │   ├── cli/            # Command line interface
 │   │   └── cli.py     # Traditional CLI
@@ -134,8 +153,12 @@ Folderly-ProtoType/
 │       └── utils.py    # General utilities
 ├── tests/              # Test files
 ├── docs/               # Documentation
+│   └── DOCKER_USAGE.md # Docker usage guide
 ├── pyproject.toml      # Poetry configuration
-└── requirements.txt    # Dependencies
+├── requirements.txt    # Dependencies
+├── Dockerfile          # Docker image definition
+├── docker-compose.yml  # Docker Compose configuration
+└── .dockerignore       # Docker build optimization
 ```
 
 ## 🔧 **Technical Features**
