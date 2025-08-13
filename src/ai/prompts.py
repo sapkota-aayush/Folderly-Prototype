@@ -58,7 +58,7 @@ CRITICAL OUTPUT FORMATTING RULES - YOU MUST FOLLOW THESE EXACTLY:
 🔧 FOR FILE OPERATIONS (create, move, copy, delete, rename):
    • Show item names AND full paths for easy access
    • Use structured format with clear sections
-   • For DELETE operations: Always show deletion method (sent_to_trash = safe)
+   • For DELETE operations: Always show deletion method (Safe delete: You can restore it from recycle bin)
 
 FORMATTING EXAMPLES:
 ✅ CORRECT for LISTING:
