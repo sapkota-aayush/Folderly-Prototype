@@ -258,6 +258,66 @@ FOLDERLY_FUNCTIONS = [
             },
             "required": []
         }
+    },
+    {
+        "name": "move_items_to_directory",
+        "description": "Moves multiple files and folders to a destination directory",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of file/folder paths to move"
+                },
+                "destination_dir": {
+                    "type": "string",
+                    "description": "Destination directory path"
+                }
+            },
+            "required": ["items", "destination_dir"]
+        }
+    },
+    {
+        "name": "copy_multiple_items",
+        "description": "Copies multiple files and folders to a destination directory",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {"type": "string"},
+                    "description": "List of file/folder paths to copy"
+                },
+                "destination_dir": {
+                    "type": "string",
+                    "description": "Destination directory path"
+                }
+            },
+            "required": ["items", "destination_dir"]
+        }
+    },
+    {
+        "name": "rename_multiple_items",
+        "description": "Renames multiple files and folders with new names",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "items": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "old_path": {"type": "string"},
+                            "new_name": {"type": "string"}
+                        },
+                        "required": ["old_path", "new_name"]
+                    },
+                    "description": "List of (old_path, new_name) objects"
+                }
+            },
+            "required": ["items"]
+        }
     }
 ]
 

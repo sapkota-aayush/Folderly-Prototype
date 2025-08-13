@@ -42,6 +42,47 @@ async def execute_operations(operations, execution_mode="parallel"):
             results.append(result)
         return results
 
+# ============================================================================
+# SMART EXECUTION STRATEGY
+# ============================================================================
+def get_smart_execution_mode(function_name: str, is_multiple: bool = False) -> str:
+    """
+    Automatically determine the best execution mode based on function type and operation count
+    
+    Args:
+        function_name: Name of the function being called
+        is_multiple: Whether this is a multiple/bulk operation
+    
+    Returns:
+        "parallel" for safe multiple operations, "sequential" for single operations
+    """
+    # Multiple operations that are safe to parallelize (fast, no conflicts)
+    multiple_safe_functions = {
+        "create_multiple_directories",
+        "create_numbered_files", 
+        "delete_multiple_items",
+        "delete_items_by_pattern",
+        "move_items_to_directory",
+        "copy_multiple_items",
+        "rename_multiple_items"
+    }
+    
+    # Single operations that should be sequential (controlled, safe)
+    single_sequential_functions = {
+        "create_directory",
+        "delete_single_item",
+        "list_directory_items",
+        "count_files_by_extension",
+        "get_file_type_statistics",
+        "list_nested_folders_tree",
+        "filter_and_sort_by_modified"
+    }
+    
+    if function_name in multiple_safe_functions and is_multiple:
+        return "parallel"  # Fast, safe multiple operations
+    else:
+        return "sequential"  # Safe, controlled single operations
+
 #Getting root directory and target folder 
 def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path:
     """
@@ -121,7 +162,7 @@ async def list_directory_items(
     include_folders: bool = True,
     include_files: bool = True,
     max_results: int = None,
-    execution_mode: str = "parallel"
+    execution_mode: str = None
 ) -> Dict[str, Any]:
     """
     Lists files and folders in the specified root folder with advanced filtering
@@ -144,6 +185,10 @@ async def list_directory_items(
         Dict with success status, filtered file list, and filter metadata
     """
     try:
+        # Smart execution mode: sequential for single operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("list_directory_items", is_multiple=False)
+        
         target_dir = get_directory(folder_name)
         
         # Check if directory exists
@@ -322,7 +367,7 @@ def filter_and_sort_by_modified(items: List[Path], days: int) -> Dict[str, Any]:
         }
 
 #Creating a directory 
-async def create_directory(target_dir: Path, base_path: str = "Desktop", execution_mode: str = "parallel") -> Dict[str, Any]:
+async def create_directory(target_dir: Path, base_path: str = "Desktop", execution_mode: str = None) -> Dict[str, Any]:
     """
     Creates a new directory in the specified base path.
     
@@ -335,6 +380,10 @@ async def create_directory(target_dir: Path, base_path: str = "Desktop", executi
         Dict with success status and created directory info
     """
     try:
+        # Smart execution mode: sequential for single operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("create_directory", is_multiple=False)
+        
         # Get the base directory path
         base_directory = get_directory(base_path)
         full_path = base_directory / target_dir
@@ -356,7 +405,7 @@ async def create_directory(target_dir: Path, base_path: str = "Desktop", executi
             "error": str(e)
         }
 
-async def create_multiple_directories(directories: List[str], base_path: str = "Desktop", execution_mode: str = "parallel") -> Dict[str, Any]:
+async def create_multiple_directories(directories: List[str], base_path: str = "Desktop", execution_mode: str = None) -> Dict[str, Any]:
     """
     Creates multiple directories in the specified base path.
     
@@ -369,6 +418,10 @@ async def create_multiple_directories(directories: List[str], base_path: str = "
         Dict with success status and created directories info
     """
     try:
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("create_multiple_directories", is_multiple=True)
+        
         # Get the base directory path (handles OneDrive, etc.)
         base_directory = get_directory(base_path)
         
@@ -417,7 +470,7 @@ async def create_multiple_directories(directories: List[str], base_path: str = "
             "base_path": base_path
         }
 
-async def move_items_to_directory(items: list[Path], destination_dir: Path, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def move_items_to_directory(items: list[Path], destination_dir: Path, execution_mode: str = None) -> Dict[str, Any]:
     """
     Moves multiple items to a destination directory.
     
@@ -430,6 +483,10 @@ async def move_items_to_directory(items: list[Path], destination_dir: Path, exec
         Dict with success status and move results
     """
     try:
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("move_items_to_directory", is_multiple=True)
+        
         # Define the move operation
         def move_single_item(item):
             try:
@@ -476,7 +533,7 @@ async def move_items_to_directory(items: list[Path], destination_dir: Path, exec
             "error": str(e)
         }
 
-async def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None, execution_mode: str = None) -> Dict[str, Any]:
     """
     Creates multiple numbered files with specified extension.
     
@@ -492,6 +549,10 @@ async def create_numbered_files(base_name: str, count: int, extension: str, star
         Dict with success status and created files info
     """
     try:
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("create_numbered_files", is_multiple=True)
+        
         if target_dir is None:
             target_dir = get_directory()
         
@@ -559,7 +620,7 @@ async def create_numbered_files(base_name: str, count: int, extension: str, star
             "error": str(e)
         }
 
-async def delete_single_item(item_path: str, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def delete_single_item(item_path: str, execution_mode: str = None) -> Dict[str, Any]:
     """
     Deletes a single file or directory.
     
@@ -571,6 +632,10 @@ async def delete_single_item(item_path: str, execution_mode: str = "parallel") -
         Dict with success status and deletion info
     """
     try:
+        # Smart execution mode: sequential for single operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("delete_single_item", is_multiple=False)
+        
         path = Path(item_path)
         
         # Check if item exists
@@ -616,7 +681,7 @@ async def delete_single_item(item_path: str, execution_mode: str = "parallel") -
             "item_path": item_path
         }
 
-async def delete_multiple_items(item_paths: List[str], execution_mode: str = "parallel") -> Dict[str, Any]:
+async def delete_multiple_items(item_paths: List[str], execution_mode: str = None) -> Dict[str, Any]:
     """
     Deletes multiple files and directories.
     
@@ -676,6 +741,10 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
                     "item_path": item_path
                 }
         
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("delete_multiple_items", is_multiple=True)
+        
         # Prepare operations for execution
         operations = [(delete_single_item_wrapper, (item_path,), {}) for item_path in item_paths]
         
@@ -718,7 +787,7 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
             "total_items": len(item_paths)
         }
 
-async def delete_items_by_pattern(pattern: str, target_dir: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def delete_items_by_pattern(pattern: str, target_dir: str = None, execution_mode: str = None) -> Dict[str, Any]:
     """
     Deletes files and directories matching a pattern.
     
@@ -757,6 +826,10 @@ async def delete_items_by_pattern(pattern: str, target_dir: str = None, executio
         
         # Convert to string paths for deletion
         item_paths = [str(item) for item in matching_items]
+        
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("delete_items_by_pattern", is_multiple=True)
         
         # Use the multiple delete function with execution mode
         result = await delete_multiple_items(item_paths, execution_mode)
@@ -862,7 +935,7 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
             "target_dir": target_dir
         }
 
-async def count_files_by_extension(folder_name: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def count_files_by_extension(folder_name: str = None, execution_mode: str = None) -> Dict[str, Any]:
     """
     Counts files by extension in the specified folder
     
@@ -885,6 +958,10 @@ async def count_files_by_extension(folder_name: str = None, execution_mode: str 
         
         # Get all files
         all_files = [f for f in target_dir.iterdir() if f.is_file()]
+        
+        # Smart execution mode: sequential for single operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("count_files_by_extension", is_multiple=False)
         
         # Count by extension
         extension_counts = {}
@@ -917,7 +994,7 @@ async def count_files_by_extension(folder_name: str = None, execution_mode: str 
             "folder_name": folder_name or TARGET_FOLDER
         }
 
-async def get_file_type_statistics(folder_name: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def get_file_type_statistics(folder_name: str = None, execution_mode: str = None) -> Dict[str, Any]:
     """
     Gets file type statistics (documents, images, videos, etc.) for the specified folder
     
@@ -951,6 +1028,10 @@ async def get_file_type_statistics(folder_name: str = None, execution_mode: str 
         
         # Get all files
         all_files = [f for f in target_dir.iterdir() if f.is_file()]
+        
+        # Smart execution mode: sequential for single operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("get_file_type_statistics", is_multiple=False)
         
         # Count by file type
         type_counts = {file_type: 0 for file_type in file_types.keys()}
@@ -988,4 +1069,148 @@ async def get_file_type_statistics(folder_name: str = None, execution_mode: str 
             "success": False,
             "error": str(e),
             "folder_name": folder_name or TARGET_FOLDER
+        }
+
+# ============================================================================
+# ADDITIONAL MULTIPLE OPERATION FUNCTIONS
+# ============================================================================
+
+async def copy_multiple_items(items: list[Path], destination_dir: Path, execution_mode: str = None) -> Dict[str, Any]:
+    """
+    Copies multiple items to a destination directory.
+    
+    Args:
+        items: List of file/folder paths to copy
+        destination_dir: Destination directory
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
+    
+    Returns:
+        Dict with success status and copy results
+    """
+    try:
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("copy_multiple_items", is_multiple=True)
+        
+        # Define the copy operation
+        def copy_single_item(item):
+            try:
+                # Skip hidden files/folders
+                if item.name.startswith('.'):
+                    return {"success": False, "item": str(item), "reason": "hidden file"}
+                
+                # Copy the item
+                dest = destination_dir / item.name
+                if item.is_file():
+                    shutil.copy2(str(item), str(dest))
+                else:
+                    shutil.copytree(str(item), str(dest), dirs_exist_ok=True)
+                
+                return {"success": True, "item": str(item), "destination": str(dest)}
+            except PermissionError:
+                return {"success": False, "item": str(item), "reason": "permission denied"}
+            except Exception as e:
+                return {"success": False, "item": str(item), "reason": str(e)}
+        
+        # Prepare operations for execution
+        operations = [(copy_single_item, (item,), {}) for item in items]
+        
+        # Execute operations using helper
+        results = await execute_operations(operations, execution_mode)
+        
+        # Process results
+        copied_items = []
+        failed_items = []
+        
+        for result in results:
+            if result["success"]:
+                copied_items.append(result["destination"])
+            else:
+                failed_items.append({"item": result["item"], "reason": result["reason"]})
+        
+        return {
+            "success": True,
+            "results": copied_items,
+            "total_copied": len(copied_items),
+            "failed_items": failed_items,
+            "destination": str(destination_dir),
+            "execution_mode": execution_mode
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
+        }
+
+async def rename_multiple_items(items: list[tuple[Path, str]], execution_mode: str = None) -> Dict[str, Any]:
+    """
+    Renames multiple items with new names.
+    
+    Args:
+        items: List of (old_path, new_name) tuples
+        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
+    
+    Returns:
+        Dict with success status and rename results
+    """
+    try:
+        # Smart execution mode: parallel for multiple operations
+        if execution_mode is None:
+            execution_mode = get_smart_execution_mode("rename_multiple_items", is_multiple=True)
+        
+        # Define the rename operation
+        def rename_single_item(item_tuple):
+            try:
+                old_path, new_name = item_tuple
+                
+                # Skip hidden files/folders
+                if old_path.name.startswith('.'):
+                    return {"success": False, "item": str(old_path), "reason": "hidden file"}
+                
+                # Create new path
+                new_path = old_path.parent / new_name
+                
+                # Check if new name already exists
+                if new_path.exists():
+                    return {"success": False, "item": str(old_path), "reason": "new name already exists"}
+                
+                # Rename the item
+                old_path.rename(new_path)
+                
+                return {"success": True, "old_path": str(old_path), "new_path": str(new_path)}
+            except PermissionError:
+                return {"success": False, "item": str(old_path), "reason": "permission denied"}
+            except Exception as e:
+                return {"success": False, "item": str(old_path), "reason": str(e)}
+        
+        # Prepare operations for execution
+        operations = [(rename_single_item, (item_tuple,), {}) for item_tuple in items]
+        
+        # Execute operations using helper
+        results = await execute_operations(operations, execution_mode)
+        
+        # Process results
+        renamed_items = []
+        failed_items = []
+        
+        for result in results:
+            if result["success"]:
+                renamed_items.append({
+                    "old_path": result["old_path"],
+                    "new_path": result["new_path"]
+                })
+            else:
+                failed_items.append({"item": result["item"], "reason": result["reason"]})
+        
+        return {
+            "success": True,
+            "renamed_items": renamed_items,
+            "total_renamed": len(renamed_items),
+            "failed_items": failed_items,
+            "execution_mode": execution_mode
+        }
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e)
         }
