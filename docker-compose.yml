@@ -1,0 +1,30 @@
+version: '3.8'
+
+services:
+  folderly:
+    build: .
+    container_name: folderly-app
+    volumes:
+      # Mount user's file system for file management
+      - ${USERPROFILE}/Desktop:/workspace/Desktop:rw
+      - ${USERPROFILE}/Documents:/workspace/Documents:rw
+      - ${USERPROFILE}/Downloads:/workspace/Downloads:rw
+      - ${USERPROFILE}/Pictures:/workspace/Pictures:rw
+      - ${USERPROFILE}/Music:/workspace/Music:rw
+      - ${USERPROFILE}/Videos:/workspace/Videos:rw
+    environment:
+      - PYTHONPATH=/app
+      - LOG_LEVEL=INFO
+      - CONFIG_PATH=/app/config.py
+    env_file:
+      - .env
+    working_dir: /workspace
+    stdin_open: true
+    tty: true
+    restart: unless-stopped
+    networks:
+      - folderly-network
+
+networks:
+  folderly-network:
+    driver: bridge
