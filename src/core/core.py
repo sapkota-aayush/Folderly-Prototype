@@ -4,6 +4,7 @@ from typing import List, Dict, Any
 import shutil
 import asyncio
 from datetime import datetime, timedelta
+from send2trash import send2trash
 
 
 # ============================================================================
@@ -326,7 +327,7 @@ async def list_directory_items(
         
         return {
             "success": True,
-            "results": [str(path) for path in results],
+            "results": [path.name for path in results],
             "total_found": len(results),
             "filters_applied": filters_applied,
             "directory": str(target_dir),
@@ -654,17 +655,14 @@ async def delete_single_item(item_path: str, execution_mode: str = None) -> Dict
                 "item_path": item_path
             }
         
-        # Delete the file or directory
-        if path.is_file():
-            path.unlink()
-        else:
-            shutil.rmtree(str(path))
+        # Delete the file or directory using send2trash (safe deletion)
+        send2trash(str(path))
         
         return {
             "success": True,
             "deleted_item": item_path,
             "item_type": "file" if path.is_file() else "directory",
-            "deletion_method": "permanent_delete"
+            "deletion_method": "sent_to_trash"
         }
         
     except PermissionError:
@@ -714,17 +712,14 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = Non
                         "item_path": item_path
                     }
                 
-                # Delete the file or directory
-                if path.is_file():
-                    path.unlink()
-                else:
-                    shutil.rmtree(str(path))
+                # Delete the file or directory using send2trash (safe deletion)
+                send2trash(str(path))
                 
                 return {
                     "success": True,
                     "deleted_item": item_path,
                     "item_type": "file" if path.is_file() else "directory",
-                    "deletion_method": "permanent_delete"
+                    "deletion_method": "sent_to_trash"
                 }
                 
             except PermissionError:
@@ -761,7 +756,7 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = Non
                 deleted_items.append({
                     "path": item_path,
                     "type": result.get("item_type", "unknown"),
-                    "deletion_method": "permanent_delete"
+                    "deletion_method": "sent_to_trash"
                 })
             else:
                 failed_items.append({
@@ -776,7 +771,7 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = Non
             "failed_items": failed_items,
             "total_deleted": len(deleted_items),
             "total_failed": len(failed_items),
-            "deletion_method": "permanent_delete",
+            "deletion_method": "sent_to_trash",
             "execution_mode": execution_mode
         }
         
