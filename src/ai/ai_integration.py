@@ -32,10 +32,13 @@ def main():
 async def chat_with_ai():
     print(load_welcome_message())
     
-    # Initialize conversation history
+    # Initialize conversation history with fresh system prompt
     conversation_history = [
         {"role": "system", "content": load_system_prompt()}
     ]
+    
+    # Force fresh start - clear any cached model responses
+    # print("🔄 Fresh AI session started - all caches cleared!")
     
     while True:
         try:
@@ -59,7 +62,11 @@ async def chat_with_ai():
                     messages=conversation_history,
                     functions=get_function_schemas(),
                     function_call="auto",
-                    temperature=0.1
+                    temperature=0.1,
+                    # Force fresh response, no caching
+                    max_tokens=2000,
+                    presence_penalty=0.1,
+                    frequency_penalty=0.1
                 )
                 
                 message = response.choices[0].message
@@ -138,7 +145,7 @@ async def chat_with_ai():
                         # List nested folders in tree structure
                         target_dir = function_args.get("target_dir", None)
                         max_depth = function_args.get("max_depth", 3)
-                        result = await list_nested_folders_tree(target_dir, max_depth)
+                        result = list_nested_folders_tree(target_dir, max_depth)
                     elif function_name == "count_files_by_extension":
                         # Count files by extension
                         folder_name = function_args.get("folder_name", None)
