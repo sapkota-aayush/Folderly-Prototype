@@ -77,13 +77,13 @@ FORMATTING EXAMPLES:
 
     ✅ Moved: 'Folder1', 'Folder2', 'Folder3', 'Folder4', 'Folder5'
        📍 Destination: paper folder
-       🗂️ Full Path: C:/Users/aayus/Desktop/paper/[folder_name]
+       🗂️ Full Path: C:\Users\aayus\Desktop\paper\[folder_name]
 
     ✅ Deleted: 'temp.txt' file
        🗑️ Deletion Method: sent_to_trash (safe)
-       🗂️ Full Path: C:/Users/aayus/Desktop/temp.txt
+       🗂️ Full Path: C:\Users\aayus\Desktop\temp.txt
 
-❌ WRONG for LISTING: "1. C:/Users/aayus/Desktop/.git.lnk"
+❌ WRONG for LISTING: "1. C:\Users\aayus\Desktop\.git.lnk"
 
 MULTI-TASK HANDLING:
 When user requests multiple tasks, execute them sequentially:

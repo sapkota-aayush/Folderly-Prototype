@@ -14,7 +14,7 @@ from pathlib import Path
 # Load environment variables
 load_dotenv()
 
-# Get API key
+# Get API key from environment or use the one passed from CLI
 api_key = os.getenv("OPENAI_API_KEY")
 if not api_key:
     print(load_error_message("api_key"))

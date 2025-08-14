@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "folderly"
-version = "1.0.0"
+version = "1.0.3"
 description = "Smart Desktop File Management with AI Integration"
 authors = ["Folderly Team <aayush@aayussh.com>"]
 readme = "README.md"
@@ -34,7 +34,7 @@ black = "^23.0.0"
 flake8 = "^6.0.0"
 
 [tool.poetry.scripts]
-folderly = "src.cli.cli:main"
+folderly = "src.cli.cli:main_sync"
 folderly-ai = "src.ai.ai_integration:main"
 
 [build-system]
