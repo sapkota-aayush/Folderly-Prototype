@@ -6,59 +6,28 @@ import asyncio
 from datetime import datetime, timedelta
 from send2trash import send2trash
 
-
-# ============================================================================
-# CONFIGURABLE TARGET DIRECTORY
-# ============================================================================
 try:
     from config import TARGET_FOLDER
 except ImportError:
-    # Default fallback
     TARGET_FOLDER = "Desktop"
 
-# ============================================================================
-# ASYNC EXECUTION HELPER
-# ============================================================================
 async def execute_operations(operations, execution_mode="parallel"):
-    """
-    Execute multiple operations in parallel or sequential mode
-    
-    Args:
-        operations: List of (function, args, kwargs) tuples
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
-    
-    Returns:
-        List of results from operations
-    """
+    """Execute multiple operations in parallel or sequential mode"""
     if execution_mode == "parallel":
-        # Create all tasks for parallel execution (independent operations)
         tasks = [asyncio.to_thread(func, *args, **kwargs) for func, args, kwargs in operations]
-        # Execute all simultaneously
         return await asyncio.gather(*tasks)
     else:
-        # Execute one by one sequentially (dependent operations)
         results = []
         for func, args, kwargs in operations:
             result = await asyncio.to_thread(func, *args, **kwargs)
             results.append(result)
         return results
 
-#Getting root directory and target folder 
 def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path:
-    """
-    Get directory path for any root folder (Desktop, Downloads, Documents, etc.)
-    
-    Args:
-        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
-        root_dir: Root directory (default: user home)
-    
-    Returns:
-        Path to the specified folder
-    """
+    """Get directory path for any root folder (Desktop, Downloads, Documents, etc.)"""
     if folder_name is None:
         folder_name = TARGET_FOLDER
     
-    # Handle common folder name variations
     folder_mappings = {
         "documents": ["Documents", "My Documents", "Documenti"],
         "downloads": ["Downloads", "Download"],
@@ -68,33 +37,22 @@ def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path
         "videos": ["Videos", "My Videos", "Video"]
     }
     
-    # Debug: Print what we're looking for
     print(f"🔍 Looking for folder: '{folder_name}' in {root_dir}")
     
-    # Normalize folder name
     folder_lower = folder_name.lower() if folder_name else TARGET_FOLDER.lower()
     
-    # Try the exact name first
     exact_path = root_dir / folder_name
     if exact_path.exists():
         return exact_path
     
-    # Try common variations
     if folder_lower in folder_mappings:
         for variation in folder_mappings[folder_lower]:
             variation_path = root_dir / variation
             if variation_path.exists():
                 return variation_path
     
-    # Handle OneDrive paths for Documents, Pictures, etc.
     if folder_lower in ["documents", "pictures", "music", "videos"]:
-        # Try OneDrive paths - check multiple possible locations
-        onedrive_variations = [
-            "OneDrive",
-            "OneDrive - Personal", 
-            "OneDrive - Personal",
-            "OneDrive"
-        ]
+        onedrive_variations = ["OneDrive", "OneDrive - Personal"]
         
         for onedrive_folder in onedrive_variations:
             onedrive_paths = [
@@ -106,10 +64,8 @@ def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path
                 if onedrive_path.exists():
                     return onedrive_path
     
-    # If nothing found, return the original path (will be created if needed)
     return root_dir / folder_name
 
-#Getting the list of all the files and folders
 async def list_directory_items(
     folder_name: str = None,
     extension: str = None,
@@ -123,29 +79,10 @@ async def list_directory_items(
     include_files: bool = True,
     max_results: int = None
 ) -> Dict[str, Any]:
-    """
-    Lists files and folders in the specified root folder with advanced filtering
-    
-    Args:
-        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
-        extension: Filter by file extension (e.g., "txt", "pdf", "docx")
-        file_type: Filter by file type ("documents", "images", "videos", "audio", "archives")
-        pattern: Filter by name pattern (case-insensitive substring match)
-        date_range: Filter by date range (days_ago, or (start_date, end_date))
-        size_range: Filter by file size in bytes (min_size, max_size)
-        sort_by: Sort by "name", "modified", "size" (default: "name")
-        sort_order: "asc" or "desc" (default: "asc")
-        include_folders: Include folders in results (default: True)
-        include_files: Include files in results (default: True)
-        max_results: Maximum number of results to return
-    
-    Returns:
-        Dict with success status, filtered file list, and filter metadata
-    """
+    """Lists files and folders in the specified root folder with advanced filtering"""
     try:
         target_dir = get_directory(folder_name)
         
-        # Check if directory exists
         if not target_dir.exists():
             return {
                 "success": False,
@@ -158,7 +95,6 @@ async def list_directory_items(
                 ]
             }
         
-        # Check if directory is accessible
         if not target_dir.is_dir():
             return {
                 "success": False,
@@ -166,11 +102,9 @@ async def list_directory_items(
                 "folder_name": folder_name or TARGET_FOLDER
             }
         
-        # Get all items
         all_items = list(target_dir.iterdir())
         results = []
         
-        # Apply file/folder filters
         for item in all_items:
             item_info = {
                 "name": item.name,
@@ -178,41 +112,34 @@ async def list_directory_items(
                 "is_file": item.is_file(),
                 "is_dir": item.is_dir(),
                 "size": item.stat().st_size if item.is_file() else None,
-                "modified": datetime.fromtimestamp(item.stat().st_mtime)
+                "modified": datetime.fromtimestamp(item.stat().st_mtime).isoformat()
             }
             
-            # Apply include/exclude filters
             if not include_folders and item.is_dir():
                 continue
             if not include_files and item.is_file():
                 continue
             
-            # Apply extension filter
             if extension and item.is_file():
                 if not item.name.lower().endswith(f".{extension.lower()}"):
                     continue
             
-            # Apply file type filter
             if file_type and item.is_file():
                 if not is_file_type_match(item.name, file_type):
                     continue
             
-            # Apply pattern filter
             if pattern and not re.search(pattern, item.name, re.IGNORECASE):
                 continue
             
-            # Apply date range filter
             if date_range and not is_in_date_range(item_info["modified"], date_range):
                 continue
             
-            # Apply size range filter
             if size_range and item.is_file():
                 if not is_in_size_range(item_info["size"], size_range):
                     continue
             
             results.append(item_info)
         
-        # Apply sorting
         if sort_by == "name":
             results.sort(key=lambda x: x["name"].lower(), reverse=(sort_order == "desc"))
         elif sort_by == "modified":
@@ -220,7 +147,6 @@ async def list_directory_items(
         elif sort_by == "size":
             results.sort(key=lambda x: x["size"] or 0, reverse=(sort_order == "desc"))
         
-        # Apply max results limit
         if max_results:
             results = results[:max_results]
         
@@ -248,8 +174,8 @@ async def list_directory_items(
             "folder_name": folder_name or TARGET_FOLDER
         }
 
-#Listing recently modified files and folders
 def filter_and_sort_by_modified(items: List[Path], days: int) -> Dict[str, Any]:
+    """Filter and sort items by modification date"""
     try:
         cutoff = datetime.now() - timedelta(days=days)
         filtered = [p for p in items if datetime.fromtimestamp(p.stat().st_mtime) >= cutoff]
@@ -257,7 +183,7 @@ def filter_and_sort_by_modified(items: List[Path], days: int) -> Dict[str, Any]:
         
         return {
             "success": True,
-            "results": [str(path) for path in sorted_items],  # Convert to strings
+            "results": [str(path) for path in sorted_items],
             "total_found": len(sorted_items),
             "days_threshold": days
         }
@@ -267,24 +193,12 @@ def filter_and_sort_by_modified(items: List[Path], days: int) -> Dict[str, Any]:
             "error": str(e)
         }
 
-#Creating a directory 
 async def create_directory(target_dir: Path, base_path: str = "Desktop") -> Dict[str, Any]:
-    """
-    Creates a new directory in the specified base path.
-    
-    Args:
-        target_dir: Name of directory to create
-        base_path: Base path where to create (Desktop, Documents, etc.)
-    
-    Returns:
-        Dict with success status and created directory info
-    """
+    """Creates a new directory in the specified base path"""
     try:
-        # Get the base directory path
         base_directory = get_directory(base_path)
         full_path = base_directory / target_dir
         
-        # Create the directory
         full_path.mkdir(parents=True, exist_ok=True)
         
         return {
@@ -301,42 +215,22 @@ async def create_directory(target_dir: Path, base_path: str = "Desktop") -> Dict
         }
 
 async def create_multiple_directories(directories: List[str], base_path: str = "Desktop", execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Creates multiple directories in the specified base path.
-    
-    Args:
-        directories: List of directory names to create (can include nested paths like "folder/subfolder")
-        base_path: Base path where to create (Desktop, Documents, Downloads, etc.)
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
-    
-    Returns:
-        Dict with success status and created directories info
-    """
+    """Creates multiple directories in the specified base path"""
     try:
-        
-        # Get the base directory path (handles OneDrive, etc.)
         base_directory = get_directory(base_path)
         
-        # Define the directory creation operation
         def create_single_directory(dir_path):
             try:
-                # Handle nested paths (e.g., "CPA/assignments/notes")
                 target_dir = Path(dir_path)
                 full_path = base_directory / target_dir
-                
-                # Create the directory (including parent directories if needed)
                 full_path.mkdir(parents=True, exist_ok=True)
                 return {"success": True, "path": str(full_path)}
             except Exception as e:
                 return {"success": False, "path": dir_path, "error": str(e)}
         
-        # Prepare operations for execution
         operations = [(create_single_directory, (dir_path,), {}) for dir_path in directories]
-        
-        # Execute operations using helper
         results = await execute_operations(operations, execution_mode)
         
-        # Process results
         created_dirs = []
         failed_dirs = []
         
@@ -362,26 +256,13 @@ async def create_multiple_directories(directories: List[str], base_path: str = "
         }
 
 async def move_items_to_directory(items: list[Path], destination_dir: Path, execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Moves multiple items to a destination directory.
-    
-    Args:
-        items: List of file/folder paths to move
-        destination_dir: Destination directory
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
-    
-    Returns:
-        Dict with success status and move results
-    """
+    """Moves multiple items to a destination directory"""
     try:
-        # Define the move operation
         def move_single_item(item):
             try:
-                # Skip hidden files/folders
                 if item.name.startswith('.'):
                     return {"success": False, "item": str(item), "reason": "hidden file"}
                 
-                # Move the item
                 dest = destination_dir / item.name
                 shutil.move(str(item), str(dest))
                 return {"success": True, "item": str(item), "destination": str(dest)}
@@ -390,13 +271,9 @@ async def move_items_to_directory(items: list[Path], destination_dir: Path, exec
             except Exception as e:
                 return {"success": False, "item": str(item), "reason": str(e)}
         
-        # Prepare operations for execution
         operations = [(move_single_item, (item,), {}) for item in items]
-        
-        # Execute operations using helper
         results = await execute_operations(operations, execution_mode)
         
-        # Process results
         moved_items = []
         skipped_items = []
         
@@ -420,33 +297,16 @@ async def move_items_to_directory(items: list[Path], destination_dir: Path, exec
         }
 
 async def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None, execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Creates multiple numbered files with specified extension.
-    
-    Args:
-        base_name: Base name for files (e.g., "file", "test")
-        count: Number of files to create
-        extension: File extension (e.g., "txt", "py", "js")
-        start_number: Starting number (default: 1)
-        target_dir: Directory to create files in (default: Desktop)
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
-    
-    Returns:
-        Dict with success status and created files info
-    """
+    """Creates multiple numbered files with specified extension"""
     try:
-        
         if target_dir is None:
             target_dir = get_directory()
         
-        # Define the file creation operation
         def create_single_file(file_number):
             try:
-                # Create filename
                 filename = f"{base_name}_{file_number}.{extension}"
                 file_path = target_dir / filename
                 
-                # Create file with basic content
                 content = f"This is {base_name} number {file_number}"
                 with open(file_path, 'w', encoding='utf-8') as f:
                     f.write(content)
@@ -464,13 +324,9 @@ async def create_numbered_files(base_name: str, count: int, extension: str, star
                     "error": str(e)
                 }
         
-        # Prepare operations for execution
         operations = [(create_single_file, (i,), {}) for i in range(start_number, start_number + count)]
-        
-        # Execute operations using helper
         results = await execute_operations(operations, execution_mode)
         
-        # Process results
         created_files = []
         failed_files = []
         
@@ -503,20 +359,10 @@ async def create_numbered_files(base_name: str, count: int, extension: str, star
         }
 
 async def delete_single_item(item_path: str) -> Dict[str, Any]:
-    """
-    Deletes a single file or directory.
-    
-    Args:
-        item_path: Path to the file or directory to delete
-        
-    Returns:
-        Dict with success status and deletion info
-    """
+    """Deletes a single file or directory"""
     try:
-        
         path = Path(item_path)
         
-        # Check if item exists
         if not path.exists():
             return {
                 "success": False,
@@ -524,7 +370,6 @@ async def delete_single_item(item_path: str) -> Dict[str, Any]:
                 "item_path": item_path
             }
         
-        # Check if item is accessible
         if not path.is_file() and not path.is_dir():
             return {
                 "success": False,
@@ -532,7 +377,6 @@ async def delete_single_item(item_path: str) -> Dict[str, Any]:
                 "item_path": item_path
             }
         
-        # Delete the file or directory using send2trash (safe deletion)
         send2trash(str(path))
         
         return {
@@ -557,23 +401,12 @@ async def delete_single_item(item_path: str) -> Dict[str, Any]:
         }
 
 async def delete_multiple_items(item_paths: List[str], execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Deletes multiple files and directories.
-    
-    Args:
-        item_paths: List of paths to files or directories to delete
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
-        
-    Returns:
-        Dict with success status and deletion info for all items
-    """
+    """Deletes multiple files and directories"""
     try:
-        # Define a regular wrapper function that performs the delete operation directly
         def delete_single_item_wrapper(item_path):
             try:
                 path = Path(item_path)
                 
-                # Check if item exists
                 if not path.exists():
                     return {
                         "success": False,
@@ -581,7 +414,6 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
                         "item_path": item_path
                     }
                 
-                # Check if item is accessible
                 if not path.is_file() and not path.is_dir():
                     return {
                         "success": False,
@@ -589,7 +421,6 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
                         "item_path": item_path
                     }
                 
-                # Delete the file or directory using send2trash (safe deletion)
                 send2trash(str(path))
                 
                 return {
@@ -613,15 +444,9 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
                     "item_path": item_path
                 }
         
-
-        
-        # Prepare operations for execution
         operations = [(delete_single_item_wrapper, (item_path,), {}) for item_path in item_paths]
-        
-        # Execute operations using helper
         results = await execute_operations(operations, execution_mode)
         
-        # Process results
         deleted_items = []
         failed_items = []
         
@@ -657,17 +482,7 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
         }
 
 async def delete_items_by_pattern(pattern: str, target_dir: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Deletes files and directories matching a pattern.
-    
-    Args:
-        pattern: Glob pattern to match (e.g., "*.txt", "test*", "*temp*")
-        target_dir: Directory to search in (default: Desktop)
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations (default: "parallel")
-        
-    Returns:
-        Dict with success status and deletion info
-    """
+    """Deletes files and directories matching a pattern"""
     try:
         if target_dir is None:
             target_dir = str(get_directory())
@@ -681,7 +496,6 @@ async def delete_items_by_pattern(pattern: str, target_dir: str = None, executio
                 "target_dir": target_dir
             }
         
-        # Find all items matching the pattern
         matching_items = list(search_dir.glob(pattern))
         
         if not matching_items:
@@ -693,10 +507,7 @@ async def delete_items_by_pattern(pattern: str, target_dir: str = None, executio
                 "total_found": 0
             }
         
-        # Convert to string paths for deletion
         item_paths = [str(item) for item in matching_items]
-        
-        # Use the multiple delete function with execution mode
         result = await delete_multiple_items(item_paths, execution_mode)
         result["pattern"] = pattern
         result["target_dir"] = target_dir
@@ -713,16 +524,7 @@ async def delete_items_by_pattern(pattern: str, target_dir: str = None, executio
         }
 
 def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict[str, Any]:
-    """
-    Lists all nested folders in a tree structure format.
-    
-    Args:
-        target_dir: Directory to search in (default: Desktop)
-        max_depth: Maximum depth to traverse (default: 3)
-        
-    Returns:
-        Dict with success status and tree structure
-    """
+    """Lists all nested folders in a tree structure format"""
     try:
         if target_dir is None:
             target_dir = str(get_directory())
@@ -737,11 +539,9 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
             }
         
         def build_tree(path: Path, depth: int = 0, is_last: bool = False, prefix: str = "") -> str:
-            """Recursively build tree structure string"""
             if depth > max_depth:
                 return ""
             
-            # Get all items in current directory
             try:
                 items = sorted([item for item in path.iterdir() if item.is_dir()], key=lambda x: x.name.lower())
             except PermissionError:
@@ -756,10 +556,8 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
                 connector = "└──" if is_last_item else "├──"
                 line_prefix = "    " if is_last else "│   "
                 
-                # Current item line
                 tree_lines.append(f"{prefix}{connector} {item.name}/")
                 
-                # Recursively add children
                 child_prefix = prefix + line_prefix
                 child_tree = build_tree(item, depth + 1, is_last_item, child_prefix)
                 if child_tree:
@@ -767,7 +565,6 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
             
             return "\n".join(tree_lines)
         
-        # Build the tree structure
         tree_structure = build_tree(search_dir)
         
         if not tree_structure:
@@ -779,10 +576,7 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
                 "total_folders": 0
             }
         
-        # Add root directory name
         full_tree = f"{search_dir.name}/\n{tree_structure}"
-        
-        # Count total folders
         folder_count = len([line for line in full_tree.split('\n') if line.strip().endswith('/')])
         
         return {
@@ -801,15 +595,7 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
         }
 
 async def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
-    """
-    Counts files by extension in the specified folder
-    
-    Args:
-        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
-    
-    Returns:
-        Dict with extension counts and statistics
-    """
+    """Counts files by extension in the specified folder"""
     try:
         target_dir = get_directory(folder_name)
         
@@ -820,10 +606,8 @@ async def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
                 "folder_name": folder_name or TARGET_FOLDER
             }
         
-        # Get all files
         all_files = [f for f in target_dir.iterdir() if f.is_file()]
         
-        # Count by extension
         extension_counts = {}
         total_files = len(all_files)
         
@@ -832,17 +616,15 @@ async def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
             if ext:
                 extension_counts[ext] = extension_counts.get(ext, 0) + 1
             else:
-                # Files without extension
                 extension_counts["no_extension"] = extension_counts.get("no_extension", 0) + 1
         
-        # Sort by count (descending)
         sorted_extensions = sorted(extension_counts.items(), key=lambda x: x[1], reverse=True)
         
         return {
             "success": True,
             "total_files": total_files,
             "extension_counts": dict(sorted_extensions),
-            "top_extensions": sorted_extensions[:10],  # Top 10 extensions
+            "top_extensions": sorted_extensions[:10],
             "directory": str(target_dir),
             "folder_name": folder_name or TARGET_FOLDER
         }
@@ -854,15 +636,7 @@ async def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
         }
 
 async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
-    """
-    Gets file type statistics (documents, images, videos, etc.) for the specified folder
-    
-    Args:
-        folder_name: Name of the folder (Desktop, Downloads, Documents, etc.)
-    
-    Returns:
-        Dict with file type statistics
-    """
+    """Gets file type statistics (documents, images, videos, etc.) for the specified folder"""
     try:
         target_dir = get_directory(folder_name)
         
@@ -873,7 +647,6 @@ async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
                 "folder_name": folder_name or TARGET_FOLDER
             }
         
-        # File type definitions
         file_types = {
             "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".ppt", ".pptx", ".xls", ".xlsx"],
             "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
@@ -884,10 +657,8 @@ async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
             "code": [".py", ".js", ".html", ".css", ".java", ".cpp", ".c", ".php", ".rb", ".go"]
         }
         
-        # Get all files
         all_files = [f for f in target_dir.iterdir() if f.is_file()]
         
-        # Count by file type
         type_counts = {file_type: 0 for file_type in file_types.keys()}
         type_counts["other"] = 0
         total_files = len(all_files)
@@ -905,7 +676,6 @@ async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
             if not categorized:
                 type_counts["other"] += 1
         
-        # Remove zero counts and sort
         non_zero_counts = {k: v for k, v in type_counts.items() if v > 0}
         sorted_types = sorted(non_zero_counts.items(), key=lambda x: x[1], reverse=True)
         
@@ -913,7 +683,7 @@ async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
             "success": True,
             "total_files": total_files,
             "file_type_counts": dict(sorted_types),
-            "top_file_types": sorted_types[:5],  # Top 5 file types
+            "top_file_types": sorted_types[:5],
             "directory": str(target_dir),
             "folder_name": folder_name or TARGET_FOLDER
         }
@@ -924,32 +694,14 @@ async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
             "folder_name": folder_name or TARGET_FOLDER
         }
 
-# ============================================================================
-# ADDITIONAL MULTIPLE OPERATION FUNCTIONS
-# ============================================================================
-
 async def copy_multiple_items(items: list[Path], destination_dir: Path, execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Copies multiple items to a destination directory.
-    
-    Args:
-        items: List of file/folder paths to copy
-        destination_dir: Destination directory
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
-    
-    Returns:
-        Dict with success status and copy results
-    """
+    """Copies multiple items to a destination directory"""
     try:
-        
-        # Define the copy operation
         def copy_single_item(item):
             try:
-                # Skip hidden files/folders
                 if item.name.startswith('.'):
                     return {"success": False, "item": str(item), "reason": "hidden file"}
                 
-                # Copy the item
                 dest = destination_dir / item.name
                 if item.is_file():
                     shutil.copy2(str(item), str(dest))
@@ -962,13 +714,9 @@ async def copy_multiple_items(items: list[Path], destination_dir: Path, executio
             except Exception as e:
                 return {"success": False, "item": str(item), "reason": str(e)}
         
-        # Prepare operations for execution
         operations = [(copy_single_item, (item,), {}) for item in items]
-        
-        # Execute operations using helper
         results = await execute_operations(operations, execution_mode)
         
-        # Process results
         copied_items = []
         failed_items = []
         
@@ -992,35 +740,20 @@ async def copy_multiple_items(items: list[Path], destination_dir: Path, executio
         }
 
 async def rename_multiple_items(items: list[tuple[Path, str]], execution_mode: str = "parallel") -> Dict[str, Any]:
-    """
-    Renames multiple items with new names.
-    
-    Args:
-        items: List of (old_path, new_name) tuples
-        execution_mode: "parallel" for independent operations, "sequential" for dependent operations
-    
-    Returns:
-        Dict with success status and rename results
-    """
+    """Renames multiple items with new names"""
     try:
-        
-        # Define the rename operation
         def rename_single_item(item_tuple):
             try:
                 old_path, new_name = item_tuple
                 
-                # Skip hidden files/folders
                 if old_path.name.startswith('.'):
                     return {"success": False, "item": str(old_path), "reason": "hidden file"}
                 
-                # Create new path
                 new_path = old_path.parent / new_name
                 
-                # Check if new name already exists
                 if new_path.exists():
                     return {"success": False, "item": str(old_path), "reason": "new name already exists"}
                 
-                # Rename the item
                 old_path.rename(new_path)
                 
                 return {"success": True, "old_path": str(old_path), "new_path": str(new_path)}
@@ -1029,13 +762,9 @@ async def rename_multiple_items(items: list[tuple[Path, str]], execution_mode: s
             except Exception as e:
                 return {"success": False, "item": str(old_path), "reason": str(e)}
         
-        # Prepare operations for execution
         operations = [(rename_single_item, (item_tuple,), {}) for item_tuple in items]
-        
-        # Execute operations using helper
         results = await execute_operations(operations, execution_mode)
         
-        # Process results
         renamed_items = []
         failed_items = []
         
@@ -1059,3 +788,49 @@ async def rename_multiple_items(items: list[tuple[Path, str]], execution_mode: s
             "success": False,
             "error": str(e)
         }
+
+# Helper functions
+def is_file_type_match(filename: str, file_type: str) -> bool:
+    """Check if filename matches the specified file type"""
+    file_types = {
+        "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".ppt", ".pptx", ".xls", ".xlsx"],
+        "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
+        "videos": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v"],
+        "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a"],
+        "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"],
+        "executables": [".exe", ".msi", ".dmg", ".pkg", ".deb", ".rpm"],
+        "code": [".py", ".js", ".html", ".css", ".java", ".cpp", ".c", ".php", ".rb", ".go"]
+    }
+    
+    if file_type not in file_types:
+        return False
+    
+    return any(filename.lower().endswith(ext) for ext in file_types[file_type])
+
+def is_in_date_range(modified_date: str, date_range: tuple) -> bool:
+    """Check if modified date is within the specified range"""
+    try:
+        if isinstance(date_range, int):
+            days_ago = date_range
+            cutoff = datetime.now() - timedelta(days=days_ago)
+            file_date = datetime.fromisoformat(modified_date)
+            return file_date >= cutoff
+        elif isinstance(date_range, tuple) and len(date_range) == 2:
+            start_date, end_date = date_range
+            file_date = datetime.fromisoformat(modified_date)
+            return start_date <= file_date <= end_date
+        return True
+    except:
+        return True
+
+def is_in_size_range(size: int, size_range: tuple) -> bool:
+    """Check if file size is within the specified range"""
+    if not size_range or len(size_range) != 2:
+        return True
+    
+    min_size, max_size = size_range
+    if min_size is not None and size < min_size:
+        return False
+    if max_size is not None and size > max_size:
+        return False
+    return True
