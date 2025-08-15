@@ -23,8 +23,18 @@ async def execute_operations(operations, execution_mode="parallel"):
             results.append(result)
         return results
 
-def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path:
-    """Get directory path for any root folder (Desktop, Downloads, Documents, etc.)"""
+def get_directory(folder_name: str = None, root_dir: Path = Path.home(), custom_path: str = None) -> Path:
+    """Get directory path for any root folder (Desktop, Downloads, Documents, etc.) or custom path"""
+    
+    # NEW: Custom path takes priority if provided
+    if custom_path:
+        custom_path_obj = Path(custom_path)
+        if custom_path_obj.exists() and custom_path_obj.is_dir():
+            print(f"🎯 Using custom path: {custom_path}")
+            return custom_path_obj
+        else:
+            print(f"⚠️ Custom path '{custom_path}' not found or not a directory, falling back to folder search")
+    
     if folder_name is None:
         folder_name = TARGET_FOLDER
     
@@ -68,6 +78,7 @@ def get_directory(folder_name: str = None, root_dir: Path = Path.home()) -> Path
 
 async def list_directory_items(
     folder_name: str = None,
+    custom_path: str = None,
     extension: str = None,
     file_type: str = None,
     pattern: str = None,
@@ -81,7 +92,7 @@ async def list_directory_items(
 ) -> Dict[str, Any]:
     """Lists files and folders in the specified root folder with advanced filtering"""
     try:
-        target_dir = get_directory(folder_name)
+        target_dir = get_directory(folder_name, custom_path=custom_path)
         
         if not target_dir.exists():
             return {
@@ -296,11 +307,11 @@ async def move_items_to_directory(items: list[Path], destination_dir: Path, exec
             "error": str(e)
         }
 
-async def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def create_numbered_files(base_name: str, count: int, extension: str, start_number: int = 1, target_dir: Path = None, custom_path: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
     """Creates multiple numbered files with specified extension"""
     try:
         if target_dir is None:
-            target_dir = get_directory()
+            target_dir = get_directory(custom_path=custom_path)
         
         def create_single_file(file_number):
             try:
@@ -481,11 +492,11 @@ async def delete_multiple_items(item_paths: List[str], execution_mode: str = "pa
             "total_items": len(item_paths)
         }
 
-async def delete_items_by_pattern(pattern: str, target_dir: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
+async def delete_items_by_pattern(pattern: str, target_dir: str = None, custom_path: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
     """Deletes files and directories matching a pattern"""
     try:
         if target_dir is None:
-            target_dir = str(get_directory())
+            target_dir = str(get_directory(custom_path=custom_path))
         
         search_dir = Path(target_dir)
         
@@ -523,11 +534,11 @@ async def delete_items_by_pattern(pattern: str, target_dir: str = None, executio
             "target_dir": target_dir
         }
 
-def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict[str, Any]:
+def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3, custom_path: str = None) -> Dict[str, Any]:
     """Lists all nested folders in a tree structure format"""
     try:
         if target_dir is None:
-            target_dir = str(get_directory())
+            target_dir = str(get_directory(custom_path=custom_path))
         
         search_dir = Path(target_dir)
         
@@ -594,10 +605,10 @@ def list_nested_folders_tree(target_dir: str = None, max_depth: int = 3) -> Dict
             "target_dir": target_dir
         }
 
-async def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
+async def count_files_by_extension(folder_name: str = None, custom_path: str = None) -> Dict[str, Any]:
     """Counts files by extension in the specified folder"""
     try:
-        target_dir = get_directory(folder_name)
+        target_dir = get_directory(folder_name, custom_path=custom_path)
         
         if not target_dir.exists():
             return {
@@ -635,10 +646,10 @@ async def count_files_by_extension(folder_name: str = None) -> Dict[str, Any]:
             "folder_name": folder_name or TARGET_FOLDER
         }
 
-async def get_file_type_statistics(folder_name: str = None) -> Dict[str, Any]:
+async def get_file_type_statistics(folder_name: str = None, custom_path: str = None) -> Dict[str, Any]:
     """Gets file type statistics (documents, images, videos, etc.) for the specified folder"""
     try:
-        target_dir = get_directory(folder_name)
+        target_dir = get_directory(folder_name, custom_path=custom_path)
         
         if not target_dir.exists():
             return {

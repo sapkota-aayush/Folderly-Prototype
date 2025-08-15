@@ -16,9 +16,13 @@ FOLDERLY_FUNCTIONS = [
         "parameters": {
             "type": "object",
             "properties": {
+                "custom_path": {
+                    "type": "string",
+                    "description": "Full custom path to scan (e.g., 'C:\\Users\\username\\OneDrive\\Documents'). If provided, this takes priority over folder_name and scans the exact location specified."
+                },
                 "folder_name": {
                     "type": "string",
-                    "description": "Name of the root folder to list (Desktop, Downloads, Documents, Pictures, Music, Videos, etc.)"
+                    "description": "Name of the root folder to list (Desktop, Downloads, Documents, Pictures, Music, Videos, etc.) - used when custom_path is not provided"
                 },
                 "extension": {
                     "type": "string",
@@ -176,34 +180,20 @@ FOLDERLY_FUNCTIONS = [
         "parameters": {
             "type": "object",
             "properties": {
+                "custom_path": {
+                    "type": "string",
+                    "description": "Full custom path to search in (e.g., 'C:\\Users\\username\\OneDrive\\Documents'). If provided, this takes priority over target_dir."
+                },
                 "pattern": {
                     "type": "string",
                     "description": "Glob pattern to match (e.g., '*.txt', 'test*', '*temp*', 'temp*')"
                 },
                 "target_dir": {
                     "type": "string",
-                    "description": "Directory to search in (default: Desktop)"
+                    "description": "Directory to search in (default: Desktop) - used when custom_path is not provided"
                 }
             },
             "required": ["pattern"]
-        }
-    },
-    {
-        "name": "list_nested_folders_tree",
-        "description": "Lists all nested folders in a tree structure format with proper hierarchy visualization",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "target_dir": {
-                    "type": "string",
-                    "description": "Directory to search in (default: Desktop)"
-                },
-                "max_depth": {
-                    "type": "integer",
-                    "description": "Maximum depth to traverse (default: 3)"
-                }
-            },
-            "required": []
         }
     },
     {
@@ -255,9 +245,13 @@ FOLDERLY_FUNCTIONS = [
         "parameters": {
             "type": "object",
             "properties": {
+                "custom_path": {
+                    "type": "string",
+                    "description": "Full custom path to analyze (e.g., 'C:\\Users\\username\\OneDrive\\Documents'). If provided, this takes priority over folder_name."
+                },
                 "folder_name": {
                     "type": "string",
-                    "description": "Name of the folder to analyze (Desktop, Downloads, Documents, etc.)"
+                    "description": "Name of the folder to analyze (Desktop, Downloads, Documents, etc.) - used when custom_path is not provided"
                 }
             },
             "required": []
@@ -269,9 +263,13 @@ FOLDERLY_FUNCTIONS = [
         "parameters": {
             "type": "object",
             "properties": {
+                "custom_path": {
+                    "type": "string",
+                    "description": "Full custom path to analyze (e.g., 'C:\\Users\\username\\OneDrive\\Documents'). If provided, this takes priority over folder_name."
+                },
                 "folder_name": {
                     "type": "string",
-                    "description": "Name of the folder to analyze (Desktop, Downloads, Documents, etc.)"
+                    "description": "Name of the folder to analyze (Desktop, Downloads, Documents, etc.) - used when custom_path is not provided"
                 }
             },
             "required": []
@@ -335,6 +333,25 @@ FOLDERLY_FUNCTIONS = [
                 }
             },
             "required": ["items"]
+        }
+    },
+    {
+        "name": "manage_onedrive_issues",
+        "description": "Helps diagnose and resolve OneDrive sync conflicts and provides recommendations for working with OneDrive files",
+        "parameters": {
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": ["status", "recommendations", "backup_folder", "check_conflicts"],
+                    "description": "Action to perform: check OneDrive status, get recommendations, create backup folder, or check for file conflicts"
+                },
+                "custom_path": {
+                    "type": "string",
+                    "description": "Optional path to check for OneDrive conflicts (e.g., 'C:\\Users\\username\\OneDrive\\Documents')"
+                }
+            },
+            "required": ["action"]
         }
     }
 ]

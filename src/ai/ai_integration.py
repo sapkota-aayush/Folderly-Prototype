@@ -25,8 +25,8 @@ print(f"API Key loaded: {'Yes' if api_key else 'No'}")
 # Configure OpenAI client - use async client
 client = openai.AsyncOpenAI(api_key=api_key)
 
-def main():
-    """Main entry point for Poetry script"""
+def main_sync():
+    """Synchronous wrapper for async main function - entry point for Poetry script"""
     asyncio.run(chat_with_ai())
 
 async def chat_with_ai():
@@ -78,6 +78,7 @@ async def chat_with_ai():
                     
                     # Execute appropriate function
                     if function_name == "list_directory_items":
+                        custom_path = function_args.get("custom_path", None)
                         folder_name = function_args.get("folder_name", None)
                         extension = function_args.get("extension", None)
                         file_type = function_args.get("file_type", None)
@@ -91,6 +92,7 @@ async def chat_with_ai():
                         max_results = function_args.get("max_results", None)
                         
                         result = await list_directory_items(
+                            custom_path=custom_path,
                             folder_name=folder_name,
                             extension=extension,
                             file_type=file_type,
@@ -140,20 +142,24 @@ async def chat_with_ai():
                         # Delete items by pattern
                         pattern = function_args.get("pattern", "")
                         target_dir = function_args.get("target_dir", None)
-                        result = await delete_items_by_pattern(pattern, target_dir)
+                        custom_path = function_args.get("custom_path", None)
+                        result = await delete_items_by_pattern(pattern, target_dir, custom_path)
                     elif function_name == "list_nested_folders_tree":
                         # List nested folders in tree structure
                         target_dir = function_args.get("target_dir", None)
                         max_depth = function_args.get("max_depth", 3)
-                        result = list_nested_folders_tree(target_dir, max_depth)
+                        custom_path = function_args.get("custom_path", None)
+                        result = list_nested_folders_tree(target_dir, max_depth, custom_path)
                     elif function_name == "count_files_by_extension":
                         # Count files by extension
+                        custom_path = function_args.get("custom_path", None)
                         folder_name = function_args.get("folder_name", None)
-                        result = await count_files_by_extension(folder_name)
+                        result = await count_files_by_extension(folder_name, custom_path)
                     elif function_name == "get_file_type_statistics":
                         # Get file type statistics
+                        custom_path = function_args.get("custom_path", None)
                         folder_name = function_args.get("folder_name", None)
-                        result = await get_file_type_statistics(folder_name)
+                        result = await get_file_type_statistics(folder_name, custom_path)
                     elif function_name == "copy_multiple_items":
                         # Copy multiple items to destination directory
                         items = [Path(item) for item in function_args.get("items", [])]
@@ -190,4 +196,4 @@ async def chat_with_ai():
             print(load_error_message("generic", str(e)))
 
 if __name__ == "__main__":
-    main()
+    main_sync()

@@ -38,7 +38,7 @@ dev = [
 
 [project.scripts]
 folderly = "src.cli.cli:main_sync"
-folderly-ai = "src.ai.ai_integration:main"
+folderly-ai = "src.ai.ai_integration:main_sync"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
