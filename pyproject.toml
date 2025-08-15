@@ -1,10 +1,12 @@
-[tool.poetry]
+[project]
 name = "folderly"
 version = "1.0.3"
 description = "Smart Desktop File Management with AI Integration"
-authors = ["Folderly Team <aayush@aayussh.com>"]
+authors = [
+    {name = "Folderly Team", email = "aayush@aayussh.com"}
+]
 readme = "README.md"
-packages = [{include = "src"}]
+requires-python = ">=3.8.1"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Developers",
@@ -21,24 +23,25 @@ classifiers = [
     "Topic :: System :: Filesystems",
     "Topic :: Utilities"
 ]
+dependencies = [
+    "openai>=1.0.0",
+    "python-dotenv>=1.0.0",
+    "send2trash>=1.8.0"
+]
 
-[tool.poetry.dependencies]
-python = "^3.8.1"
-openai = "^1.0.0"
-python-dotenv = "^1.0.0"
-send2trash = "^1.8.0"
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0"
+]
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.0.0"
-black = "^23.0.0"
-flake8 = "^6.0.0"
-
-[tool.poetry.scripts]
+[project.scripts]
 folderly = "src.cli.cli:main_sync"
 folderly-ai = "src.ai.ai_integration:main"
 
 [build-system]
-requires = ["poetry-core"]
+requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.black]
