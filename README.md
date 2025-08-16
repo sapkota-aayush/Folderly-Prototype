@@ -2,13 +2,32 @@
 
 Folderly is an intelligent desktop file management system that combines powerful file operations with AI-powered assistance. It helps you organize, declutter, and manage your files across Desktop, Documents, Downloads, and other folders with natural language commands and smart automation.
 
-## ✨ **Current Features (v1.0)**
+## 📦 **Current Version: v1.0.3**
+
+**Latest Release:** Available on PyPI as `folderly` package
+**Status:** Production Ready - Stable Release
+
+### **Quick Start (30 seconds)**
+```bash
+# Install from PyPI
+pip install folderly
+
+# Set API key
+echo "OPENAI_API_KEY=your_key_here" > .env
+
+# Start using!
+folderly-ai
+```
+
+## ✨ **Current Features (v1.0.3)**
 
 ### **🤖 AI-Powered Interface**
 - **Natural language commands** - "list my desktop", "create a folder called work", "move all txt files to documents"
 - **Smart function selection** - AI automatically chooses the right operation for your request
 - **Beautiful formatted output** - Clean, emoji-enhanced results with full paths for operations
 - **Multi-task handling** - Execute multiple operations from a single command
+- **Real-time streaming responses** - See AI responses build up word by word for instant feedback
+- **Progress indicators** - Visual feedback for all operations with completion status
 
 ### **📁 Core File Operations**
 - **List and explore** files/folders with advanced filtering (extension, type, date, size)
@@ -28,6 +47,7 @@ Folderly is an intelligent desktop file management system that combines powerful
 ### **🎯 Easy Configuration**
 - **Flexible targeting** - Manage Desktop, Documents, Downloads, Pictures, Music, Videos
 - **OneDrive support** - Automatic detection of OneDrive folder structures
+- **Smart path discovery** - Automatically finds all Desktop/Documents locations including OneDrive variations
 - **Cross-platform** - Works on Windows, macOS, and Linux
 - **Simple setup** - Just set your OpenAI API key and start using
 
@@ -38,6 +58,20 @@ Folderly is an intelligent desktop file management system that combines powerful
 - OpenAI API key
 
 ### **Installation**
+
+#### **Option 1: PyPI (Recommended for Users)**
+```bash
+# Install from PyPI
+pip install folderly
+
+# Set up your OpenAI API key
+echo "OPENAI_API_KEY=your_api_key_here" > .env
+
+# Start using Folderly!
+folderly-ai
+```
+
+#### **Option 2: Poetry (Recommended for Developers)**
 
 #### **Option 1: Poetry (Recommended)**
 ```bash
@@ -95,9 +129,25 @@ echo "OPENAI_API_KEY=your_api_key_here" > .env
 ### **Listing and Exploring**
 ```
 💭 You: list my desktop
-🤖 📋 Items in Desktop:
-    1. .git.lnk
-    2. ai_test_destination  
+🤔 AI is thinking...
+🤖 I'll help you scan your Desktop. Let me discover all available Desktop locations first...
+🔧 Function call detected, executing...
+🔧 Executing: discover_user_paths
+🔍 Discovering user paths... ✅
+
+I found 3 Desktop locations:
+1. 📂 C:\Users\username\Desktop - 15 files 💾 Local
+2. 📂 C:\Users\username\OneDrive\Desktop - 8 files ☁️ OneDrive
+
+Which one should I scan?
+
+💭 You: 1
+🔧 Executing: list_directory_items
+🔍 Scanning directory... ✅
+
+📋 Items in Desktop:
+1. 📁 .git.lnk
+2. 📁 ai_test_destination  
     3. Animals
     4. async practice
     5. Backup
@@ -134,6 +184,22 @@ echo "OPENAI_API_KEY=your_api_key_here" > .env
        📍 Location: Desktop
        🗂️ Full Path: C:/Users/username/Desktop/backup_[year]
 ```
+
+## 🚀 **Streaming Experience (New in v1.0.3)**
+
+Folderly now features **real-time streaming responses** that make interactions feel instant and engaging:
+
+### **Real-time AI Responses**
+- **🤔 AI is thinking...** - Immediate feedback when processing
+- **🤖 Streaming text** - See responses build up word by word
+- **🔧 Function detection** - Real-time function call identification
+- **✅ Progress indicators** - Visual completion status for all operations
+
+### **Enhanced User Experience**
+- **No more waiting** - Responses start appearing immediately
+- **Professional feel** - Similar to ChatGPT and modern AI tools
+- **Progress transparency** - Know exactly what's happening at each step
+- **Engaging interaction** - Users stay engaged throughout the process
 
 ## 🏗️ **Project Structure**
 
@@ -173,6 +239,7 @@ Folderly-ProtoType/
 - **Function calling** - Precise operation execution
 - **Context awareness** - AI remembers conversation history
 - **Structured responses** - Clean, formatted output
+- **Smart path discovery** - Automatically finds all user folder locations including OneDrive variations
 
 ### **Safety & Reliability**
 - **Safe deletion** - Files go to recycle bin, not permanently deleted
@@ -191,6 +258,25 @@ Folderly-ProtoType/
 - **pytest** - Testing framework
 - **black** - Code formatting
 - **flake8** - Code linting
+
+## 🆕 **What's New in v1.0.3**
+
+### **🚀 Streaming Responses**
+- **Real-time AI responses** - See text build up word by word
+- **Progress indicators** - Visual feedback for all operations
+- **Function call detection** - Real-time identification during streaming
+- **Enhanced UX** - Professional, engaging interaction experience
+
+### **🔍 Smart Path Discovery**
+- **Automatic path detection** - Finds all Desktop/Documents locations
+- **OneDrive integration** - Detects OneDrive-managed folders
+- **User choice interface** - Let users select which location to work with
+- **Session memory** - Remembers user choices throughout the session
+
+### **📱 Better User Interface**
+- **Emoji-enhanced output** - Folder icons and status indicators
+- **Progress tracking** - Real-time operation status
+- **Clean formatting** - Professional, readable results
 
 ## 🔮 **Future Enhancements**
 
