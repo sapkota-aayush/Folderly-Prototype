@@ -8,7 +8,7 @@ from src.ai.prompts import (
     load_system_prompt, load_force_prompt, load_welcome_message, 
     load_goodbye_message, load_empty_input_message, load_error_message
 )
-from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, create_multiple_directories, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics, copy_multiple_items, rename_multiple_items
+from src.core.core import list_directory_items, filter_and_sort_by_modified, create_directory, create_multiple_directories, move_items_to_directory, delete_single_item, delete_multiple_items, delete_items_by_pattern, list_nested_folders_tree, count_files_by_extension, get_file_type_statistics, copy_multiple_items, rename_multiple_items, discover_user_paths
 from pathlib import Path
 
 # Load environment variables
@@ -170,6 +170,9 @@ async def chat_with_ai():
                         items_data = function_args.get("items", [])
                         items = [(Path(item["old_path"]), item["new_name"]) for item in items_data]
                         result = await rename_multiple_items(items)
+                    elif function_name == "discover_user_paths":
+                        # Discover all user folder paths for path selection
+                        result = await discover_user_paths()
                     else:
                         result = {"success": False, "error": f"Unknown function: {function_name}"}
                     

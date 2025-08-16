@@ -1,3 +1,4 @@
+import os
 import re
 from pathlib import Path
 from typing import List, Dict, Any
@@ -845,3 +846,140 @@ def is_in_size_range(size: int, size_range: tuple) -> bool:
     if max_size is not None and size > max_size:
         return False
     return True
+
+# ============================================================================
+# PATH DISCOVERY FUNCTIONS
+# ============================================================================
+
+def find_candidate_paths():
+    """Find all possible OneDrive and user profile paths"""
+    user_profile = os.environ.get("USERPROFILE")
+    if not user_profile:
+        raise RuntimeError("USERPROFILE not found")
+
+    candidates = []
+
+    # Step 1: gather OneDrive-like folders under user profile
+    for entry in os.listdir(user_profile):
+        full_path = os.path.join(user_profile, entry)
+        if os.path.isdir(full_path) and entry.startswith("OneDrive"):
+            # This is a OneDrive root
+            candidates.append(full_path)
+
+    # Always include the plain user profile root as well
+    candidates.append(user_profile)
+
+    return candidates
+
+def find_special_folders(base_paths):
+    """Find Desktop, Documents, Downloads in the candidate paths"""
+    target_names = ["Desktop", "Documents", "Downloads", "Pictures", "Music", "Videos"]
+    results = []
+
+    for base in base_paths:
+        # Directly under base
+        for name in target_names:
+            path = os.path.join(base, name)
+            if os.path.exists(path):
+                results.append(path)
+
+        # One level deeper (to catch OneDrive/something/Desktop)
+        try:
+            for sub in os.listdir(base):
+                sub_path = os.path.join(base, sub)
+                if os.path.isdir(sub_path):
+                    for name in target_names:
+                        path = os.path.join(sub_path, name)
+                        if os.path.exists(path):
+                            results.append(path)
+        except PermissionError:
+            # skip folders we can't access
+            continue
+
+    return results
+
+def summarize_paths(paths):
+    """Count files in each path and return structured data"""
+    results = []
+    
+    for path in paths:
+        try:
+            path_obj = Path(path)
+            files = os.listdir(path)
+            # Count non-hidden files and folders
+            count = len([f for f in files if not f.startswith('.')])
+            
+            # Determine if this is OneDrive-managed
+            is_onedrive = "onedrive" in str(path).lower()
+            
+            # Get the folder type (Desktop, Documents, etc.)
+            folder_type = path_obj.name
+            
+            # Get the base path for context
+            base_path = str(path_obj.parent)
+            
+            results.append({
+                "path": str(path),
+                "folder_type": folder_type,
+                "file_count": count,
+                "is_onedrive": is_onedrive,
+                "base_path": base_path,
+                "access": "success"
+            })
+            
+        except PermissionError:
+            results.append({
+                "path": str(path),
+                "folder_type": "unknown",
+                "file_count": 0,
+                "is_onedrive": "onedrive" in str(path).lower(),
+                "base_path": "unknown",
+                "access": "no access"
+            })
+        except Exception as e:
+            results.append({
+                "path": str(path),
+                "folder_type": "unknown", 
+                "file_count": 0,
+                "is_onedrive": "onedrive" in str(path).lower(),
+                "base_path": "unknown",
+                "access": f"error: {str(e)}"
+            })
+    
+    return results
+
+async def discover_user_paths() -> Dict[str, Any]:
+    """Main function to discover all user folder paths with analysis"""
+    try:
+        # Find candidate base paths
+        base_paths = find_candidate_paths()
+        
+        # Find special folders in those paths
+        special_folders = find_special_folders(base_paths)
+        
+        # Analyze each path
+        path_analysis = summarize_paths(special_folders)
+        
+        # Group by folder type for better organization
+        organized_paths = {}
+        for path_info in path_analysis:
+            folder_type = path_info["folder_type"]
+            if folder_type not in organized_paths:
+                organized_paths[folder_type] = []
+            organized_paths[folder_type].append(path_info)
+        
+        return {
+            "success": True,
+            "total_paths_discovered": len(special_folders),
+            "base_paths": base_paths,
+            "organized_paths": organized_paths,
+            "path_analysis": path_analysis,
+            "message": f"Discovered {len(special_folders)} folder locations across {len(base_paths)} base paths"
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "message": "Failed to discover user paths"
+        }

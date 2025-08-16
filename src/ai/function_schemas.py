@@ -353,6 +353,15 @@ FOLDERLY_FUNCTIONS = [
             },
             "required": ["action"]
         }
+    },
+    {
+        "name": "discover_user_paths",
+        "description": "Discovers all possible Desktop, Documents, Downloads, Pictures, Music, and Videos locations in the user's profile, including OneDrive variations. Use this to understand the user's file structure and help them choose which location to work with.",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
     }
 ]
 
