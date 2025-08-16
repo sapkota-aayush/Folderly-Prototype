@@ -57,26 +57,64 @@ async def chat_with_ai():
 
             # Inner loop to handle multiple function calls per user input
             while True:
+                # Show thinking indicator
+                print("🤔 AI is thinking...", end="", flush=True)
+                
+                # Enable streaming for better UX
                 response = await client.chat.completions.create(
                     model="gpt-4o",
                     messages=conversation_history,
                     functions=get_function_schemas(),
                     function_call="auto",
                     temperature=0.1,
-                    # Force fresh response, no caching
                     max_tokens=2000,
                     presence_penalty=0.1,
-                    frequency_penalty=0.1
+                    frequency_penalty=0.1,
+                    stream=True  # Enable streaming for real-time responses
                 )
                 
-                message = response.choices[0].message
+                # Clear thinking indicator and start streaming response
+                print("\r🤖 ", end="", flush=True)
                 
-                if message.function_call:
-                    function_name = message.function_call.name
-                    function_args = json.loads(message.function_call.arguments)
-                    print(f"🔧 DEBUG: Calling function: {function_name}")
+                # Variables to track streaming response
+                full_content = ""
+                function_call_data = {"name": "", "arguments": ""}
+                in_function_call = False
+                
+                # Stream the response in real-time
+                async for chunk in response:
+                    if chunk.choices[0].delta.content:
+                        content = chunk.choices[0].delta.content
+                        full_content += content
+                        print(content, end="", flush=True)
                     
-                    # Execute appropriate function
+                    # Handle function calls during streaming
+                    if chunk.choices[0].delta.function_call:
+                        if not in_function_call:
+                            in_function_call = True
+                            print("\n🔧 Function call detected, executing...")
+                        
+                        delta = chunk.choices[0].delta.function_call
+                        if delta.name:
+                            function_call_data["name"] += delta.name
+                        if delta.arguments:
+                            function_call_data["arguments"] += delta.arguments
+                
+                print()  # New line after streaming
+                
+                # Check if we have a function call
+                if function_call_data["name"]:
+                    function_name = function_call_data["name"]
+                    try:
+                        function_args = json.loads(function_call_data["arguments"])
+                    except json.JSONDecodeError:
+                        # Handle incomplete JSON
+                        print(f"⚠️ Incomplete function arguments, retrying...")
+                        continue
+                    
+                    print(f"🔧 Executing: {function_name}")
+                    
+                    # Execute appropriate function with progress indicators
                     if function_name == "list_directory_items":
                         custom_path = function_args.get("custom_path", None)
                         folder_name = function_args.get("folder_name", None)
@@ -91,6 +129,7 @@ async def chat_with_ai():
                         include_files = function_args.get("include_files", True)
                         max_results = function_args.get("max_results", None)
                         
+                        print("🔍 Scanning directory...", end="", flush=True)
                         result = await list_directory_items(
                             custom_path=custom_path,
                             folder_name=folder_name,
@@ -105,7 +144,9 @@ async def chat_with_ai():
                             include_files=include_files,
                             max_results=max_results
                         )
+                        print(" ✅")
                     elif function_name == "filter_and_sort_by_modified":
+                        print("📅 Filtering by date...", end="", flush=True)
                         # Get items first, then filter by date
                         items_result = await list_directory_items()
                         if items_result["success"]:
@@ -115,64 +156,89 @@ async def chat_with_ai():
                             result = filter_and_sort_by_modified(items, days)
                         else:
                             result = items_result
+                        print(" ✅")
                     elif function_name == "create_directory":
+                        print("📁 Creating directory...", end="", flush=True)
                         # Create directory with base path support
                         target_dir = Path(function_args.get("target_dir", ""))
                         base_path = function_args.get("base_path", "Desktop")
                         result = await create_directory(target_dir, base_path)
+                        print(" ✅")
                     elif function_name == "create_multiple_directories":
+                        print("📁 Creating multiple directories...", end="", flush=True)
                         # Create multiple directories with base path support
                         directories = function_args.get("directories", [])
                         base_path = function_args.get("base_path", "Desktop")
                         result = await create_multiple_directories(directories, base_path)
+                        print(" ✅")
                     elif function_name == "move_items_to_directory":
+                        print("🚚 Moving items...", end="", flush=True)
                         # Move items to destination directory
                         items = [Path(item) for item in function_args.get("items", [])]
                         destination_dir = Path(function_args.get("destination_dir", ""))
                         result = await move_items_to_directory(items, destination_dir)
+                        print(" ✅")
                     elif function_name == "delete_single_item":
+                        print("🗑️ Deleting item...", end="", flush=True)
                         # Delete a single item
                         item_path = function_args.get("item_path", "")
                         result = await delete_single_item(item_path)
+                        print(" ✅")
                     elif function_name == "delete_multiple_items":
+                        print("🗑️ Deleting multiple items...", end="", flush=True)
                         # Delete multiple items
                         item_paths = function_args.get("item_paths", [])
                         result = await delete_multiple_items(item_paths)
+                        print(" ✅")
                     elif function_name == "delete_items_by_pattern":
+                        print("🗑️ Deleting by pattern...", end="", flush=True)
                         # Delete items by pattern
                         pattern = function_args.get("pattern", "")
                         target_dir = function_args.get("target_dir", None)
                         custom_path = function_args.get("custom_path", None)
                         result = await delete_items_by_pattern(pattern, target_dir, custom_path)
+                        print(" ✅")
                     elif function_name == "list_nested_folders_tree":
+                        print("🌳 Building folder tree...", end="", flush=True)
                         # List nested folders in tree structure
                         target_dir = function_args.get("target_dir", None)
                         max_depth = function_args.get("max_depth", 3)
                         custom_path = function_args.get("custom_path", None)
                         result = list_nested_folders_tree(target_dir, max_depth, custom_path)
+                        print(" ✅")
                     elif function_name == "count_files_by_extension":
+                        print("📊 Counting files by extension...", end="", flush=True)
                         # Count files by extension
                         custom_path = function_args.get("custom_path", None)
                         folder_name = function_args.get("folder_name", None)
                         result = await count_files_by_extension(folder_name, custom_path)
+                        print(" ✅")
                     elif function_name == "get_file_type_statistics":
+                        print("📈 Getting file statistics...", end="", flush=True)
                         # Get file type statistics
                         custom_path = function_args.get("custom_path", None)
                         folder_name = function_args.get("folder_name", None)
                         result = await get_file_type_statistics(folder_name, custom_path)
+                        print(" ✅")
                     elif function_name == "copy_multiple_items":
+                        print("📋 Copying items...", end="", flush=True)
                         # Copy multiple items to destination directory
                         items = [Path(item) for item in function_args.get("items", [])]
                         destination_dir = Path(function_args.get("destination_dir", ""))
                         result = await copy_multiple_items(items, destination_dir)
+                        print(" ✅")
                     elif function_name == "rename_multiple_items":
+                        print("✏️ Renaming items...", end="", flush=True)
                         # Rename multiple items with new names
                         items_data = function_args.get("items", [])
                         items = [(Path(item["old_path"]), item["new_name"]) for item in items_data]
                         result = await rename_multiple_items(items)
+                        print(" ✅")
                     elif function_name == "discover_user_paths":
+                        print("🔍 Discovering user paths...", end="", flush=True)
                         # Discover all user folder paths for path selection
                         result = await discover_user_paths()
+                        print(" ✅")
                     else:
                         result = {"success": False, "error": f"Unknown function: {function_name}"}
                     
@@ -188,8 +254,10 @@ async def chat_with_ai():
                 
                 else:
                     # No function call, final model response ready
-                    conversation_history.append(message)
-                    print(f"🤖 {message.content}")
+                    conversation_history.append({
+                        "role": "assistant",
+                        "content": full_content
+                    })
                     break  # Exit the inner loop and wait for next user input
                 
         except KeyboardInterrupt:
