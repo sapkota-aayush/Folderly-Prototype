@@ -2,10 +2,10 @@
 
 Folderly is an intelligent desktop file management system that combines powerful file operations with AI-powered assistance. It helps you organize, declutter, and manage your files across Desktop, Documents, Downloads, and other folders with natural language commands and smart automation.
 
-## 📦 **Current Version: v1.0.3**
+## 📦 **Current Version: v1.0.4**
 
 **Latest Release:** Available on PyPI as `folderly` package
-**Status:** Production Ready - Stable Release
+**Status:** Production Ready - Stable Release with Enhanced Path Display
 
 ### **Quick Start (30 seconds)**
 ```bash
@@ -19,7 +19,19 @@ echo "OPENAI_API_KEY=your_key_here" > .env
 folderly-ai
 ```
 
-## ✨ **Current Features (v1.0.3)**
+### **For Non-Tech Users:**
+```bash
+# Install Python (if not already installed)
+winget install Python.Python.3.12
+
+# Install Folderly
+pip install folderly
+
+# Launch Folderly
+folderly-ai
+```
+
+## ✨ **Current Features (v1.0.4)**
 
 ### **🤖 AI-Powered Interface**
 - **Natural language commands** - "list my desktop", "create a folder called work", "move all txt files to documents"
@@ -72,8 +84,6 @@ folderly-ai
 ```
 
 #### **Option 2: Poetry (Recommended for Developers)**
-
-#### **Option 1: Poetry (Recommended)**
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -89,7 +99,7 @@ echo "OPENAI_API_KEY=your_api_key_here" > .env
 poetry run folderly-ai
 ```
 
-#### **Option 2: Traditional Python**
+#### **Option 3: Traditional Python**
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -105,7 +115,7 @@ echo "OPENAI_API_KEY=your_api_key_here" > .env
 python -m src.ai.ai_integration
 ```
 
-#### **Option 3: Docker (Recommended for Production)**
+#### **Option 4: Docker (Recommended for Production)**
 ```bash
 # Clone the repository
 git clone <repository-url>
@@ -185,7 +195,7 @@ Which one should I scan?
        🗂️ Full Path: C:/Users/username/Desktop/backup_[year]
 ```
 
-## 🚀 **Streaming Experience (New in v1.0.3)**
+## 🚀 **Streaming Experience (Enhanced in v1.0.4)**
 
 Folderly now features **real-time streaming responses** that make interactions feel instant and engaging:
 
@@ -259,7 +269,15 @@ Folderly-ProtoType/
 - **black** - Code formatting
 - **flake8** - Code linting
 
-## 🆕 **What's New in v1.0.3**
+## 🆕 **What's New in v1.0.4**
+
+### **🔧 Enhanced Path Display & Error-Free Operations**
+- **Actual path information** - AI shows real file paths from function results instead of making up information
+- **Fixed function calling** - No more errors from non-existent functions
+- **Improved reliability** - Consistent AI behavior following prompt rules
+- **Better user experience** - Faster file access with accurate path information
+
+### **🚀 Streaming Responses (Enhanced)**
 
 ### **🚀 Streaming Responses**
 - **Real-time AI responses** - See text build up word by word
@@ -352,4 +370,4 @@ This project is open source and available under the MIT License.
 
 **Folderly: Your files, intelligently organized.** 🚀✨
 
-*Ready to transform your file management experience? Start with `poetry run folderly-ai` and let AI handle the rest!*
+*Ready to transform your file management experience? Start with `folderly-ai` and let AI handle the rest!*
