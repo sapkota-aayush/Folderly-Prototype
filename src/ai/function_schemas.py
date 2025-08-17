@@ -196,49 +196,7 @@ FOLDERLY_FUNCTIONS = [
             "required": ["pattern"]
         }
     },
-    {
-        "name": "create_structured_hierarchy",
-        "description": "Creates a structured folder hierarchy with predefined categories like Documents/Education/Work/Personal with subfolders for better organization",
-        "parameters": {
-            "type": "object",
-            "properties": {
-                "base_path": {
-                    "type": "string",
-                    "description": "Base path where the hierarchy should be created (default: Desktop)"
-                },
-                "hierarchy_type": {
-                    "type": "string",
-                    "description": "Type of hierarchy to create: 'documents' (Documents/Education/Work/Personal), 'projects' (Projects/Client/Personal/Archive), 'media' (Media/Photos/Videos/Music), or 'custom'",
-                    "enum": ["documents", "projects", "media", "custom"]
-                },
-                "custom_structure": {
-                    "type": "object",
-                    "description": "Custom folder structure (only used when hierarchy_type is 'custom')",
-                    "properties": {
-                        "root_name": {"type": "string"},
-                        "categories": {
-                            "type": "array",
-                            "items": {
-                                "type": "object",
-                                "properties": {
-                                    "name": {"type": "string"},
-                                    "subcategories": {
-                                        "type": "array",
-                                        "items": {"type": "string"}
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "include_readme": {
-                    "type": "boolean",
-                    "description": "Whether to create a README file in each folder explaining its purpose (default: true)"
-                }
-            },
-            "required": ["hierarchy_type"]
-        }
-    },
+
     {
         "name": "count_files_by_extension",
         "description": "Counts files by extension in the specified folder and provides statistics about file types",

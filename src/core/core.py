@@ -12,43 +12,58 @@ try:
 except ImportError:
     TARGET_FOLDER = "Desktop"
 
+# File type mappings - centralized to avoid duplication
+FILE_TYPE_MAPPINGS = {
+    "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".ppt", ".pptx", ".xls", ".xlsx"],
+    "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
+    "videos": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v"],
+    "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a"],
+    "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"],
+    "executables": [".exe", ".msi", ".dmg", ".pkg", ".deb", ".rpm"],
+    "code": [".py", ".js", ".html", ".css", ".java", ".cpp", ".c", ".php", ".rb", ".go"]
+}
+
+# Folder name mappings for cross-platform compatibility
+FOLDER_MAPPINGS = {
+    "documents": ["Documents", "My Documents", "Documenti"],
+    "downloads": ["Downloads", "Download"],
+    "desktop": ["Desktop"],
+    "pictures": ["Pictures", "My Pictures", "Immagini"],
+    "music": ["Music", "My Music", "Musica"],
+    "videos": ["Videos", "My Videos", "Video"]
+}
+
 async def execute_operations(operations, execution_mode="parallel"):
     """Execute multiple operations in parallel or sequential mode"""
     if execution_mode == "parallel":
-        tasks = [asyncio.to_thread(func, *args, **kwargs) for func, args, kwargs in operations]
+        # Handle both async and sync functions
+        tasks = []
+        for func, args, kwargs in operations:
+            if asyncio.iscoroutinefunction(func):
+                tasks.append(func(*args, **kwargs))
+            else:
+                tasks.append(asyncio.to_thread(func, *args, **kwargs))
         return await asyncio.gather(*tasks)
     else:
         results = []
         for func, args, kwargs in operations:
-            result = await asyncio.to_thread(func, *args, **kwargs)
+            if asyncio.iscoroutinefunction(func):
+                result = await func(*args, **kwargs)
+            else:
+                result = await asyncio.to_thread(func, *args, **kwargs)
             results.append(result)
         return results
 
 def get_directory(folder_name: str = None, root_dir: Path = Path.home(), custom_path: str = None) -> Path:
     """Get directory path for any root folder (Desktop, Downloads, Documents, etc.) or custom path"""
     
-    # NEW: Custom path takes priority if provided
     if custom_path:
         custom_path_obj = Path(custom_path)
         if custom_path_obj.exists() and custom_path_obj.is_dir():
-            print(f"🎯 Using custom path: {custom_path}")
             return custom_path_obj
-        else:
-            print(f"⚠️ Custom path '{custom_path}' not found or not a directory, falling back to folder search")
     
     if folder_name is None:
         folder_name = TARGET_FOLDER
-    
-    folder_mappings = {
-        "documents": ["Documents", "My Documents", "Documenti"],
-        "downloads": ["Downloads", "Download"],
-        "desktop": ["Desktop"],
-        "pictures": ["Pictures", "My Pictures", "Immagini"],
-        "music": ["Music", "My Music", "Musica"],
-        "videos": ["Videos", "My Videos", "Video"]
-    }
-    
-    print(f"🔍 Looking for folder: '{folder_name}' in {root_dir}")
     
     folder_lower = folder_name.lower() if folder_name else TARGET_FOLDER.lower()
     
@@ -56,8 +71,8 @@ def get_directory(folder_name: str = None, root_dir: Path = Path.home(), custom_
     if exact_path.exists():
         return exact_path
     
-    if folder_lower in folder_mappings:
-        for variation in folder_mappings[folder_lower]:
+    if folder_lower in FOLDER_MAPPINGS:
+        for variation in FOLDER_MAPPINGS[folder_lower]:
             variation_path = root_dir / variation
             if variation_path.exists():
                 return variation_path
@@ -68,7 +83,7 @@ def get_directory(folder_name: str = None, root_dir: Path = Path.home(), custom_
         for onedrive_folder in onedrive_variations:
             onedrive_paths = [
                 root_dir / onedrive_folder / folder_name,
-                root_dir / onedrive_folder / folder_mappings[folder_lower][0] if folder_lower in folder_mappings else folder_name
+                root_dir / onedrive_folder / FOLDER_MAPPINGS[folder_lower][0] if folder_lower in FOLDER_MAPPINGS else folder_name
             ]
             
             for onedrive_path in onedrive_paths:
@@ -99,12 +114,7 @@ async def list_directory_items(
             return {
                 "success": False,
                 "error": f"Folder '{folder_name or TARGET_FOLDER}' does not exist at {target_dir}",
-                "folder_name": folder_name or TARGET_FOLDER,
-                "suggestions": [
-                    "Try checking the folder name spelling",
-                    "The folder might be in a different location",
-                    "Common folder names: Desktop, Downloads, Documents, Pictures, Music, Videos"
-                ]
+                "folder_name": folder_name or TARGET_FOLDER
             }
         
         if not target_dir.is_dir():
@@ -372,6 +382,50 @@ async def create_numbered_files(base_name: str, count: int, extension: str, star
 
 async def delete_single_item(item_path: str) -> Dict[str, Any]:
     """Deletes a single file or directory"""
+    return await _delete_item_internal(item_path)
+
+async def delete_multiple_items(item_paths: List[str], execution_mode: str = "parallel") -> Dict[str, Any]:
+    """Deletes multiple files and directories"""
+    try:
+        operations = [(_delete_item_internal, (item_path,), {}) for item_path in item_paths]
+        results = await execute_operations(operations, execution_mode)
+        
+        deleted_items = []
+        failed_items = []
+        
+        for i, result in enumerate(results):
+            item_path = item_paths[i]
+            if result["success"]:
+                deleted_items.append({
+                    "path": item_path,
+                    "type": result.get("item_type", "unknown"),
+                    "deletion_method": "sent_to_trash"
+                })
+            else:
+                failed_items.append({
+                    "path": item_path,
+                    "error": result.get("error", "Unknown error"),
+                    "reason": result.get("reason", "unknown")
+                })
+        
+        return {
+            "success": True,
+            "deleted_items": deleted_items,
+            "failed_items": failed_items,
+            "total_deleted": len(deleted_items),
+            "total_failed": len(failed_items),
+            "deletion_method": "sent_to_trash"
+        }
+        
+    except Exception as e:
+        return {
+            "success": False,
+            "error": str(e),
+            "total_items": len(item_paths)
+        }
+
+async def _delete_item_internal(item_path: str) -> Dict[str, Any]:
+    """Internal helper function for deleting items"""
     try:
         path = Path(item_path)
         
@@ -410,87 +464,6 @@ async def delete_single_item(item_path: str) -> Dict[str, Any]:
             "success": False,
             "error": str(e),
             "item_path": item_path
-        }
-
-async def delete_multiple_items(item_paths: List[str], execution_mode: str = "parallel") -> Dict[str, Any]:
-    """Deletes multiple files and directories"""
-    try:
-        def delete_single_item_wrapper(item_path):
-            try:
-                path = Path(item_path)
-                
-                if not path.exists():
-                    return {
-                        "success": False,
-                        "error": f"Item does not exist: {item_path}",
-                        "item_path": item_path
-                    }
-                
-                if not path.is_file() and not path.is_dir():
-                    return {
-                        "success": False,
-                        "error": f"Item is not a file or directory: {item_path}",
-                        "item_path": item_path
-                    }
-                
-                send2trash(str(path))
-                
-                return {
-                    "success": True,
-                    "deleted_item": item_path,
-                    "item_type": "file" if path.is_file() else "directory",
-                    "deletion_method": "sent_to_trash"
-                }
-                
-            except PermissionError:
-                return {
-                    "success": False,
-                    "error": f"Permission denied: Cannot delete {item_path}",
-                    "item_path": item_path,
-                    "reason": "file_in_use_or_protected"
-                }
-            except Exception as e:
-                return {
-                    "success": False,
-                    "error": str(e),
-                    "item_path": item_path
-                }
-        
-        operations = [(delete_single_item_wrapper, (item_path,), {}) for item_path in item_paths]
-        results = await execute_operations(operations, execution_mode)
-        
-        deleted_items = []
-        failed_items = []
-        
-        for i, result in enumerate(results):
-            item_path = item_paths[i]
-            if result["success"]:
-                deleted_items.append({
-                    "path": item_path,
-                    "type": result.get("item_type", "unknown"),
-                    "deletion_method": "sent_to_trash"
-                })
-            else:
-                failed_items.append({
-                    "path": item_path,
-                    "error": result.get("error", "Unknown error"),
-                    "reason": result.get("reason", "unknown")
-                })
-        
-        return {
-            "success": True,
-            "deleted_items": deleted_items,
-            "failed_items": failed_items,
-            "total_deleted": len(deleted_items),
-            "total_failed": len(failed_items),
-            "deletion_method": "sent_to_trash"
-        }
-        
-    except Exception as e:
-        return {
-            "success": False,
-            "error": str(e),
-            "total_items": len(item_paths)
         }
 
 async def delete_items_by_pattern(pattern: str, target_dir: str = None, custom_path: str = None, execution_mode: str = "parallel") -> Dict[str, Any]:
@@ -659,19 +632,9 @@ async def get_file_type_statistics(folder_name: str = None, custom_path: str = N
                 "folder_name": folder_name or TARGET_FOLDER
             }
         
-        file_types = {
-            "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".ppt", ".pptx", ".xls", ".xlsx"],
-            "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
-            "videos": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v"],
-            "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a"],
-            "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"],
-            "executables": [".exe", ".msi", ".dmg", ".pkg", ".deb", ".rpm"],
-            "code": [".py", ".js", ".html", ".css", ".java", ".cpp", ".c", ".php", ".rb", ".go"]
-        }
-        
         all_files = [f for f in target_dir.iterdir() if f.is_file()]
         
-        type_counts = {file_type: 0 for file_type in file_types.keys()}
+        type_counts = {file_type: 0 for file_type in FILE_TYPE_MAPPINGS.keys()}
         type_counts["other"] = 0
         total_files = len(all_files)
         
@@ -679,7 +642,7 @@ async def get_file_type_statistics(folder_name: str = None, custom_path: str = N
             ext = file_path.suffix.lower()
             categorized = False
             
-            for file_type, extensions in file_types.items():
+            for file_type, extensions in FILE_TYPE_MAPPINGS.items():
                 if ext in extensions:
                     type_counts[file_type] += 1
                     categorized = True
@@ -804,20 +767,10 @@ async def rename_multiple_items(items: list[tuple[Path, str]], execution_mode: s
 # Helper functions
 def is_file_type_match(filename: str, file_type: str) -> bool:
     """Check if filename matches the specified file type"""
-    file_types = {
-        "documents": [".pdf", ".doc", ".docx", ".txt", ".rtf", ".odt", ".ppt", ".pptx", ".xls", ".xlsx"],
-        "images": [".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tiff", ".webp", ".svg"],
-        "videos": [".mp4", ".avi", ".mov", ".wmv", ".flv", ".mkv", ".webm", ".m4v"],
-        "audio": [".mp3", ".wav", ".flac", ".aac", ".ogg", ".wma", ".m4a"],
-        "archives": [".zip", ".rar", ".7z", ".tar", ".gz", ".bz2", ".xz"],
-        "executables": [".exe", ".msi", ".dmg", ".pkg", ".deb", ".rpm"],
-        "code": [".py", ".js", ".html", ".css", ".java", ".cpp", ".c", ".php", ".rb", ".go"]
-    }
-    
-    if file_type not in file_types:
+    if file_type not in FILE_TYPE_MAPPINGS:
         return False
     
-    return any(filename.lower().endswith(ext) for ext in file_types[file_type])
+    return any(filename.lower().endswith(ext) for ext in FILE_TYPE_MAPPINGS[file_type])
 
 def is_in_date_range(modified_date: str, date_range: tuple) -> bool:
     """Check if modified date is within the specified range"""
@@ -847,10 +800,9 @@ def is_in_size_range(size: int, size_range: tuple) -> bool:
         return False
     return True
 
-# ============================================================================
-# PATH DISCOVERY FUNCTIONS
-# ============================================================================
 
+
+# Path discovery functions
 def find_candidate_paths():
     """Find all possible OneDrive and user profile paths"""
     user_profile = os.environ.get("USERPROFILE")
@@ -859,11 +811,10 @@ def find_candidate_paths():
 
     candidates = []
 
-    # Step 1: gather OneDrive-like folders under user profile
+    # Gather OneDrive-like folders under user profile
     for entry in os.listdir(user_profile):
         full_path = os.path.join(user_profile, entry)
         if os.path.isdir(full_path) and entry.startswith("OneDrive"):
-            # This is a OneDrive root
             candidates.append(full_path)
 
     # Always include the plain user profile root as well
