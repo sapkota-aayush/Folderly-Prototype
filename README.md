@@ -2,10 +2,10 @@
 
 Folderly is an intelligent desktop file management system that combines powerful file operations with AI-powered assistance. It helps you organize, declutter, and manage your files across Desktop, Documents, Downloads, and other folders with natural language commands and smart automation.
 
-## 📦 **Current Version: v1.0.4**
+## 📦 **Current Version: v1.0.5**
 
 **Latest Release:** Available on PyPI as `folderly` package
-**Status:** Production Ready - Stable Release with Enhanced Path Display
+**Status:** Production Ready - Stable Release with Enhanced Path Display & Fixed Package Structure
 
 ### **Quick Start (30 seconds)**
 ```bash
@@ -31,7 +31,7 @@ pip install folderly
 folderly-ai
 ```
 
-## ✨ **Current Features (v1.0.4)**
+## ✨ **Current Features (v1.0.5)**
 
 ### **🤖 AI-Powered Interface**
 - **Natural language commands** - "list my desktop", "create a folder called work", "move all txt files to documents"
@@ -269,13 +269,19 @@ Folderly-ProtoType/
 - **black** - Code formatting
 - **flake8** - Code linting
 
-## 🆕 **What's New in v1.0.4**
+## 🆕 **What's New in v1.0.5**
 
 ### **🔧 Enhanced Path Display & Error-Free Operations**
 - **Actual path information** - AI shows real file paths from function results instead of making up information
 - **Fixed function calling** - No more errors from non-existent functions
 - **Improved reliability** - Consistent AI behavior following prompt rules
 - **Better user experience** - Faster file access with accurate path information
+
+### **📦 Fixed Package Structure & Installation**
+- **Resolved PyPI installation** - No more "No module named 'src'" errors
+- **Proper package configuration** - Clean Poetry-based build system
+- **Seamless installation** - Works directly from `pip install folderly`
+- **Production ready** - Stable, reliable package distribution
 
 ### **🚀 Streaming Responses (Enhanced)**
 
