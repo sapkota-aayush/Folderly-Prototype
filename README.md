@@ -211,6 +211,31 @@ Folderly now features **real-time streaming responses** that make interactions f
 - **Progress transparency** - Know exactly what's happening at each step
 - **Engaging interaction** - Users stay engaged throughout the process
 
+## 🏗️ **System Architecture**
+
+Folderly uses a sophisticated AI-powered architecture that processes user requests through multiple stages:
+
+<figure>
+  <img src="docs/images/Folderly-Architecture.png" alt="Folderly System Architecture Flow" width="800">
+  <figcaption>Complete system flow showing user input, AI processing, function execution, and result handling</figcaption>
+</figure>
+
+**Key Components:**
+- **User Input Processing**: Captures and validates user commands
+- **AI Processing Engine**: Analyzes requests using OpenAI GPT-4o
+- **Function Schema Injection**: Provides AI with available operations
+- **Sequential Function Execution**: Executes file operations one by one
+- **Context Building**: Maintains conversation history for intelligent responses
+- **Result Processing**: Stores and processes function outcomes
+
+**Flow Process:**
+1. User types natural language command
+2. AI analyzes request and plans function sequence
+3. Functions execute sequentially with progress tracking
+4. Results build context for AI decision making
+5. AI provides comprehensive final response
+6. System returns to wait for next user input
+
 ## 🏗️ **Project Structure**
 
 ```
