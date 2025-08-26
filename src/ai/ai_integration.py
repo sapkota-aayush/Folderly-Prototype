@@ -37,9 +37,6 @@ async def chat_with_ai():
         {"role": "system", "content": load_system_prompt()}
     ]
     
-    # Force fresh start - clear any cached model responses
-    # print("🔄 Fresh AI session started - all caches cleared!")
-    
     while True:
         try:
             user_input = input("\n💭 You: ").strip()
@@ -57,9 +54,6 @@ async def chat_with_ai():
 
             # Inner loop to handle multiple function calls per user input
             while True:
-                # Show thinking indicator
-                print("🤔 AI is thinking...", end="", flush=True)
-                
                 # Enable streaming for better UX
                 response = await client.chat.completions.create(
                     model="gpt-4o",
@@ -72,9 +66,6 @@ async def chat_with_ai():
                     frequency_penalty=0.1,
                     stream=True  # Enable streaming for real-time responses
                 )
-                
-                # Clear thinking indicator and start streaming response
-                print("\r🤖 ", end="", flush=True)
                 
                 # Variables to track streaming response
                 full_content = ""
@@ -92,7 +83,6 @@ async def chat_with_ai():
                     if chunk.choices[0].delta.function_call:
                         if not in_function_call:
                             in_function_call = True
-                            print("\n🔧 Function call detected, executing...")
                         
                         delta = chunk.choices[0].delta.function_call
                         if delta.name:
@@ -109,18 +99,14 @@ async def chat_with_ai():
                         function_args = json.loads(function_call_data["arguments"])
                     except json.JSONDecodeError:
                         # Handle incomplete JSON
-                        print(f"⚠️ Incomplete function arguments, retrying...")
                         continue
-                    
-                    print(f"🔧 Executing: {function_name}")
                     
                     # Helper function to get arguments with defaults
                     def get_arg(key, default=None):
                         return function_args.get(key, default)
                     
-                    # Execute appropriate function with progress indicators
+                    # Execute appropriate function
                     if function_name == "list_directory_items":
-                        print("🔍 Scanning directory...", end="", flush=True)
                         result = await list_directory_items(
                             custom_path=get_arg("custom_path"),
                             folder_name=get_arg("folder_name"),
@@ -133,38 +119,37 @@ async def chat_with_ai():
                             sort_order=get_arg("sort_order", "asc"),
                             include_folders=get_arg("include_folders", True),
                             include_files=get_arg("include_files", True),
-                            max_results=get_arg("max_results")
+                            max_results=get_arg("max_results"),
+                            summary_only=get_arg("summary_only", True),
+                            sample_size=get_arg("sample_size", 5)
                         )
-                        print(" ✅")
                     elif function_name == "filter_and_sort_by_modified":
-                        print("📅 Filtering by date...", end="", flush=True)
                         # Get items first, then filter by date
-                        items_result = await list_directory_items()
+                        items_result = await list_directory_items(
+                            folder_name=get_arg("folder_name", "Desktop"),
+                            custom_path=get_arg("custom_path"),
+                            summary_only=True,
+                            sample_size=5
+                        )
                         if items_result["success"]:
                             # Convert string paths back to Path objects for the filter function
-                            items = [Path(path) for path in items_result["results"]]
+                            items = [Path(path) for path in items_result["full_results"]]
                             days = get_arg("days", 7)
                             result = filter_and_sort_by_modified(items, days)  # No await needed
                         else:
                             result = items_result
-                        print(" ✅")
                     elif function_name == "create_directory":
-                        print("📁 Creating directory...", end="", flush=True)
                         # Create directory with base path support
                         target_dir = Path(get_arg("target_dir", ""))
                         base_path = get_arg("base_path", "Desktop")
                         result = await create_directory(target_dir, base_path)
-                        print(" ✅")
                     elif function_name == "create_multiple_directories":
-                        print("📁 Creating multiple directories...", end="", flush=True)
                         # Create multiple directories with base path support
                         directories = get_arg("directories", [])
                         base_path = get_arg("base_path", "Desktop")
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await create_multiple_directories(directories, base_path, execution_mode)
-                        print(" ✅")
                     elif function_name == "create_numbered_files":
-                        print("📄 Creating numbered files...", end="", flush=True)
                         # Create numbered files with execution mode support
                         base_name = get_arg("base_name", "")
                         count = get_arg("count", 1)
@@ -174,80 +159,59 @@ async def chat_with_ai():
                         custom_path = get_arg("custom_path", None)
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await create_numbered_files(base_name, count, extension, start_number, target_dir, custom_path, execution_mode)
-                        print(" ✅")
                     elif function_name == "move_items_to_directory":
-                        print("🚚 Moving items...", end="", flush=True)
                         # Move items to destination directory
                         items = [Path(item) for item in get_arg("items", [])]
                         destination_dir = Path(get_arg("destination_dir", ""))
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await move_items_to_directory(items, destination_dir, execution_mode)
-                        print(" ✅")
                     elif function_name == "delete_single_item":
-                        print("🗑️ Deleting item...", end="", flush=True)
                         # Delete a single item
                         item_path = get_arg("item_path", "")
                         result = await delete_single_item(item_path)
-                        print(" ✅")
                     elif function_name == "delete_multiple_items":
-                        print("🗑️ Deleting multiple items...", end="", flush=True)
                         # Delete multiple items
                         item_paths = get_arg("item_paths", [])
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await delete_multiple_items(item_paths, execution_mode)
-                        print(" ✅")
                     elif function_name == "delete_items_by_pattern":
-                        print("🗑️ Deleting by pattern...", end="", flush=True)
                         # Delete items by pattern
                         pattern = get_arg("pattern", "")
                         target_dir = get_arg("target_dir", None)
                         custom_path = get_arg("custom_path", None)
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await delete_items_by_pattern(pattern, target_dir, custom_path, execution_mode)
-                        print(" ✅")
                     elif function_name == "list_nested_folders_tree":
-                        print("🌳 Building folder tree...", end="", flush=True)
                         # List nested folders in tree structure
                         target_dir = get_arg("target_dir", None)
                         max_depth = get_arg("max_depth", 3)
                         custom_path = get_arg("custom_path", None)
                         result = list_nested_folders_tree(target_dir, max_depth, custom_path)  # No await needed
-                        print(" ✅")
                     elif function_name == "count_files_by_extension":
-                        print("📊 Counting files by extension...", end="", flush=True)
                         # Count files by extension
                         custom_path = get_arg("custom_path", None)
                         folder_name = get_arg("folder_name", None)
                         result = await count_files_by_extension(folder_name, custom_path)
-                        print(" ✅")
                     elif function_name == "get_file_type_statistics":
-                        print("📈 Getting file statistics...", end="", flush=True)
                         # Get file type statistics
                         custom_path = get_arg("custom_path", None)
                         folder_name = get_arg("folder_name", None)
-                        result = await get_file_type_statistics(folder_name, custom_path)
-                        print(" ✅")
+                        result = await count_files_by_extension(folder_name, custom_path)
                     elif function_name == "copy_multiple_items":
-                        print("📋 Copying items...", end="", flush=True)
                         # Copy multiple items to destination directory
                         items = [Path(item) for item in get_arg("items", [])]
                         destination_dir = Path(get_arg("destination_dir", ""))
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await copy_multiple_items(items, destination_dir, execution_mode)
-                        print(" ✅")
                     elif function_name == "rename_multiple_items":
-                        print("✏️ Renaming items...", end="", flush=True)
                         # Rename multiple items with new names
                         items_data = get_arg("items", [])
                         items = [(Path(item["old_path"]), item["new_name"]) for item in items_data]
                         execution_mode = get_arg("execution_mode", "parallel")
                         result = await rename_multiple_items(items, execution_mode)
-                        print(" ✅")
                     elif function_name == "discover_user_paths":
-                        print("🔍 Discovering user paths...", end="", flush=True)
                         # Discover all user folder paths for path selection
                         result = await discover_user_paths()
-                        print(" ✅")
                     else:
                         result = {"success": False, "error": f"Unknown function: {function_name}"}
                     

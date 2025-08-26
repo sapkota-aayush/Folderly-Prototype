@@ -104,7 +104,9 @@ async def list_directory_items(
     sort_order: str = "asc",
     include_folders: bool = True,
     include_files: bool = True,
-    max_results: int = None
+    max_results: int = None,
+    summary_only: bool = True,
+    sample_size: int = 5
 ) -> Dict[str, Any]:
     """Lists files and folders in the specified root folder with advanced filtering"""
     try:
@@ -127,40 +129,49 @@ async def list_directory_items(
         all_items = list(target_dir.iterdir())
         results = []
         
+        # Auto-skip problematic files
         for item in all_items:
-            item_info = {
-                "name": item.name,
-                "path": str(item),
-                "is_file": item.is_file(),
-                "is_dir": item.is_dir(),
-                "size": item.stat().st_size if item.is_file() else None,
-                "modified": datetime.fromtimestamp(item.stat().st_mtime).isoformat()
-            }
-            
-            if not include_folders and item.is_dir():
-                continue
-            if not include_files and item.is_file():
-                continue
-            
-            if extension and item.is_file():
-                if not item.name.lower().endswith(f".{extension.lower()}"):
+            try:
+                # Skip hidden files and system files
+                if item.name.startswith('.') or item.name.startswith('~'):
                     continue
-            
-            if file_type and item.is_file():
-                if not is_file_type_match(item.name, file_type):
+                
+                item_info = {
+                    "name": item.name,
+                    "path": str(item),
+                    "is_file": item.is_file(),
+                    "is_dir": item.is_dir(),
+                    "size": item.stat().st_size if item.is_file() else None,
+                    "modified": datetime.fromtimestamp(item.stat().st_mtime).isoformat()
+                }
+                
+                if not include_folders and item.is_dir():
                     continue
-            
-            if pattern and not re.search(pattern, item.name, re.IGNORECASE):
-                continue
-            
-            if date_range and not is_in_date_range(item_info["modified"], date_range):
-                continue
-            
-            if size_range and item.is_file():
-                if not is_in_size_range(item_info["size"], size_range):
+                if not include_files and item.is_file():
                     continue
-            
-            results.append(item_info)
+                
+                if extension and item.is_file():
+                    if not item.name.lower().endswith(f".{extension.lower()}"):
+                        continue
+                
+                if file_type and item.is_file():
+                    if not is_file_type_match(item.name, file_type):
+                        continue
+                
+                if pattern and not re.search(pattern, item.name, re.IGNORECASE):
+                    continue
+                
+                if date_range and not is_in_date_range(item_info["modified"], date_range):
+                    continue
+                
+                if size_range and item.is_file():
+                    if not is_in_size_range(item_info["size"], size_range):
+                        continue
+                
+                results.append(item_info)
+            except (PermissionError, OSError):
+                # Skip files we can't access
+                continue
         
         if sort_by == "name":
             results.sort(key=lambda x: x["name"].lower(), reverse=(sort_order == "desc"))
@@ -169,25 +180,69 @@ async def list_directory_items(
         elif sort_by == "size":
             results.sort(key=lambda x: x["size"] or 0, reverse=(sort_order == "desc"))
         
-        if max_results:
-            results = results[:max_results]
+        # Calculate extension statistics
+        extension_counts = {}
+        file_count = 0
+        folder_count = 0
         
-        return {
-            "success": True,
-            "results": [item["name"] for item in results],
-            "full_results": results,
-            "total_count": len(results),
-            "folder_name": folder_name or TARGET_FOLDER,
-            "filters_applied": {
-                "extension": extension,
-                "file_type": file_type,
-                "pattern": pattern,
-                "date_range": date_range,
-                "size_range": size_range,
-                "sort_by": sort_by,
-                "sort_order": sort_order
+        for item in results:
+            if item["is_file"]:
+                file_count += 1
+                ext = Path(item["name"]).suffix.lower()
+                if ext:
+                    extension_counts[ext] = extension_counts.get(ext, 0) + 1
+            else:
+                folder_count += 1
+        
+        # Sort extensions by count
+        top_extensions = sorted(extension_counts.items(), key=lambda x: x[1], reverse=True)[:5]
+        
+        if summary_only:
+            # Return compact summary
+            sample_items = [item["name"] for item in results[:sample_size]]
+            
+            return {
+                "success": True,
+                "summary": {
+                    "total_items": len(results),
+                    "files": file_count,
+                    "folders": folder_count
+                },
+                "samples": sample_items,
+                "top_extensions": top_extensions,
+                "folder_name": folder_name or TARGET_FOLDER,
+                "filters_applied": {
+                    "extension": extension,
+                    "file_type": file_type,
+                    "pattern": pattern,
+                    "date_range": date_range,
+                    "size_range": size_range,
+                    "sort_by": sort_by,
+                    "sort_order": sort_order
+                },
+                "full_results": results  # Keep for AI use, but don't show to user
             }
-        }
+        else:
+            # Return full results (for when user insists on seeing everything)
+            if max_results:
+                results = results[:max_results]
+            
+            return {
+                "success": True,
+                "results": [item["name"] for item in results],
+                "full_results": results,
+                "total_count": len(results),
+                "folder_name": folder_name or TARGET_FOLDER,
+                "filters_applied": {
+                    "extension": extension,
+                    "file_type": file_type,
+                    "pattern": pattern,
+                    "date_range": date_range,
+                    "size_range": size_range,
+                    "sort_by": sort_by,
+                    "sort_order": sort_order
+                }
+            }
         
     except Exception as e:
         return {

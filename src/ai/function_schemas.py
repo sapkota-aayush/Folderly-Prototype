@@ -64,6 +64,14 @@ FOLDERLY_FUNCTIONS = [
                 "max_results": {
                     "type": "integer",
                     "description": "Maximum number of results to return (useful for large directories)"
+                },
+                "summary_only": {
+                    "type": "boolean",
+                    "description": "Return summary with counts and samples instead of full list (default: true)"
+                },
+                "sample_size": {
+                    "type": "integer",
+                    "description": "Number of sample items to show in summary (default: 5)"
                 }
             },
             "required": []
